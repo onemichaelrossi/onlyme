@@ -4,57 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Michael Rossi — Portfolio</title>
-  <meta name="description" content="Michael Rossi — portfolio, projects, and contact details." />
+  <meta name="description" content="Michael Rossi — Portfolio, projects, and contact details." />
   <link rel="icon" href="data:,">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <header class="site-header">
-    <nav class="nav container">
-      <a href="#top" class="logo">Michael Rossi</a>
-      <div class="nav-links">
-        <a href="#about">About</a>
-        <a href="#portfolio">Portfolio</a>
-        <a href="#contact">Contact</a>
-      </div>
-    </nav>
-  </header>
+  <div class="hero-wrap" id="top">
+    <header class="site-header">
+      <nav class="nav container">
+        <div class="pill navbar">
+          <a href="#top" class="logo">Michael Rossi</a>
+          <div class="nav-links">
+            <a href="#portfolio">Portfolio</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <div class="nav-icons">
+            <a href="mailto:michael@michaelrossi.org" class="icon-btn" aria-label="Email">✉</a>
+            <a href="https://github.com/onemichaelrossi" class="icon-btn" target="_blank" rel="noopener" aria-label="GitHub">gh</a>
+            <a href="#" class="icon-btn" id="linkedin-icon" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-inner">
+          <h1 class="hero-heading">
+            <span class="photo-inline"><img src="assets/profile.jpg" alt="Photo of Michael Rossi" /></span>
+            Michael Rossi
+          </h1>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <main>
-    <section id="top" class="hero">
-      <div class="container hero-inner">
-        <div class="hero-text">
-          <p class="eyebrow">Hello, I'm</p>
-          <h1>Michael Rossi</h1>
-          <p class="hero-sub">Builder of things. This is where I share what I've made.</p>
-          <div class="hero-cta">
-            <a href="#portfolio" class="btn btn-primary">See my work</a>
-            <a href="#contact" class="btn btn-ghost">Get in touch</a>
-          </div>
-        </div>
-        <div class="hero-photo">
-          <div class="photo-frame">
-            <img src="assets/profile.jpg" alt="Photo of Michael Rossi" />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="about" class="about">
-      <div class="container">
-        <h2 class="section-title">About Me</h2>
-        <p class="about-text">
-          I'm Michael — welcome to my corner of the internet. I'm still filling this
-          site in, but the idea is simple: a home base for the projects I'm building
-          and a straightforward way to get in touch. Check back soon for more.
-        </p>
-      </div>
-    </section>
-
     <section id="portfolio" class="portfolio">
       <div class="container">
         <h2 class="section-title">Portfolio</h2>
