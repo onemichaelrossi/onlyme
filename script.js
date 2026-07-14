@@ -10,3 +10,6 @@ if (linkedinEl) linkedinEl.href = LINKEDIN_URL;
 
 const socialEl = document.getElementById('social-link');
 if (socialEl) socialEl.href = SOCIAL_URL;
+
+const linkedinIconEl = document.getElementById('linkedin-icon');
+if (linkedinIconEl) linkedinIconEl.href = LINKEDIN_URL;
