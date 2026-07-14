@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Michael Rossi — Portfolio</title>
+  <meta name="description" content="Michael Rossi — portfolio, projects, and contact details." />
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav container">
+      <a href="#top" class="logo">Michael Rossi</a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="top" class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <p class="eyebrow">Hello, I'm</p>
+          <h1>Michael Rossi</h1>
+          <p class="hero-sub">Builder of things. This is where I share what I've made.</p>
+          <div class="hero-cta">
+            <a href="#portfolio" class="btn btn-primary">See my work</a>
+            <a href="#contact" class="btn btn-ghost">Get in touch</a>
+          </div>
+        </div>
+        <div class="hero-photo">
+          <div class="photo-frame">
+            <img src="assets/profile.jpg" alt="Photo of Michael Rossi" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <p class="about-text">
+          I'm Michael — welcome to my corner of the internet. I'm still filling this
+          site in, but the idea is simple: a home base for the projects I'm building
+          and a straightforward way to get in touch. Check back soon for more.
+        </p>
+      </div>
+    </section>
+
+    <section id="portfolio" class="portfolio">
+      <div class="container">
+        <h2 class="section-title">Portfolio</h2>
+        <p class="section-sub">A few things I've worked on (placeholders for now — real projects coming soon).</p>
+        <div class="project-grid">
+
+          <article class="project-card">
+            <div class="project-thumb thumb-1" aria-hidden="true">
+              <span class="thumb-icon">✦</span>
+            </div>
+            <div class="project-body">
+              <h3>Project One</h3>
+              <p>A short description of this project goes here — what it does, what you built it with, and why it matters.</p>
+              <div class="project-links">
+                <a href="#" class="link-pill">View project</a>
+                <a href="#" class="link-pill link-pill-ghost">Source</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-thumb thumb-2" aria-hidden="true">
+              <span class="thumb-icon">◆</span>
+            </div>
+            <div class="project-body">
+              <h3>Project Two</h3>
+              <p>A short description of this project goes here — what it does, what you built it with, and why it matters.</p>
+              <div class="project-links">
+                <a href="#" class="link-pill">View project</a>
+                <a href="#" class="link-pill link-pill-ghost">Source</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-thumb thumb-3" aria-hidden="true">
+              <span class="thumb-icon">●</span>
+            </div>
+            <div class="project-body">
+              <h3>Project Three</h3>
+              <p>A short description of this project goes here — what it does, what you built it with, and why it matters.</p>
+              <div class="project-links">
+                <a href="#" class="link-pill">View project</a>
+                <a href="#" class="link-pill link-pill-ghost">Source</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <div class="container">
+        <h2 class="section-title">Get In Touch</h2>
+        <p class="section-sub">Feel free to reach out — happy to chat.</p>
+        <div class="contact-links">
+          <a href="mailto:michael@michaelrossi.org" class="contact-pill">
+            <span class="contact-icon">✉</span> michael@michaelrossi.org
+          </a>
+          <a href="#" class="contact-pill" id="linkedin-link" target="_blank" rel="noopener">
+            <span class="contact-icon">in</span> LinkedIn
+          </a>
+          <a href="#" class="contact-pill" id="social-link" target="_blank" rel="noopener">
+            <span class="contact-icon">@</span> Social
+          </a>
+          <a href="https://github.com/onemichaelrossi" class="contact-pill" target="_blank" rel="noopener">
+            <span class="contact-icon">gh</span> GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Michael Rossi. Built and hosted on GitHub Pages.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
