@@ -49,7 +49,7 @@ body {
 .hero-text { flex: 1; }
 .hero-text h1 { font-size: 44px; font-weight: 500; line-height: 1.15; margin-bottom: 16px; }
 .hero-text p { color: var(--ink-soft); font-size: 17px; max-width: 440px; }
-.hero-photo img { width: 280px; height: auto; display: block; }
+.hero-photo img { width: 280px; height: auto; display: block; border-radius: 24px; }
 
 /* Sections */
 .section { padding-bottom: 64px; }
@@ -77,12 +77,10 @@ body {
 .row-link:hover { opacity: 0.6; }
 
 .org-logo {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
-  border-radius: 6px;
-  background: #fff;
-  padding: 3px;
+  filter: brightness(0);
 }
 .logo-stack { display: inline-flex; gap: 8px; }
 
