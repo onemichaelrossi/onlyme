@@ -82,7 +82,8 @@ body {
   object-fit: contain;
   filter: brightness(0);
 }
-.logo-stack { display: inline-flex; gap: 8px; }
+.logo-stack { display: inline-flex; gap: 8px; align-items: center; }
+.org-logo-wide { width: 52px; }
 
 /* Footer */
 .site-footer {
