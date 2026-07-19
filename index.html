@@ -3,125 +3,97 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Michael Rossi — Portfolio</title>
-  <meta name="description" content="Michael Rossi — portfolio, projects, and contact details." />
+  <title>Michael Rossi</title>
+  <meta name="description" content="Michael Rossi — resume, portfolio, and contact details." />
   <link rel="icon" href="data:,">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <div class="hero-wrap" id="top">
-    <header class="site-header">
-      <nav class="nav container">
-        <div class="pill navbar">
-          <a href="#top" class="logo">Michael Rossi</a>
-          <div class="nav-links">
-            <a href="#portfolio">Portfolio</a>
-            <a href="#contact">Contact</a>
-          </div>
-          <div class="nav-icons">
-            <a href="mailto:michael@michaelrossi.org" class="icon-btn" aria-label="Email">✉</a>
-            <a href="https://github.com/onemichaelrossi" class="icon-btn" target="_blank" rel="noopener" aria-label="GitHub">gh</a>
-            <a href="#" class="icon-btn" id="linkedin-icon" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
-          </div>
-        </div>
-      </nav>
-    </header>
-
-    <main>
-      <section class="hero">
-        <div class="container hero-inner">
-          <h1 class="hero-heading">
-            <span class="photo-inline"><img src="assets/profile.jpg" alt="Photo of Michael Rossi" /></span>
-            Michael Rossi
-          </h1>
-        </div>
-      </section>
-    </main>
-  </div>
+  <header class="site-header" id="top">
+    <nav class="nav container">
+      <a href="#top" class="logo">Michael Rossi</a>
+      <div class="nav-links">
+        <a href="#resume">Resume</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
 
   <main>
-    <section id="portfolio" class="portfolio">
-      <div class="container">
-        <h2 class="section-title">Portfolio</h2>
-        <p class="section-sub">A few things I've worked on (placeholders for now — real projects coming soon).</p>
-        <div class="project-grid">
-
-          <article class="project-card">
-            <div class="project-thumb thumb-1" aria-hidden="true">
-              <span class="thumb-icon">✦</span>
-            </div>
-            <div class="project-body">
-              <h3>Project One</h3>
-              <p>A short description of this project goes here — what it does, what you built it with, and why it matters.</p>
-              <div class="project-links">
-                <a href="#" class="link-pill">View project</a>
-                <a href="#" class="link-pill link-pill-ghost">Source</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <div class="project-thumb thumb-2" aria-hidden="true">
-              <span class="thumb-icon">◆</span>
-            </div>
-            <div class="project-body">
-              <h3>Project Two</h3>
-              <p>A short description of this project goes here — what it does, what you built it with, and why it matters.</p>
-              <div class="project-links">
-                <a href="#" class="link-pill">View project</a>
-                <a href="#" class="link-pill link-pill-ghost">Source</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <div class="project-thumb thumb-3" aria-hidden="true">
-              <span class="thumb-icon">●</span>
-            </div>
-            <div class="project-body">
-              <h3>Project Three</h3>
-              <p>A short description of this project goes here — what it does, what you built it with, and why it matters.</p>
-              <div class="project-links">
-                <a href="#" class="link-pill">View project</a>
-                <a href="#" class="link-pill link-pill-ghost">Source</a>
-              </div>
-            </div>
-          </article>
-
-        </div>
+    <section class="hero container">
+      <div class="hero-text">
+        <h1>Hello — I'm Michael.</h1>
+        <p>A calm one-or-two sentence introduction sits here, with plenty of air around it.</p>
+      </div>
+      <div class="hero-photo">
+        <img src="assets/profile.png" alt="Photo of Michael Rossi" />
       </div>
     </section>
 
-    <section id="contact" class="contact">
-      <div class="container">
-        <h2 class="section-title">Get In Touch</h2>
-        <p class="section-sub">Feel free to reach out — happy to chat.</p>
-        <div class="contact-links">
-          <a href="mailto:michael@michaelrossi.org" class="contact-pill">
-            <span class="contact-icon">✉</span> michael@michaelrossi.org
-          </a>
-          <a href="#" class="contact-pill" id="linkedin-link" target="_blank" rel="noopener">
-            <span class="contact-icon">in</span> LinkedIn
-          </a>
-          <a href="#" class="contact-pill" id="social-link" target="_blank" rel="noopener">
-            <span class="contact-icon">@</span> Social
-          </a>
-          <a href="https://github.com/onemichaelrossi" class="contact-pill" target="_blank" rel="noopener">
-            <span class="contact-icon">gh</span> GitHub
-          </a>
-        </div>
-      </div>
+    <section id="resume" class="section container">
+      <p class="section-label">Resume</p>
+      <ul class="row-list">
+        <li class="row">
+          <span class="row-main">
+            <img class="org-logo" src="https://www.google.com/s2/favicons?domain=capgemini.com&sz=64" alt="Capgemini logo" onerror="this.style.display='none'">
+            <span>Capgemini</span>
+          </span>
+          <span class="row-date">2018 – present</span>
+        </li>
+        <li class="row">
+          <span class="row-main">
+            <img class="org-logo" src="https://www.google.com/s2/favicons?domain=soprasteria.com&sz=64" alt="Sopra Steria logo" onerror="this.style.display='none'">
+            <span>Sopra Steria</span>
+          </span>
+          <span class="row-date">2015 – 2018</span>
+        </li>
+        <li class="row">
+          <span class="row-main">
+            <img class="org-logo" src="https://www.google.com/s2/favicons?domain=capgemini.com&sz=64" alt="Capgemini logo" onerror="this.style.display='none'">
+            <span>Capgemini</span>
+          </span>
+          <span class="row-date">2013 – 2015</span>
+        </li>
+        <li class="row">
+          <span class="row-main">
+            <span class="logo-stack">
+              <img class="org-logo" src="https://www.google.com/s2/favicons?domain=fujitsu.com&sz=64" alt="Fujitsu logo" onerror="this.style.display='none'">
+              <img class="org-logo" src="https://www.google.com/s2/favicons?domain=atos.net&sz=64" alt="Atos logo" onerror="this.style.display='none'">
+              <img class="org-logo" src="https://www.google.com/s2/favicons?domain=hp.com&sz=64" alt="Hewlett Packard logo" onerror="this.style.display='none'">
+            </span>
+            <span>Fujitsu · Atos Origin · Fujitsu · Hewlett Packard</span>
+          </span>
+          <span class="row-date">1999 – 2013</span>
+        </li>
+      </ul>
+    </section>
+
+    <section id="portfolio" class="section container">
+      <p class="section-label">Portfolio</p>
+      <ul class="row-list">
+        <li class="row"><span class="row-main"><span>Project one</span></span><span class="row-arrow">&rarr;</span></li>
+        <li class="row"><span class="row-main"><span>Project two</span></span><span class="row-arrow">&rarr;</span></li>
+        <li class="row"><span class="row-main"><span>Project three</span></span><span class="row-arrow">&rarr;</span></li>
+      </ul>
+    </section>
+
+    <section id="contact" class="section container">
+      <p class="section-label">Contact</p>
+      <ul class="row-list">
+        <li class="row"><a class="row-main row-link" href="mailto:michael@michaelrossi.org">michael@michaelrossi.org</a><span class="row-arrow">&rarr;</span></li>
+        <li class="row"><a class="row-main row-link" href="https://github.com/onemichaelrossi" target="_blank" rel="noopener">GitHub</a><span class="row-arrow">&rarr;</span></li>
+        <li class="row"><a class="row-main row-link" id="linkedin-link" href="#" target="_blank" rel="noopener">LinkedIn</a><span class="row-arrow">&rarr;</span></li>
+      </ul>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>&copy; <span id="year"></span> Michael Rossi. Built and hosted on GitHub Pages.</p>
-    </div>
+  <footer class="site-footer container">
+    <p>&copy; <span id="year"></span> Michael Rossi. Built and hosted on GitHub Pages.</p>
   </footer>
 
   <script src="script.js"></script>
