@@ -70,6 +70,8 @@ body {
   border-bottom: 1px solid var(--yellow-line);
 }
 .row-main { display: flex; align-items: center; gap: 14px; font-size: 16px; }
+.row-content { display: flex; flex-direction: column; gap: 2px; }
+.row-desc { color: var(--ink-muted); font-size: 14px; line-height: 1.4; }
 .row-date { color: var(--ink-muted); font-size: 14px; white-space: nowrap; }
 .row-arrow { color: var(--ink-muted); font-size: 15px; }
 
