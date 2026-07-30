@@ -75,6 +75,17 @@ body {
 .portfolio-logo { width: 34px; height: 34px; object-fit: contain; border-radius: 7px; flex-shrink: 0; }
 .portfolio-title { font-size: 16px; color: var(--ink); }
 .row-indent { margin-left: 48px; }
+
+/* Contact form */
+.contact-form { display: flex; flex-direction: column; gap: 12px; max-width: 440px; margin-bottom: 28px; }
+.cf-input { font: inherit; color: var(--ink); background: transparent; border: none; border-bottom: 1px solid var(--yellow-line); padding: 10px 0; outline: none; }
+.cf-input:focus { border-bottom-color: var(--ink); }
+.cf-input::placeholder { color: var(--ink-muted); }
+textarea.cf-input { resize: vertical; }
+.cf-btn { align-self: flex-start; font: inherit; font-weight: 500; color: var(--yellow); background: var(--ink); border: none; border-radius: 999px; padding: 10px 22px; cursor: pointer; transition: opacity .15s; }
+.cf-btn:hover { opacity: 0.85; }
+.cf-btn:disabled { opacity: 0.5; cursor: default; }
+.cf-status { font-size: 14px; color: var(--ink-soft); margin: 0; }
 .row-date { color: var(--ink-muted); font-size: 14px; white-space: nowrap; }
 .row-arrow { color: var(--ink-muted); font-size: 15px; }
 

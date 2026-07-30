@@ -131,8 +131,13 @@
 
     <section id="contact" class="section container">
       <p class="section-label">Contact</p>
+      <form id="contact-form" class="contact-form" action="https://formspree.io/f/mjgnzgla" method="POST">
+        <input class="cf-input" type="email" name="email" placeholder="Your email" required>
+        <textarea class="cf-input" name="message" rows="3" placeholder="Your message" required></textarea>
+        <button class="cf-btn" type="submit">Contact Michael</button>
+        <p class="cf-status" id="cf-status" role="status" hidden></p>
+      </form>
       <ul class="row-list">
-        <li class="row"><a class="row-main row-link" href="mailto:michael@michaelrossi.org">michael@michaelrossi.org</a><span class="row-arrow">&rarr;</span></li>
         <li class="row"><a class="row-main row-link" id="linkedin-link" href="#" target="_blank" rel="noopener">LinkedIn</a><span class="row-arrow">&rarr;</span></li>
       </ul>
     </section>
