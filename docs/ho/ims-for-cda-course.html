@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>IMS for Communications Data Acquisition</title>
+  <link rel="icon" type="image/png" href="../../assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css?v=2" />
+</head>
+<body id="top">
+
+  <header class="doc-top container">
+    <a class="back" href="./">&larr; All documents</a>
+    <a class="pdf" href="pdf/ims-for-cda-course.pdf">PDF &darr;</a>
+  </header>
+  <main class="container doc">
+    <header class="doc-head">
+      <h1>IMS for Communications Data Acquisition</h1>
+      <p class="subtitle">A Design and Technical Governance Course Prepared for Michael Rossi September 2026</p>
+      
+    </header>
+    <nav class="toc"><p class="toc-label">Contents</p><ol><li><a href="#s-how-to-use-this-course">How to Use This Course</a></li><li><a href="#s-part-i-the-problem-domain">Part I — The Problem Domain</a></li><li><a href="#s-module-1-what-cda-is-and-why-it-is-hard-c">Module 1 — What CDA Is, and Why It Is Hard [C]</a></li><li><a href="#s-module-2-the-uk-legal-framework-c-g">Module 2 — The UK Legal Framework [C/G]</a></li><li><a href="#s-module-3-the-data-taxonomy-c-d">Module 3 — The Data Taxonomy [C/D]</a></li><li><a href="#s-part-ii-where-the-data-comes-from">Part II — Where the Data Comes From</a></li><li><a href="#s-module-4-ims-as-a-data-producing-machine-c-d">Module 4 — IMS as a Data-Producing Machine [C/D]</a></li><li><a href="#s-module-5-identifiers-and-the-resolution-problem-d">Module 5 — Identifiers and the Resolution Problem [D]</a></li><li><a href="#s-module-6-what-the-data-can-and-cannot-support-c-g">Module 6 — What the Data Can and Cannot Support [C/G]</a></li><li><a href="#s-part-iii-designing-the-solution">Part III — Designing the Solution</a></li><li><a href="#s-module-7-reference-architecture-for-a-csp-disclosure-capabil">Module 7 — Reference Architecture for a CSP Disclosure Capability [D]</a></li><li><a href="#s-module-8-designing-the-retention-store-d">Module 8 — Designing the Retention Store [D]</a></li><li><a href="#s-module-9-request-handling-mediation-and-handover-d-g">Module 9 — Request Handling, Mediation and Handover [D/G]</a></li><li><a href="#s-module-10-security-compartmentation-and-insider-risk-d-g">Module 10 — Security, Compartmentation and Insider Risk [D/G]</a></li><li><a href="#s-part-iv-assurance-and-governance">Part IV — Assurance and Governance</a></li><li><a href="#s-module-11-quality-integrity-and-evidential-weight-g">Module 11 — Quality, Integrity and Evidential Weight [G]</a></li><li><a href="#s-module-12-governing-the-programme-g">Module 12 — Governing the Programme [G]</a></li><li><a href="#s-appendix-a-design-review-question-bank">Appendix A — Design Review Question Bank</a></li><li><a href="#s-appendix-b-patterns-and-anti-patterns">Appendix B — Patterns and Anti-Patterns</a></li><li><a href="#s-appendix-c-ims-protocol-reference-annex">Appendix C — IMS Protocol Reference Annex</a></li><li><a href="#s-appendix-d-legal-and-standards-index">Appendix D — Legal and Standards Index</a></li><li><a href="#s-appendix-e-glossary">Appendix E — Glossary</a></li></ol></nav>
+    <article>
+<h2 id="s-how-to-use-this-course">How to Use This Course</h2>
+<h3>What this course is</h3>
+<p>This is a course on<strong> designing and governing Communications Data Acquisition (CDA)</strong> <strong>solutions</strong>, written from the point of view of someone who has to make, challenge and assure design decisions rather than someone who has to configure a network element.</p>
+<p>It is framed against the<strong> UK Investigatory Powers Act 2016 as amended</strong>, and it takes the<strong> communications service provider (CSP) disclosure side</strong> and<strong> the interface and</strong> <strong>assurance between the CSP and the acquiring authority</strong> as its subject. The acquiring authority’s own internal tooling is referred to where it shapes the interface, but is not itself designed here.</p>
+<p>It covers<strong> communications data only</strong> — the who, when, where and how of a communication. Content interception is a different power, a different legal test and a largely different design problem; the boundary between the two is drawn explicitly in Module 3 and then respected throughout, because in this domain a blurred boundary is a compliance failure, not a rounding error.</p>
+<p>IMS appears because it is where a modern operator’s voice, video and messaging records are made. But IMS is treated here as<strong> a machine that produces data</strong>, not as a call-control system to be operated. The protocol detail that a telco engineer needs is compressed into Appendix C, where you can check a fact without it interrupting the argument.</p>
+<h3>Who it is for</h3>
+<p>The material addresses three kinds of question, and every module is marked with the ones it serves:</p>
+<div class="table-wrap"><table><thead><tr><th>Marker</th><th>Kind of question</th><th>Typical reader</th></tr></thead><tbody><tr><td><strong>[C]</strong></td><td><em>What is this and why does it</em> <em>work this way?</em></td><td>Anyone new to the domain</td></tr><tr><td><strong>[D]</strong></td><td><em>How should the solution be</em> <em>built?</em></td><td>Solution architects, designers</td></tr><tr><td><strong>[G]</strong></td><td><em>How do I know the design is</em> <em>right, and defend it?</em></td><td>Design authority, assurance, governance</td></tr></tbody></table></div>
+<p>If you are coming to the domain new, read straight through. If you already know the law and need the architecture, start at Module 7. If you are reviewing someone else’s design, Appendix A is a question bank built for exactly that and is the fastest route to a useful challenge.</p>
+<h3>Structure</h3>
+<p><strong>Part I — The Problem Domain (Modules 1–3). </strong>What CDA is, the legal structure that determines every requirement in it, and the data taxonomy that determines what may lawfully be built.</p>
+<p><strong>Part II — Where the Data Comes From (Modules 4–6).</strong> IMS as a data-producing machine, the identifier and resolution problem that dominates real designs, and an honest account of what the data can and cannot support.</p>
+<p><strong>Part III — Designing the Solution (Modules 7–10).</strong> A reference architecture for a CSP disclosure capability, retention design, request handling and handover, and the security and compartmentation model.</p>
+<p><strong>Part IV — Assurance and Governance (Modules 11–12). </strong>Data quality, integrity and evidential weight; and how to run the design authority for a programme of this kind.</p>
+<p><strong>Appendices.</strong> A design review question bank, architecture patterns and anti-patterns, the IMS protocol reference annex, the legal and standards index, and a glossary.</p>
+<h3>Conventions</h3>
+<p>Three devices recur.</p>
+<p><strong>Ladder diagrams</strong> show the sequence of a request or a data flow between parties. Unlike the protocol diagrams in a telecoms course, the parties here are usually organisations or systems, not network elements:</p>
+<pre class="diagram">Authority       SPoC        CSP gateway     Retention      Disclosure
+    |             |              |            store           team
+    |--- (1) ----&gt;|              |              |              |
+    |             |--- (2) -----&gt;|              |              |
+    |             |              |--- (3) -----&gt;|              |</pre>
+<p><strong>Design decision tables</strong> set out an option, what it buys, what it costs, and the condition under which each choice is right. They are written so they can be lifted into a design paper.</p>
+<aside class="callout"><p><strong>Governance note.</strong> Boxes like this flag the point in a design where a governance decision is actually being taken, often without anyone noticing. They are the ones to put on a design authority agenda.</p></aside>
+<h3>An honest caveat</h3>
+<p>Law in this area changes, and it changed recently: the<strong> Investigatory Powers (Amendment)</strong> <strong>Act 2024</strong> and the revised Codes of Practice brought into force during 2025 altered the notices regime, the internet connection record conditions, the bulk personal dataset regime and the section 11 offence. Every legal statement in this course is written as at September 2026 and is given so you know<em> what to look up</em>, not so you can rely on it. Before any statement here becomes a design constraint in a real programme, check it against the current Act, the current Code of Practice and your own legal advisers. This course is engineering guidance, not legal advice.</p>
+<h2 id="s-part-i-the-problem-domain">Part I — The Problem Domain</h2>
+<h2 id="s-module-1-what-cda-is-and-why-it-is-hard-c">Module 1 — What CDA Is, and Why It Is Hard [C]</h2>
+<aside class="callout"><p><strong>Objectives.</strong> You can define communications data acquisition and place it against the adjacent powers; you can name the parties and what each owes the others; and you can state the five structural tensions that make every CDA design a compromise.</p></aside>
+<h3>1.1 The one-sentence definition</h3>
+<p><strong>Communications data acquisition is the lawful obtaining, by a public authority from a</strong> <strong>telecommunications or postal operator, of data about a communication — who, when,</strong> <strong>where, how and with whom — but not what was said.</strong></p>
+<p>Every word in that sentence carries design consequences.<em> Lawful</em> means an authorisation regime and an audit obligation.<em> From an operator</em> means an interface between organisations with different incentives.<em> About a communication</em> means a data taxonomy with a legally sharp boundary.<em> Not what was said</em> means a filter that must be demonstrably effective.</p>
+<h3>1.2 Where CDA sits among the powers</h3>
+<pre class="diagram">+-------------------------------------------------------------+
+|  Targeted interception (IPA Part 2)                          |
+|  CONTENT of communications. Secretary of State warrant +     |
+|  Judicial Commissioner approval ("double lock").             |
++-------------------------------------------------------------+
+|  Targeted CD acquisition (IPA Part 3)   &lt;-- THIS COURSE      |
+|  Entity and events data. Authorisation normally by OCDA.     |
++-------------------------------------------------------------+
+|  Data retention (IPA Part 4)            &lt;-- and this         |
+|  Notices requiring operators to retain data they would       |
+|  otherwise delete. Secretary of State + JC approval.         |
++-------------------------------------------------------------+
+|  Equipment interference (Part 5) | Bulk powers (Part 6)      |
+|  Bulk personal datasets (Part 7, 7A, 7B)                     |
++-------------------------------------------------------------+
+|  Notices to operators (Part 9): data retention notices,      |
+|  technical capability notices, national security notices,    |
+|  notification notices                                         |
++-------------------------------------------------------------+</pre>
+<p>Two observations that matter more than they look.</p>
+<p><strong>Parts 3 and 4 are a pair.</strong> Part 4 makes the data exist; Part 3 obtains it. A CSP-side design that treats them as one system will over-retain; a design that treats them as unrelated will find that the retained schema cannot answer the questions Part 3 asks. Most of the interesting design work is in the seam.</p>
+<p><strong>Part 9 is the design-forcing part.</strong> A data retention notice or a technical capability notice is where an operator’s abstract duty becomes a concrete engineering requirement with a delivery date. If you are governing a CDA programme inside a CSP, the notice is your requirements baseline, and the fact that it is a legal instrument rather than a requirements document is a permanent source of friction.</p>
+<h3>1.3 The parties</h3>
+<div class="table-wrap"><table><thead><tr><th>Party</th><th>What they are</th><th>What they want</th></tr></thead><tbody><tr><td><strong>Acquiring authority</strong></td><td>Police force, NCA, intelligence agency, or one of the other listed public authorities</td><td>Fast, complete, intelligible answers; ability to use the result evidentially</td></tr><tr><td><strong>SPoC</strong></td><td>Single Point of Contact — accredited staff within the authority who quality-assure and submit requests</td><td>Requests that will be authorised and will not be returned; a predictable interface</td></tr><tr><td><strong>OCDA</strong></td><td>Office for Communications Data Authorisations — independent authorisation on behalf of most authorities</td><td>Applications that demonstrate necessity and proportionality on their face</td></tr><tr><td><strong>IPCO / IPC</strong></td><td>Investigatory Powers Commissioner’s Office — oversight and inspection</td><td>Auditable evidence that the regime was followed, at both ends</td></tr><tr><td><strong>CSP / TO</strong></td><td>The telecommunications operator holding the data</td><td>Minimum cost, minimum risk, clear scope, cost recovery, no surprises</td></tr><tr><td><strong>CSP disclosure team</strong></td><td>The accredited staff inside the operator who receive and answer requests</td><td>Unambiguous requests, tooling that does not require them to be engineers</td></tr><tr><td><strong>Vendor</strong></td><td>Supplier of retention, mediation and disclosure products</td><td>A scope that does not move; a reference architecture they recognise</td></tr><tr><td><strong>Investigatory Powers</strong></td><td>Redress for individuals</td><td>—</td></tr><tr><td><strong>Tribunal</strong></td><td></td><td></td></tr></tbody></table></div>
+<aside class="callout"><p><strong>Governance note. </strong>The commonest structural failure in these programmes is designing for the acquiring authority’s workflow when you are building the CSP’s system, or vice versa. They have genuinely different obligations. The CSP’s duty is to disclose what it holds, accurately, when lawfully required; it is not to investigate, to interpret, or to help build a case. Designs that quietly cross that line create both legal and commercial exposure.</p></aside>
+<h3>1.4 The shape of a request, end to end</h3>
+<pre class="diagram">Investigator    SPoC       OCDA       CSP gateway    Retention   Disclosure
+     |            |          |             |            store       team
+     |--(1) app--&gt;|          |             |             |           |
+     |            |--(2)----&gt;|             |             |           |
+     |            |&lt;-(3) authorisation ----|             |           |
+     |            |--(4) request ----------&gt;|            |           |
+     |            |          |             |--(5) query-&gt;|           |
+     |            |          |             |&lt;-(6) result-|           |
+     |            |          |             |--(7) review -----------&gt;|
+     |            |&lt;-(8) disclosure --------|             |          |
+     |&lt;-(9) -----|          |             |             |           |</pre>
+<p>1. An investigator applies, stating the purpose, the necessity, the proportionality case, the</p>
+<aside class="callout"><p>data sought and the period.</p></aside>
+<p>2. The SPoC quality-assures and submits to the authorising body. 3. Authorisation is granted, refused, or granted in part.</p>
+<aside class="callout"><p><strong>This is a legal act, and</strong> <strong>everything downstream inherits its scope.</strong></p></aside>
+<p>4. The authorised request reaches the CSP — increasingly over a structured, machine-</p>
+<aside class="callout"><p>readable interface rather than by email or portal. 5.–6. The CSP resolves the request against what it holds.</p></aside>
+<p>5. Where required, a human in the disclosure team reviews the result before it leaves — for</p>
+<aside class="callout"><p>scope, for content leakage, and for third-party data. 8.–9. The disclosure returns, with provenance, to the SPoC and the investigator.</p></aside>
+<p>Nine steps, two organisations, at least four systems, one legal instrument and one audit trail that has to survive inspection years later. That is the design problem.</p>
+<h3>1.5 The five structural tensions</h3>
+<p>Every CDA design is a negotiated position between these. Naming them makes design reviews far more productive, because most disagreements turn out to be about which tension is being prioritised rather than about the technology.</p>
+<p><strong>1. Completeness versus minimisation.</strong> The authority wants everything relevant; the law requires no more than is necessary and proportionate; the operator wants to hold as little as possible. The design decides this in concrete ways: what is retained, at what granularity, for how long, and what a query is permitted to return.</p>
+<p><strong>2. Latency versus deliberation.</strong> A threat-to-life request needs an answer in minutes. The same pipeline must also support a request that will be scrutinised in court in three years. Optimising for one degrades the other, and pretending one pipeline serves both is a common and expensive mistake.</p>
+<p><strong>3. Automation versus human judgement.</strong> Machine-to-machine interfaces are faster, more consistent and more auditable. But some decisions — is this within scope, is this content, is this third-party data — are judgement calls that regulators expect a person to have made. The design decides where the human sits, and that placement is a governance decision disguised as a workflow decision.</p>
+<p><strong>4. Evidential weight versus operational speed.</strong> Data that will be used as evidence needs provenance, integrity and a chain of custody that can be explained to a court. Data used only to direct an investigation needs none of that. Building everything to evidential standard is unaffordable; building nothing to it is negligent.</p>
+<p><strong>5. Capability versus exposure.</strong> Every capability built — every retained field, every query type, every interface — is also an attack surface, an insider risk and a political liability. The most secure CDA system is the one that cannot answer the question; the least useful one is the same system.</p>
+<h3>1.6 Why IMS makes it harder than it used to be</h3>
+<p>In a circuit-switched network, a call produced one record, in one place, with one identifier for each party, at the moment the call ended. That world is gone.</p>
+<div class="table-wrap"><table><thead><tr><th>Then</th><th>Now</th></tr></thead><tbody><tr><td>One CDR per call, from the switch</td><td>Records from several IMS nodes, at several stages, for one call</td></tr><tr><td>One identity: the phone number</td><td>IMPI, several IMPUs, SIP and TEL URIs, GRUUs, IMSI, IMEI, IP address and port</td></tr><tr><td>The network carried the service</td><td>The network may carry someone else’s service</td></tr><tr><td>A fixed location: the line, or the cell</td><td>An IP address that may be shared, carrier-graded, or a VPN exit</td></tr><tr><td>One operator end to end</td><td>Access operator, service operator, interconnect, and an OTT provider</td></tr><tr><td>Records existed for billing</td><td>Flat-rate bundles mean the commercial reason to generate records has gone</td></tr></tbody></table></div>
+<p>That last row is the one most often missed in governance. Historically, communications data existed because operators needed it to bill. Modern tariffs do not require per-event records, so increasingly the<em> only</em> reason a record exists is that the law requires it. That changes the engineering: retention becomes a purpose-built system rather than a by-product, and its cost is a compliance cost with no commercial offset. Expect that argument in every business case you review.</p>
+<h3>Key takeaways</h3>
+<ul>
+<li>CDA is the lawful obtaining of data<em> about</em> communications; content is a different power with a different test, and the boundary is load-bearing.</li>
+<li>Parts 3 and 4 of the IPA are a pair: one creates the data, the other obtains it. The design problem lives in the seam.</li>
+<li>A notice under Part 9 is where legal duty becomes an engineering requirement — and it is your requirements baseline whether or not it reads like one.</li>
+<li>Five tensions — completeness/minimisation, latency/deliberation, automation/judgement, evidence/speed, capability/exposure — explain most design disagreements.</li>
+<li>Modern networks have broken the assumptions the old model relied on: one record, one identity, one operator, and a commercial reason to keep it.</li>
+</ul>
+<h2 id="s-module-2-the-uk-legal-framework-c-g">Module 2 — The UK Legal Framework [C/G]</h2>
+<aside class="callout"><p><strong>Objectives. </strong>You can describe the structure of the IPA 2016 as it bears on CDA, name the authorisation routes and who uses them, explain the four kinds of notice an operator may receive, and translate each legal concept into the design requirement it generates.</p></aside>
+<p>This module is a map, not a legal text. Its purpose is to let you recognise which legal instrument is generating a requirement, so that you can ask whether the design actually satisfies it.</p>
+<h3>2.1 The structure</h3>
+<p>The<strong> Investigatory Powers Act 2016</strong> consolidated powers previously spread across RIPA 2000, the Telecommunications Act 1984 and elsewhere. It has been amended, materially, by the<strong> Investigatory Powers (Amendment) Act 2024</strong>, with revised Codes of Practice brought into force during 2025.</p>
+<div class="table-wrap"><table><thead><tr><th>Part</th><th>Subject</th><th>Relevance here</th></tr></thead><tbody><tr><td>Part 1</td><td>General protections, offences</td><td><strong>s.11</strong> offence of obtaining CD without lawful authority</td></tr><tr><td>Part 2</td><td>Targeted interception</td><td>Out of scope — content</td></tr><tr><td><strong>Part 3</strong></td><td><strong>Acquisition of</strong> <strong>communications data</strong></td><td><strong>The acquisition power</strong></td></tr><tr><td><strong>Part 4</strong></td><td><strong>Retention of</strong> <strong>communications data</strong></td><td><strong>The duty to hold it</strong></td></tr><tr><td>Part 5</td><td>Equipment interference</td><td>Out of scope</td></tr><tr><td>Part 6</td><td>Bulk powers, incl. bulk acquisition of CD</td><td>Adjacent; different regime</td></tr><tr><td>Part 7 / 7A / 7B</td><td>Bulk personal datasets</td><td>Adjacent; 7A and 7B added in 2024</td></tr><tr><td><strong>Part 8</strong></td><td><strong>Oversight</strong></td><td>IPC, IPCO, Technical Advisory Board, IPT</td></tr><tr><td><strong>Part 9</strong></td><td><strong>Miscellaneous — notices</strong></td><td><strong>Where duties become</strong> <strong>engineering</strong></td></tr></tbody></table></div>
+<h3>2.2 The acquisition power: Part 3</h3>
+<p>An authorisation permits a<em> relevant public authority</em> to obtain communications data where doing so is<strong> necessary</strong> for one of the statutory purposes and<strong> proportionate</strong> to what is sought to be achieved.</p>
+<p><strong>The statutory purposes</strong> include national security; preventing or detecting crime or preventing disorder; the economic well-being of the UK so far as relevant to national security; public safety; preventing death, injury or damage to health; and a small number of others including certain regulatory functions. Not every purpose is available to every authority, and not every purpose supports every data type.</p>
+<p><strong>Authorisation routes. </strong>Following the Data Retention and Acquisition Regulations 2018 — themselves a response to litigation about independence — the default is external authorisation:</p>
+<div class="table-wrap"><table><thead><tr><th>Route</th><th>Who decides</th><th>Typical use</th></tr></thead><tbody><tr><td><strong>OCDA</strong></td><td>Independent authorising officers acting for the IPC</td><td>The normal route for most authorities and most requests</td></tr><tr><td><strong>Designated senior officer</strong></td><td>A senior officer within the authority</td><td>Urgent cases, threat to life, and certain limited categories</td></tr><tr><td><strong>Judicial Commissioner</strong></td><td>JC approval</td><td>Where the statute requires it, e.g. certain sensitive professions</td></tr><tr><td><strong>Internal, intelligence</strong> <strong>agencies</strong></td><td>Agency internal authorisation with IPC oversight</td><td>National security work by the agencies</td></tr></tbody></table></div>
+<p><strong>The serious crime threshold.</strong> For<em> events</em> data acquired for the crime purpose, the crime must meet the serious-crime threshold.<em> Entity</em> data may be acquired for the broader crime purpose. This asymmetry is one of the most important facts in the whole course, because it means<strong> the entity/events distinction is not academic: it changes who may obtain what,</strong> <strong>on what grounds.</strong> Any design that cannot reliably classify a field as entity or events data has a legal problem, not a data-modelling problem.</p>
+<p><strong>Internet connection records. </strong>ICRs are a defined subset of events data — broadly, the record of which internet service a device connected to, and when, generated by the operator in the course of providing the service. They are subject to their own restrictions in section 62, including which authorities may obtain them and on what conditions. The 2024 Act relaxed one of those conditions to support “target discovery” — identifying an unknown person from a pattern of service usage — for the intelligence services and the NCA, with continued IPC oversight.</p>
+<aside class="callout"><p><strong>Governance note.</strong> ICR capability is the single most contested design area in CDA. If a programme you are governing is building it, expect the requirements to be ambiguous, the volumes to be badly estimated, and the political sensitivity to be high. Ask early and repeatedly: exactly which events constitute an ICR in our network, and who has signed that definition off?</p></aside>
+<h3>2.3 The retention duty: Part 4</h3>
+<p>A<strong> data retention notice</strong> (DRN) may require an operator to retain specified communications data for up to twelve months. The notice is given by the Secretary of State and approved by a Judicial Commissioner, and it may specify the data, the period, the operator’s obligations as to integrity and security, and the arrangements for disclosure.</p>
+<p>Key features that shape the design:</p>
+<ul>
+<li><strong>Retention is compelled, not permitted.</strong> The operator must retain what the notice specifies. It must<em> not</em> retain more than its other legal bases allow — data protection law still applies to everything else.</li>
+<li><strong>Retained data must be kept secure and to the same standard as the operator’s</strong> <strong>own business data</strong>, and must be destroyed at the end of the period unless another basis applies.</li>
+<li><strong>Retained data must be capable of disclosure without undue delay. </strong>That is a performance requirement, expressed legally, and it is the origin of most of the latency requirements in a retention design.</li>
+<li><strong>Notices are now subject to statutory review timelines</strong> following the 2024 Act and the 2025 notices regulations, where previously review could be open-ended.</li>
+</ul>
+<h3>2.4 Notices to operators: Part 9</h3>
+<p>Four instruments, and it is worth being able to tell them apart at a glance, because they generate very different work.</p>
+<div class="table-wrap"><table><thead><tr><th>Notice</th><th>Power</th><th>What it does</th><th>Design consequence</th></tr></thead><tbody><tr><td><strong>Data retention</strong> <strong>notice</strong></td><td>Part 4</td><td>Requires specified CD to be retained, up to 12 months</td><td>Build and operate a retention store</td></tr><tr><td><strong>Technical</strong> <strong>capability notice</strong></td><td>s.253</td><td>Requires the operator to maintain a capability to give effect to warrants and authorisations</td><td>Build and maintain interfaces and systems, in advance of any specific request</td></tr><tr><td><strong>National security</strong> <strong>notice</strong></td><td>s.252</td><td>Requires steps in the interests of national security</td><td>Varies; often infrastructure or access arrangements</td></tr><tr><td><strong>Notification notice</strong></td><td>s.258A (added 2024)</td><td>Requires the operator to notify the Secretary of State of relevant changes that would negatively affect capability, before making them</td><td>A<strong> change-control</strong> <strong>obligation</strong>: your release process becomes a regulated process</td></tr></tbody></table></div>
+<p>Three points about notification notices, since they are new and least understood:</p>
+<ul>
+<li>They apply to operators above a customer threshold — set at more than 10,000 customers in the implementing regulations.</li>
+<li>They require<em> notification</em>, not permission. The Secretary of State has no power under s.258A to approve or veto the change.</li>
+<li>Routine security patching is excluded.</li>
+</ul>
+<aside class="callout"><p><strong>Governance note. </strong>A notification notice changes the<em> governance of your own</em> <em>delivery lifecycle</em>. Somebody must be able to tell, for every change going through your release process, whether it is notifiable. That is an architecture and impact-assessment capability, not a legal one, and if it is not designed deliberately it will be done by an overloaded human reading release notes. Put it on the design authority agenda before the first release, not after the first miss.</p></aside>
+<h3>2.5 Oversight, and what it demands of the design</h3>
+<p><strong>The Investigatory Powers Commissioner</strong> and<strong> IPCO</strong> inspect both authorities and, in respect of their obligations, operators. Inspection is evidence-based: inspectors look at records of what was requested, what was authorised, what was disclosed, and whether those three agree.</p>
+<p>That produces a hard design requirement that is easy to underrate:</p>
+<p><strong>Every disclosure must be reconstructable.</strong> Years later, you must be able to show: the request as received, the authorisation it cited, the query actually executed, the data actually returned, who saw it, and when everything was destroyed. If your architecture cannot produce that narrative from its own records, it is not compliant regardless of how correctly it behaved at the time.</p>
+<p><strong>The Investigatory Powers Tribunal</strong> provides redress for individuals.</p>
+<aside class="callout"><p>Its existence is</p></aside>
+<p>why error reporting matters: a material error — data disclosed that should not have been, or disclosed about the wrong person — is reportable, and the design should make errors <em>detectable</em>, not merely unlikely.</p>
+<h3>2.6 Translating law into requirements</h3>
+<p>This table is the practical output of the module. It is deliberately written in the form you would put into a requirements traceability matrix.</p>
+<div class="table-wrap"><table><thead><tr><th>Legal concept</th><th>Requirement it generates</th><th>Evidence that satisfies it</th></tr></thead><tbody><tr><td>Necessity and proportionality</td><td>The system must not return more than the authorisation permits</td><td>Scope enforcement at query time; logged comparison of request scope to result scope</td></tr><tr><td>Entity vs events distinction</td><td>Every retained field must be classified, and the classification must drive access control</td><td>Data catalogue with per-field classification; query-time enforcement; sign-off record</td></tr><tr><td>Serious crime threshold (events)</td><td>Authorisation type must be checked before events data is released</td><td>Machine-readable authorisation attributes; enforced at the gateway</td></tr><tr><td>ICR restrictions (s.62)</td><td>ICR queries must be separately controlled and separately logged</td><td>Distinct capability, distinct audit stream, distinct approval</td></tr><tr><td>Content exclusion</td><td>The system must not disclose content, including content inferable from over-granular data</td><td>Documented content-boundary analysis per field; filtering; human review point</td></tr><tr><td>Retention limits (Part 4)</td><td>Automated, verifiable deletion at end of period</td><td>Deletion job with evidence; sampling; exception reporting</td></tr><tr><td>“Without undue delay”</td><td>Defined and monitored response times, with an urgent path</td><td>SLA instrumentation; separate urgent pipeline</td></tr><tr><td>s.11 lawful authority</td><td>The system must refuse to act on a request lacking valid authority</td><td>Authorisation validation; refusal is a designed, logged outcome</td></tr><tr><td>Oversight / inspection</td><td>Full reconstructability of every disclosure</td><td>Immutable audit; retention of the audit beyond the data</td></tr><tr><td>Error reporting</td><td>Errors must be detectable and reportable</td><td>Reconciliation controls; defined error taxonomy; escalation path</td></tr><tr><td>Notification notices</td><td>Notifiable-change detection in the release process</td><td>Change impact assessment with a capability-impact question</td></tr></tbody></table></div>
+<h3>Key takeaways</h3>
+<ul>
+<li>Part 3 acquires, Part 4 retains, Part 9 compels capability. Know which one is generating the requirement in front of you.</li>
+<li>The entity/events distinction determines the legal test, so it must be a first-class, enforced attribute of the data model — not a documentation exercise.</li>
+<li>ICRs carry their own restrictions and their own political weight; treat them as a separate capability with separate controls.</li>
+<li>Notification notices make your own change process a regulated process.</li>
+<li>Oversight demands reconstructability. If a disclosure cannot be explained from system records years later, the design has failed even if it behaved correctly.</li>
+</ul>
+<h2 id="s-module-3-the-data-taxonomy-c-d">Module 3 — The Data Taxonomy [C/D]</h2>
+<aside class="callout"><p><strong>Objectives.</strong> You can classify a field as entity data, events data or content and justify the classification; you can explain why the boundary is difficult in an IP network; and you can specify the controls a design needs so that the classification is enforced rather than merely asserted.</p></aside>
+<p>If Module 2 is the map, this is the compass. Almost every hard question in a CDA design reduces to “which side of a line is this data on?”</p>
+<h3>3.1 The three categories</h3>
+<pre class="diagram">+-----------------------------------------------------------+
+|  CONTENT                                                   |
+|  The meaning of the communication: what was said, written  |
+|  or sent. Requires an interception warrant. NOT in scope.  |
++-----------------------------------------------------------+
+|  EVENTS DATA                                               |
+|  Data identifying or describing an EVENT on a system:      |
+|  something happened, between these parties, at this time,  |
+|  from this place, by this means.                           |
++-----------------------------------------------------------+
+|  ENTITY DATA                                               |
+|  Data about an ENTITY — a person, a device, an account —   |
+|  and about the association between an entity and a         |
+|  telecommunications service. Who holds this number?        |
++-----------------------------------------------------------+</pre>
+<p><strong>Entity data</strong> answers<em> who or what</em>. The subscriber behind a number; the account behind a username; the device associated with a SIM; the address a service is installed at; which services an account holds. It is comparatively static, and it is the less privacy-intrusive category — which is why the law permits it to be obtained on a lower threshold.</p>
+<p><strong>Events data</strong> answers<em> what happened, when</em>. A call was made from A to B at this time for this duration; a device registered on the network at this cell; a message was sent; a data session started and stopped. It is dynamic, it accumulates, and in aggregate it reveals pattern of life. The law therefore attaches the higher threshold to it.</p>
+<p><strong>Content</strong> is what was communicated. For a voice call, the audio. For a message, the text. And — the part designs get wrong —<strong> anything that reveals the meaning of the communication</strong>, including elements of signalling data that would disclose what a service was being used for at a level of detail beyond identifying the service itself.</p>
+<h3>3.2 Worked classification</h3>
+<p>The table below classifies the fields an IMS-era operator typically holds. Treat it as a worked example rather than an authority: your own classification must be made against the current Act and Code and signed off, and some of these are genuinely arguable.</p>
+<div class="table-wrap"><table><thead><tr><th>Field</th><th>Classification</th><th>Note</th></tr></thead><tbody><tr><td>Subscriber name and billing address</td><td>Entity</td><td>The classic “subscriber check”</td></tr><tr><td>MSISDN ↔account mapping</td><td>Entity</td><td></td></tr><tr><td>IMSI, IMEI associated with an account</td><td>Entity</td><td></td></tr><tr><td>IMPI / IMPU associated with a subscription</td><td>Entity</td><td>The IMS-era equivalent</td></tr><tr><td>Services provisioned on an account</td><td>Entity</td><td>Voice, video, SMS, RCS</td></tr><tr><td>Account status, activation, cessation dates</td><td>Entity</td><td>Arguably event-like, generally treated as entity</td></tr><tr><td>IMS registration: identity, time, access type</td><td>Events</td><td>The device attached at this time</td></tr><tr><td>IMS registration: cell or access location</td><td>Events</td><td>Location is events data</td></tr><tr><td>Call/session start, end, duration, both parties</td><td>Events</td><td>The core record</td></tr><tr><td>Message sent: sender, recipient, time</td><td>Events</td><td></td></tr><tr><td>Message body</td><td><strong>Content</strong></td><td>Never in scope</td></tr><tr><td>Media type of a session (voice vs video)</td><td>Events</td><td>Describes the event, not its meaning</td></tr><tr><td>Codec negotiated</td><td>Events, low value</td><td>Rarely worth retaining</td></tr><tr><td>Supplementary service invoked (forwarded, held)</td><td>Events</td><td>Useful and often overlooked</td></tr><tr><td>Forwarded-to number</td><td>Events</td><td>And a third-party data question</td></tr><tr><td>Data session start/stop, volume, IP and port</td><td>Events</td><td></td></tr><tr><td>Destination IP/port or hostname of a session</td><td>Events, possibly ICR</td><td><strong>Depends on granularity —</strong> <strong>see §3.3</strong></td></tr><tr><td>Full URL beyond the host</td><td>Likely<strong> content</strong></td><td>The classic bright line</td></tr><tr><td>DNS query for a hostname</td><td>Contested; often events/ICR</td><td>Jurisdiction-and design-sensitive</td></tr><tr><td>Cell site / location at a point in time</td><td>Events</td><td></td></tr><tr><td>Device capability data (feature tags)</td><td>Entity or events by context</td><td>Often over-collected</td></tr></tbody></table></div>
+<aside class="callout"><p><strong>Governance note. </strong>Notice how many rows say “depends” or “arguably”. That is the honest position, and a design that presents this table with no ambiguity is concealing decisions rather than making them. The governance requirement is not that every field be obviously classified; it is that every arguable field have a<strong> recorded</strong> <strong>decision, a named decision-maker and a stated rationale</strong>. That record is what an inspector will ask for.</p></aside>
+<h3>3.3 Where the content boundary actually bites</h3>
+<p>Three recurring cases. Each is a design decision dressed as a data question.</p>
+<p><strong>Granularity of a destination. </strong>“This device contacted<code> example.com</code>” identifies a service. “This device requested <code>example.com/support/bereavement-benefits/apply</code>” reveals the substance of the communication. Same protocol, same log source, different side of the line. The design consequence is that<strong> truncation must happen at generation, not at disclosure</strong> — if the full string is retained, it exists, and its existence is a risk and a disclosure target regardless of your intentions.</p>
+<p><strong>Signalling that carries meaning.</strong> Some signalling fields describe a service; others leak substance. A SIP header identifying the communication service in use is descriptive. A subject line in a message header, or free-text carried in a signalling field, is content sitting in a place that looks like metadata. Anywhere an operator retains a signalling record verbatim rather than parsing defined fields out of it, this risk exists.</p>
+<p><strong>Inference from aggregation. </strong>A single record may be unambiguously events data while a long enough sequence of them discloses far more than any one of them. The law does not generally reclassify data because it was aggregated, but proportionality and oversight expectations bite harder on bulk-like queries. The practical design answer is to constrain the <em>query</em>, not only the<em> field</em>: limit periods, require the request scope to be enforced mechanically, and separately log broad queries for review.</p>
+<h3>3.4 Design controls the taxonomy demands</h3>
+<p>The taxonomy is not achieved by writing it down. Four controls make it real.</p>
+<p><strong>1. A field-level data catalogue as a build artefact. </strong>Every retained field carries: its classification, the legal basis for holding it, the retention period, its source system, its known quality characteristics, and the date and owner of the classification decision. This is a<em> machine-</em> <em>readable artefact used by the system</em>, not a spreadsheet in a governance folder — if the catalogue and the schema can drift apart, they will.</p>
+<p><strong>2. Classification-driven access control. </strong>The authorisation type carried with a request determines which classifications may be returned. An entity-only authorisation must be mechanically incapable of returning events data.</p>
+<aside class="callout"><p>This belongs at the query gateway,</p></aside>
+<p>enforced, not in a user interface that a trained operator is expected to use correctly.</p>
+<pre class="diagram">Request + Authorisation
+         |
+         v
++---------------------------+     catalogue
+|  Scope resolver           |&lt;----(field classifications,
+|  - what is authorised?    |     periods, bases)
+|  - what is requested?     |
+|  - intersection only      |
++---------------------------+
+         |
+         v  permitted field set + permitted period
++---------------------------+
+|  Query execution          |  never sees fields outside the set
++---------------------------+
+         |
+         v
++---------------------------+
+|  Result assembly + audit  |  records requested vs authorised
++---------------------------+     vs returned</pre>
+<p><strong>3. Truncation and parsing at the point of generation. </strong>Content-bearing granularity is removed before the record is written to the retention store. This is the single highestvalue control in the whole architecture, because it converts a continuing risk into a one-off engineering decision.</p>
+<p><strong>4. A human review point with a defined remit.</strong> Somebody, with training and accreditation, looks at the result before it leaves — specifically for scope creep, content leakage and third-party data. The design decides<em> when</em> this is required: typically always for free-text or unparsed fields, and never for fully structured, pre-classified results. Making that rule explicit is better than making every disclosure wait for a human, which is what happens by default when nobody decides.</p>
+<h3>3.5 Third-party data</h3>
+<p>A request about A’s communications necessarily reveals something about B, who is not the subject of any authorisation. This is unavoidable and is accepted in the regime — but it has design consequences:</p>
+<ul>
+<li><strong>Minimise incidental identification.</strong> Return what the request needs, not the whole record because the whole record was easier to extract.</li>
+<li><strong>Flag it.</strong> Results containing third-party identifiers should be marked so that handling downstream is deliberate.</li>
+<li><strong>Do not enrich it.</strong> It is tempting to resolve the other party’s number to a subscriber name because you hold that mapping. Unless the authorisation covers it, that is a fresh disclosure about a person who is not the subject. This is one of the most common real-world errors and it is designed in, not operator error, when the tooling enriches by default.</li>
+</ul>
+<h3>Key takeaways</h3>
+<ul>
+<li>Three categories — entity, events, content — and the first two carry different legal thresholds, so classification has legal effect.</li>
+<li>The hard cases are granularity, signalling that carries meaning, and inference from aggregation.</li>
+<li>Classification must be enforced by the architecture: catalogue as a build artefact, scope resolution at the gateway, truncation at generation.</li>
+<li>Constrain the query as well as the field; proportionality lives in scope, not only in schema.</li>
+<li>Do not enrich third-party identifiers by default. Default-on enrichment is a designed-in error.</li>
+</ul>
+<h2 id="s-part-ii-where-the-data-comes-from">Part II — Where the Data Comes From</h2>
+<h2 id="s-module-4-ims-as-a-data-producing-machine-c-d">Module 4 — IMS as a Data-Producing Machine [C/D]</h2>
+<aside class="callout"><p><strong>Objectives.</strong> You can explain what IMS is in two minutes to a non-specialist, name the nodes that generate communications data and what each one knows, describe the records a call or message actually produces, and identify where the data you need is<em> not</em> generated.</p></aside>
+<p>Appendix C holds the protocol detail. This module is only concerned with what IMS produces, where, and how trustworthy it is.</p>
+<h3>4.1 IMS in two minutes</h3>
+<p>The<strong> IP Multimedia Subsystem</strong> is the standardised system operators use to deliver voice, video and messaging over packet networks. It is what makes a 4G or 5G phone call a phone call rather than an app: it supplies the telephone number as an identity, interconnect to every other operator, emergency calling, supplementary services such as diversion and barring, lawful process, and charging that can be reconciled between operators.</p>
+<p>Three facts are enough to reason about the data.</p>
+<p><strong>Fact 1 — signalling and media travel separately. </strong>The control messages that set up a call pass through the IMS core. The voice itself does not: it flows through the user plane, often bypassing the core entirely. <strong>This is why communications data and content are</strong> <strong>physically separable in IMS</strong> — a fortunate alignment between the architecture and the law, and the reason CD generation does not require touching media at all.</p>
+<p><strong>Fact 2 — the subscriber’s home network always sees the transaction.</strong> However far the user roams, the session passes through their home serving node. So the home operator holds a record of every session its subscribers originate or receive, which is what makes CSP-side retention viable.</p>
+<p><strong>Fact 3 — IMS is access-independent.</strong> The same core serves 4G, 5G, Wi-Fi calling and fixed broadband. One consequence for design: the IMS record tells you the identity and the event, but tells you comparatively little about<em> where</em> — location comes from the access network, and must be correlated in.</p>
+<h3>4.2 The nodes that generate data, and what each knows</h3>
+<pre class="diagram">+--------+        +----------+        +-----------+
+|  UE    |--Gm---&gt;|  P-CSCF  |--Mw---&gt;|  S-CSCF   |
++--------+        +----------+        +-----------+
+  device            access edge          home core
+                         |                    |
+                         |                    +--ISC--&gt; +---------+
+                         |                    |         |  TAS    |
+                     knows:               knows:        +---------+
+                     - access type        - the identity   service logic
+                     - IP address         - both parties   knows:
+                     - cell / location    - service used   - diversion
+                     - registration       - time, outcome  - barring
+                       binding            - iFC chain      - conference
+                                                           - transfer
+                         |                    |</pre>
+<pre class="diagram">+--------+          +---------+     +---------+
+| policy |          |  HSS    |     |IP-SM-GW |
+| (PCRF/ |          +---------+     +---------+
+|  PCF)  |           subscriber       messaging
++--------+           data, identity   (SMS over IP)
+ QoS events          bindings</pre>
+<div class="table-wrap"><table><thead><tr><th>Node</th><th>Generates</th><th>Value for CDA</th></tr></thead><tbody><tr><td><strong>P-CSCF</strong></td><td>Registration events, access type, UE IP address and port, cell identity via the access-network header, session start/stop as seen at the edge</td><td><strong>The location and access</strong> <strong>story.</strong> The single richest source for “where was this device”.</td></tr><tr><td><strong>S-CSCF</strong></td><td>Registration state, both parties’ identities, session establishment and release, service invoked, final outcome</td><td><strong>The authoritative session</strong> <strong>record.</strong> If you retain one thing, retain this.</td></tr><tr><td><strong>TAS / MMTel AS</strong></td><td>Supplementary service events: diversion applied, call waiting, transfer, conference, barring</td><td>The<em> why</em> behind an odd record. Frequently under-retained and then badly missed.</td></tr><tr><td><strong>HSS</strong></td><td>Identity bindings: IMPI, IMPUs, MSISDN, IMSI, service profile, current serving node</td><td>The entity-data backbone.</td></tr><tr><td><strong>IP-SM-GW</strong></td><td>SMS over IP send/deliver events and delivery reports</td><td>Messaging records when SMS runs over IMS rather than the legacy path.</td></tr><tr><td><strong>IBCF / border</strong></td><td>Interconnect events, peer operator identity, inter-operator identifiers</td><td>Who the other operator was; essential for onward enquiry.</td></tr><tr><td><strong>SCC AS</strong></td><td>Access transfers, domain selection decisions</td><td>Explains a session that moved between 4G, 5G and circuit-switched.</td></tr><tr><td><strong>Policy (PCRF/PCF)</strong></td><td>QoS session events tied to a media session</td><td>Corroboration and timing; rarely primary.</td></tr><tr><td><strong>Charging (CDF/OCS)</strong></td><td>The consolidated charging record</td><td>Often the<em> existing</em> production source the programme is tempted to reuse — see §4.5.</td></tr></tbody></table></div>
+<aside class="callout"><p><strong>Governance note.</strong> Ask early:<em> which node is the system of record for each event</em> <em>type, and what happens when two disagree? </em>In practice several nodes produce overlapping records of the same call, with different timestamps, different identifier forms and different completeness. A design that has not nominated a system of record per event type has deferred a problem that will surface as a data-quality incident under inspection.</p></aside>
+<h3>4.3 What one voice call actually produces</h3>
+<p>A single answered call between two of your subscribers, in an ordinary IMS network, typically produces records at these points:</p>
+<pre class="diagram">t0   Caller's device already registered      -&gt; registration record exists
+                                                (P-CSCF, S-CSCF)
+t1   Session invitation submitted            -&gt; originating session record
+                                                starts (S-CSCF)
+t2   Originating service logic applied       -&gt; service event if barring,
+                                                diversion etc. apply (TAS)
+t3   Destination resolved, routed            -&gt; interconnect record if the
+                                                call leaves (IBCF)
+t4   Terminating service logic applied       -&gt; service event (TAS)</pre>
+<pre class="diagram">t5   Called device alerted                   -&gt; progress state
+t6   Answered                                -&gt; answer time recorded
+t7   Media flows                             -&gt; policy/QoS session record;
+                                                NO content record
+t8   Released                                -&gt; release time, cause, duration
+t9   Consolidated                            -&gt; charging record(s) produced</pre>
+<p><strong>So a single call yields several records from several systems</strong>, which must be correlated to produce the one row an investigator expects. That correlation is the central engineering problem of Module 8, and the thing most likely to be underestimated in a plan.</p>
+<p>The equivalent for a message is shorter but has the same shape: a submit event, a routing event, a delivery event, and sometimes a delivery report — four records for one message, frequently in two different systems if SMS can travel either over IMS or over the legacy path.</p>
+<h3>4.4 What IMS does not tell you</h3>
+<p>An honest account of the gaps is more useful to a governance reader than a catalogue of the riches.</p>
+<div class="table-wrap"><table><thead><tr><th>Question</th><th>Can IMS answer it?</th></tr></thead><tbody><tr><td>Who called whom, when, for how long</td><td><strong>Yes</strong>, well</td></tr><tr><td>Which identity was used</td><td><strong>Yes</strong> — but several identities map to one person</td></tr><tr><td>Where the device was</td><td><strong>Partly</strong> — via the access-network information carried in signalling, at cell granularity, at specific moments</td></tr><tr><td>Where the device was<em> between</em> events</td><td><strong>No</strong> — that is access-network data, not IMS</td></tr><tr><td>What was said</td><td><strong>No</strong>, and by design</td></tr><tr><td>Whether the call was answered by a person</td><td><strong>No</strong> — answered is not answered-by-whom</td></tr><tr><td>Who the subscriber is</td><td><strong>No</strong> — that is HSS and the business systems, joined in</td></tr><tr><td>What happened on a third-party app</td><td><strong>No</strong> — OTT services are invisible to IMS</td></tr><tr><td>Whether a diverted call reached its final destination</td><td><strong>Only if</strong> the diversion legs are retained and correlated</td></tr><tr><td>What device was used</td><td><strong>Partly</strong> — device identity appears in registration, not reliably per session</td></tr></tbody></table></div>
+<p>The two entries in bold-adjacent territory are the ones that cause friction with acquiring authorities: continuous location, and anything about over-the-top services. Both are outside what the IMS record can honestly support, and the right governance response is to say so early and in writing rather than to let a requirement persist that the architecture cannot meet.</p>
+<h3>4.5 The charging-record temptation</h3>
+<p>Every programme reaches a moment where somebody says:<em> we already produce charging</em> <em>records; can we not just retain those?</em></p>
+<div class="table-wrap"><table><thead><tr><th>Reuse charging records</th><th>Purpose-built CD generation</th></tr></thead><tbody><tr><td>Cost to build Low — the feed exists</td><td>High — new interfaces, new pipeline</td></tr><tr><td>Completeness Only what is billable.</td><td>Designed for the</td></tr><tr><td>Unanswered calls, zero-rated events, bundled traffic and internal transactions may be absent</td><td>requirement</td></tr><tr><td>Timeliness Batch, often hours; consolidated late</td><td>Can be near-real-time</td></tr><tr><td>Field set Optimised for money, not for identity or location</td><td>Optimised for the request types</td></tr><tr><td>Stability Changes whenever the tariff changes</td><td>Changes under change control</td></tr><tr><td>Classification Mixed; not built with the entity/events boundary in mind</td><td>Classified by design</td></tr><tr><td>Evidential quality Designed for internal reconciliation, not disclosure</td><td>Designed for provenance</td></tr></tbody></table></div>
+<p>The reuse option is often right for a first release, and is often<em> presented</em> as right for the end state. The governance question is not “which is better” but<strong> “what does the notice actually</strong> <strong>require, and can this source meet it without a dependency on the billing roadmap?”</strong> The dependency is the killer: tying a regulated capability to a commercial system whose changes are driven by marketing produces a permanent, invisible compliance risk.</p>
+<aside class="callout"><p><strong>Governance note.</strong> If a design reuses charging records, insist on two artefacts: a <strong>gap analysis</strong> against the notice, field by field, with the gaps accepted explicitly; and a<strong> change-coupling statement</strong> naming who must be consulted before a billing change goes live. Without both, the risk is real and nobody owns it.</p></aside>
+<h3>Key takeaways</h3>
+<ul>
+<li>IMS separates signalling from media, so communications data can be generated without ever touching content — the architecture and the law agree here.</li>
+<li>Different nodes know different things: S-CSCF for the authoritative session, P-CSCF for access and location, TAS for why a call behaved oddly, HSS for identity.</li>
+<li>One call produces many records in many systems; correlation, not capture, is the hard part.</li>
+<li>IMS cannot give continuous location, anything about OTT services, or content — say so early.</li>
+<li>Reusing charging records is a legitimate first move and a dangerous end state; demand a gap analysis and a change-coupling statement.</li>
+</ul>
+<h2 id="s-module-5-identifiers-and-the-resolution-problem-d">Module 5 — Identifiers and the Resolution Problem [D]</h2>
+<aside class="callout"><p><strong>Objectives.</strong> You can enumerate the identifiers in play and say what each is good for; you can explain why identity resolution is the dominant design risk in CDA; and you can specify a resolution design that is defensible under inspection.</p></aside>
+<p>An acquiring authority arrives with one identifier and a time. Everything the system does afterwards depends on turning that into the right set of records about the right person — and on knowing when it cannot.</p>
+<h3>5.1 The identifier zoo</h3>
+<div class="table-wrap"><table><thead><tr><th>Identifier</th><th>What it names</th><th>Stability</th><th>Typical use in a request</th></tr></thead><tbody><tr><td><strong>MSISDN</strong></td><td>The telephone number</td><td>Stable, but portable and reassignable</td><td>The most common starting point</td></tr><tr><td><strong>IMSI</strong></td><td>The subscription on the SIM</td><td>Stable per SIM</td><td>Links records across access and core</td></tr><tr><td><strong>IMEI / IMEISV</strong></td><td>The physical device</td><td>Stable per handset</td><td>“What else was used in this device?”</td></tr><tr><td><strong>IMPI</strong></td><td>The IMS private identity — the credential</td><td>One per subscription/device</td><td>Internal; rarely a request input</td></tr><tr><td><strong>IMPU</strong></td><td>The IMS public identity: a SIP URI or TEL URI</td><td>Several per subscriber</td><td>Appears throughout IMS records</td></tr><tr><td><strong>IP address + port +</strong> <strong>time</strong></td><td>A network endpoint at an instant</td><td>Highly unstable</td><td>Increasingly the starting point</td></tr><tr><td><strong>Account number /</strong> <strong>customer ID</strong></td><td>The commercial relationship</td><td>Stable</td><td>Entity-data enquiries</td></tr><tr><td><strong>Username / handle</strong></td><td>An account on a service</td><td>Varies</td><td>Where the operator runs the service</td></tr><tr><td><strong>GRUU</strong></td><td>A specific registered device instance</td><td>Per registration</td><td>Rare, but disambiguates multi-device</td></tr></tbody></table></div>
+<p>Two structural facts drive most of the difficulty.</p>
+<p><strong>A person is not an identifier.</strong> One person may hold several MSISDNs, several IMPUs aliased to each, a tablet with its own IMPI, and a Wi-Fi-calling registration from a device with no SIM at all. Conversely one MSISDN may have been held by three people over eighteen months.</p>
+<p><strong>Identifiers are reused.</strong> Numbers are recycled after cessation. IP addresses are reassigned continuously. IMEIs are cloned. <strong>Therefore every identifier lookup is only valid with</strong> <strong>respect to a time</strong>, and a design that resolves an identifier without a temporal qualifier is producing confident answers about the wrong people. This is the single most consequential correctness requirement in the whole system.</p>
+<h3>5.2 The three resolution problems</h3>
+<pre class="diagram">(A) Identifier  -&gt;  Subscriber          "who holds this number?"
+    Entity data. Needs: time-qualified account history.
+
+(B) Identifier  -&gt;  Other identifiers    "what else is this person?"
+    Entity data. Needs: binding history across MSISDN/IMSI/IMEI/IMPU.
+    DANGER: over-expansion. Each hop widens the disclosure.
+
+(C) Identifier + time  -&gt;  Events        "what did they do?"
+    Events data. Needs: correct resolution at (A)/(B) FIRST,
+    then a scoped query.</pre>
+<p>Problem (B) is where designs go wrong in a way that matters. It is technically easy to walk the graph — this MSISDN was in this device, which also held that SIM, which is registered to that account — and each hop feels like the same enquiry. Legally, each hop may be a disclosure about a different person, and the authorisation may not cover it.</p>
+<aside class="callout"><p><strong>Governance note.</strong> Require the design to answer:<em> how many hops does a resolution</em> <em>perform, is that number bounded, is the bound configurable per authorisation, and</em> <em>is the hop count in the audit record?</em> If the answer is “the tool follows the links”, the design has delegated a legal judgement to a graph traversal.</p></aside>
+<h3>5.3 Carrier-grade NAT, and why it breaks things</h3>
+<p>The IP-address-to-subscriber lookup is the case that most often fails in practice, and the reason is address sharing.</p>
+<pre class="diagram">Subscriber A  10.x.x.x:...  \
+Subscriber B  10.x.x.x:...   &gt;-- CGNAT --&gt; 203.0.113.7 : port ranges
+Subscriber C  10.x.x.x:...  /
+                                one public address, hundreds of subscribers</pre>
+<p>Given only a public IP address and a timestamp, the operator cannot say which subscriber it was. Resolution requires, at minimum, the<strong> source port</strong> and an<strong> accurate time</strong>, matched against the NAT translation records for that instant.</p>
+<aside class="callout"><p>That produces three hard design</p></aside>
+<p>requirements:</p>
+<p>1.<strong> Port must be part of the request.</strong> If the acquiring authority’s source system does not</p>
+<aside class="callout"><p>capture source port, the enquiry is unanswerable and the design should return a clear “insufficient information” rather than a best guess. Getting this stated in the interface specification, rather than discovered case by case, saves an enormous amount of friction.</p></aside>
+<p>2.<strong> Clock accuracy becomes a compliance control.</strong> Translation bindings last seconds.</p>
+<aside class="callout"><p>A clock skew of a few seconds between the authority’s source, the operator’s NAT logs and the retention store turns a correct answer into a wrong one. Time synchronisation is therefore not an infrastructure detail in this system; it is a correctness control that belongs in the assurance regime with evidence attached.</p></aside>
+<p>3.<strong> NAT logging volume is the dominant capacity driver. </strong>Translation records vastly</p>
+<aside class="callout"><p>outnumber session records. Any capacity model that does not size this separately is wrong, usually by an order of magnitude.</p></aside>
+<p>Deterministic NAT allocation — giving each subscriber a fixed port range — reduces log volume by orders of magnitude at some cost in address efficiency. It is one of the highestleverage design decisions available and is frequently made by the IP network team without reference to the CDA programme.</p>
+<h3>5.4 Designing resolution defensibly</h3>
+<p><strong>Model bindings as intervals, not as facts.</strong> Every association — MSISDN-to-account, IMSI- to-MSISDN, IP-to-subscriber — is valid from a time to a time. The primary key of the resolution store is (identifier, type, valid-from, valid-to). Queries take a time and select the binding in force. This sounds obvious and is very often not what the underlying business systems provide, because they hold current state and overwrite history.</p>
+<pre class="diagram">Request: MSISDN=X, period 2026-02-01 .. 2026-02-28
+                 |
+                 v
++-----------------------------------------------+
+| Binding store (interval model)                |
+|  X -&gt; account A   2024-06-01 .. 2026-02-14    |
+|  X -&gt; account B   2026-02-20 .. open          |
++-----------------------------------------------+
+                 |
+                 v
+Result MUST distinguish:
+  - 01 Feb .. 14 Feb : account A
+  - 15 Feb .. 19 Feb : NOT ALLOCATED   &lt;- say so explicitly
+  - 20 Feb .. 28 Feb : account B       &lt;- a different person!</pre>
+<p>That third row is the one that produces wrongful disclosure if the design returns “account B” for the whole period.<strong> The requirement is that a resolution returns a time-segmented</strong> <strong>answer, including explicit gaps, not a single value.</strong></p>
+<p><strong>Return confidence, not just values.</strong></p>
+<aside class="callout"><p>A resolution can be exact (a unique binding),</p></aside>
+<p>ambiguous (several candidates, e.g. CGNAT without port), or absent. The interface must be able to express all three. Collapsing ambiguity into a single best answer is an error the receiving analyst cannot detect.</p>
+<p><strong>Separate resolution from retrieval. </strong>Resolution is an entity-data operation; retrieval of events is an events-data operation with a higher threshold. Keeping them as distinct services with distinct authorisation checks makes the legal boundary enforceable and the audit legible. Fusing them into one “search” is convenient and makes the entity/events distinction impossible to demonstrate.</p>
+<h3>5.5 Number portability and interconnect</h3>
+<p>Two more sources of wrong answers, both worth a governance question.</p>
+<p><strong>Portability. </strong>A number no longer identifies an operator. A request arriving at the wrong operator should produce a clear, standard “not our subscriber” response rather than an empty result — an empty result is indistinguishable from “no activity”, which is a materially different fact. Getting that distinction into the interface specification is a small change with large downstream value.</p>
+<p><strong>Interconnect. </strong>When the other party is on another network, you hold their number but nothing about them. Inter-operator identifiers in the records identify the peer operator, which tells the authority where to send the next enquiry. Retaining that field is cheap and disproportionately useful; it is also frequently dropped during pipeline design because it looks like routing minutiae.</p>
+<h3>Key takeaways</h3>
+<ul>
+<li>Every identifier lookup is only valid with respect to a time; bindings are intervals, not facts, and the answer must be time-segmented with explicit gaps.</li>
+<li>Identifier-to-identifier expansion is a legal act per hop, not a graph traversal. Bound it, configure it per authorisation, and audit the hop count.</li>
+<li>CGNAT makes IP resolution impossible without source port and accurate time; say so in the interface specification and return “insufficient information” rather than a guess.</li>
+<li>Deterministic NAT allocation is a high-leverage decision usually taken outside the programme. Go and find out what was decided.</li>
+<li>Distinguish “not our subscriber” from “no activity”, and keep resolution and retrieval as separate, separately authorised services.</li>
+</ul>
+<h2 id="s-module-6-what-the-data-can-and-cannot-support-c-g">Module 6 — What the Data Can and Cannot Support [C/G]</h2>
+<aside class="callout"><p><strong>Objectives.</strong> You can set realistic expectations with an acquiring authority; you can explain the structural erosion of communications data and what it means for a ten-year investment; and you can frame the honest limitations of the capability in a way a governance board can act on.</p></aside>
+<p>This module exists because the commonest failure in CDA programmes is not technical. It is a requirement accepted that the data could never satisfy.</p>
+<h3>6.1 The four honest limits</h3>
+<p><strong>1. The data describes the service, not the person.</strong> A record says that an identity used a service at a time. It does not say who was holding the device, whether the SIM was in its registered owner’s phone, or whether the account holder was in the country. Every inference from identity to person is exactly that — an inference — and the CSP’s disclosure should not present it as more.</p>
+<p><strong>2. Absence of a record is weak evidence of absence of an event.</strong> Records are missing for many innocent reasons: a node was restarted, a feed was late, a record failed validation, the service was carried by a path that does not generate a record, or the event was of a type never retained. A design must be able to distinguish<em> “we hold no record”</em> from<em> “we can</em> <em>confirm nothing happened”</em>, and must communicate that difference. Most cannot, and the gap is invisible to the recipient.</p>
+<p><strong>3. Timestamps are approximate and heterogeneous.</strong> Different nodes stamp at different points in a transaction, with different clocks and different conventions about what “start” means. Sub-second precision in a record is almost never sub-second accuracy across sources. Where timing matters — and in CGNAT resolution it decisively does — the design must state its accuracy, not its precision.</p>
+<p><strong>4. Location is coarse, occasional and inferred.</strong> IMS-era location is cell or access-point granularity, captured at the moments when signalling happens. It is not a track. Presenting a sequence of such points as a movement history invites over-interpretation, and the design can mitigate that by disclosing the uncertainty alongside the value.</p>
+<aside class="callout"><p><strong>Governance note.</strong> These four limits belong in a written<strong> capability statement</strong> that the CSP maintains and the acquiring authority acknowledges. It is the artefact that prevents a slow drift into expectations the system cannot meet, and it is also, if an error ever reaches the Tribunal, the document that shows the operator described its capability honestly.</p></aside>
+<h3>6.2 The erosion problem</h3>
+<p>The long-run trend is that the proportion of communications visible to a network operator falls. This is the single most important fact for anyone making a ten-year investment decision in this area.</p>
+<pre class="diagram">Share of a person's communications visible as CSP-held CD
+
+high |*****
+     |     ****
+     |         ****            circuit voice + SMS
+     |             ****
+     |                 *****
+     |                      *****      IMS voice + operator messaging
+     |                           ******
+low  |                                 ***** OTT messaging, calls, video
+     +--------------------------------------------------------------
+       1995            2010            2025            2035?</pre>
+<p>The drivers:</p>
+<ul>
+<li><strong>Over-the-top services. </strong>A message sent through a third-party application is, to the access operator, an encrypted data session to a cloud provider. The operator can say a session occurred; it cannot say to whom the user was speaking. That information, if it exists, sits with the application provider, who is frequently outside the jurisdiction.</li>
+<li><strong>Encryption in transport. </strong>Encrypted DNS, encrypted SNI and QUIC progressively remove the fields that once let an operator identify the service being contacted, which is exactly the data that ICRs depend on.</li>
+<li><strong>Address sharing and privacy infrastructure.</strong> CGNAT, VPNs, private relay services and IPv6 privacy addressing all weaken the identifier-to-subscriber link.</li>
+<li><strong>Flat-rate tariffs. </strong>As Module 4 noted, the commercial reason to generate per-event records has gone, so records increasingly exist only because they are compelled.</li>
+</ul>
+<p><strong>The governance consequence</strong> is not that the capability is pointless — the data that remains is high value, particularly identity resolution and the service usage the operator does carry. It is that a business case which assumes constant or growing evidential yield is wrong, and that the right architectural posture is<em> modularity</em>: assume the sources change, and do not couple the retention schema, the query model and the handover interface so tightly that replacing a source means rebuilding the system.</p>
+<h3>6.3 What remains valuable, and is often under-exploited</h3>
+<p>Against that erosion, four things get<em> more</em> valuable, and they are worth naming because programmes tend to spend disproportionately on the eroding half.</p>
+<div class="table-wrap"><table><thead><tr><th>Capability</th><th>Why it holds its value</th></tr></thead><tbody><tr><td><strong>Identity resolution</strong></td><td>Every other line of enquiry starts here, and only the operator can do it. Resilient to encryption.</td></tr><tr><td><strong>Registration and attachment events</strong></td><td>A device attached to this network at this time in this place — unaffected by what it then did.</td></tr><tr><td><strong>Service-layer events on operator-run</strong> <strong>services</strong></td><td>Where the operator<em> is</em> the service (IMS voice, operator messaging, RCS), the records remain complete.</td></tr><tr><td><strong>Corroboration and pattern</strong></td><td>Even without content or destination, the shape of usage corroborates or contradicts an account.</td></tr></tbody></table></div>
+<h3>6.4 Setting expectations in practice</h3>
+<p>Three artefacts do most of the work, and all three are cheap relative to their effect.</p>
+<p><strong>A data availability matrix.</strong> For each request type, what the operator can return, at what granularity, for what historical period, and with what known caveats. Published to the acquiring authority and version-controlled.</p>
+<div class="table-wrap"><table><thead><tr><th>Request type</th><th>Available</th><th>Period</th><th>Granularity</th><th>Caveats</th></tr></thead><tbody><tr><td>Subscriber for MSISDN</td><td>Yes</td><td>Account life + N</td><td>Exact</td><td>Time-segmented; gaps shown</td></tr><tr><td>Subscriber for IP + port + time</td><td>Yes</td><td>12 months</td><td>Exact if port supplied</td><td>Unanswerable without port; ±N s clock</td></tr><tr><td>Voice session records</td><td>Yes</td><td>12 months</td><td>Per session</td><td>On-net complete; off-net leg limited</td></tr><tr><td>Operator messaging</td><td>Yes</td><td>12 months</td><td>Per message</td><td>Delivery status where produced</td></tr><tr><td>Location at session time</td><td>Yes</td><td>12 months</td><td>Cell</td><td>Occasional, not continuous</td></tr><tr><td>OTT service identification</td><td><strong>No</strong></td><td>—</td><td>—</td><td>Encrypted; out of scope</td></tr><tr><td>Continuous location</td><td><strong>No</strong></td><td>—</td><td>—</td><td>Not generated</td></tr></tbody></table></div>
+<p><strong>A defined “nil return” vocabulary.</strong> Distinct, documented responses for: not our subscriber; identifier not allocated in this period; no records held for this period; insufficient information to resolve; request outside authorised scope. Five responses, five different meanings, and collapsing them into “nothing found” destroys information the recipient needs.</p>
+<p><strong>A caveat that travels with the data. </strong>Every disclosure carries its own provenance and limitation statement, so that the caveat cannot be separated from the result as it moves through the recipient’s systems.</p>
+<h3>Key takeaways</h3>
+<ul>
+<li>The data describes the service, not the person; absence of a record is not absence of an event; timestamps are approximate; location is occasional.</li>
+<li>Operator-visible communications data is structurally eroding.</li>
+</ul>
+<aside class="callout"><p>Design for modular replacement of sources, and do not build a business case that assumes constant yield.</p></aside>
+<ul>
+<li>Identity resolution, attachment events and operator-run service records are the parts that hold their value.</li>
+<li>Three cheap artefacts — availability matrix, nil-return vocabulary, travelling caveats — prevent most expectation failures.</li>
+</ul>
+<h2 id="s-part-iii-designing-the-solution">Part III — Designing the Solution</h2>
+<h2 id="s-module-7-reference-architecture-for-a-csp-disclosure-capabil">Module 7 — Reference Architecture for a CSP Disclosure Capability [D]</h2>
+<aside class="callout"><p><strong>Objectives.</strong> You can draw and justify a layered reference architecture for the CSP side; you can state the responsibility of each layer and the interface between them; and you can identify the three architectural decisions that determine whether the system will still be viable in ten years.</p></aside>
+<h3>7.1 The reference architecture</h3>
+<pre class="diagram">+---------------------------------------------------------------+
+|  L6  EXTERNAL INTERFACE                                        |
+|      Authenticated request/response with the authority.        |
+|      Structured, machine-readable, audited. (Module 9)         |
++---------------------------------------------------------------+
+                ^                                  |
+                |  authorised request              |  disclosure
+                v                                  v
++---------------------------------------------------------------+
+|  L5  DISCLOSURE MANAGEMENT                                     |
+|      Validate authority. Resolve scope. Route. Human review    |
+|      where required. Assemble, caveat, record, release.        |
++---------------------------------------------------------------+
+                |                                  ^
+                v  scoped query                    |  scoped result
++---------------------------------------------------------------+
+|  L4  QUERY AND RESOLUTION SERVICES                             |
+|      Entity resolution (time-segmented) | Events retrieval     |
+|      Separately authorised. Scope enforced here, not above.    |
++---------------------------------------------------------------+
+                |                                  ^
+                v                                  |
++---------------------------------------------------------------+
+|  L3  RETENTION STORE                                           |
+|      Immutable, classified, time-partitioned, with automatic   |
+|      expiry and deletion evidence. (Module 8)                  |
++---------------------------------------------------------------+
+                ^
+                |  normalised, classified records
++---------------------------------------------------------------+
+|  L2  INGEST AND NORMALISATION                                  |
+|      Parse. Truncate content-bearing granularity. Classify.    |
+|      Correlate. Quality-check. Reject and report.              |
++---------------------------------------------------------------+
+                ^
+                |  raw feeds
++---------------------------------------------------------------+
+|  L1  SOURCES                                                   |
+|      IMS nodes | access network | NAT | HSS | business systems |
++---------------------------------------------------------------+
+
++---------------------------------------------------------------+
+|  L0  CROSS-CUTTING: audit, time, identity and access, key      |
+|      management, monitoring, configuration and change control  |
++---------------------------------------------------------------+</pre>
+<p>The layering is not decoration. Each boundary is where a specific kind of control is applied, and collapsing any two of them removes a control:</p>
+<div class="table-wrap"><table><thead><tr><th>Boundary</th><th>Control applied there</th></tr></thead><tbody><tr><td>L1 →L2</td><td>Content truncation and field parsing —<em> the</em> <em>irreversible one</em></td></tr><tr><td>L2 →L3</td><td>Classification and quality gating; nothing unclassified is stored</td></tr><tr><td>L3 →L4</td><td>Retention period enforcement; expired data is not queryable</td></tr><tr><td>L4 →L5</td><td>Scope enforcement: authorisation intersected with request</td></tr><tr><td>L5 →L6</td><td>Human review, caveat attachment, release authorisation</td></tr></tbody></table></div>
+<aside class="callout"><p><strong>Governance note.</strong> When reviewing a vendor architecture, map it onto these six layers and ask where each control lives. Products frequently merge L4 and L5 — a single “investigation workbench” — which puts scope enforcement and result assembly in the same component as the user interface. That is not automatically wrong, but it means scope is enforced by the application the user is driving rather than by a service beneath them, and the audit story changes accordingly.</p></aside>
+<h3>7.2 Layer responsibilities in detail</h3>
+<p><strong>L1 — Sources. </strong>Not built by the programme, but constrained by it. The key governance act here is establishing, per source, a<strong> data supply agreement</strong>: what is produced, at what completeness, with what timing, and who must be consulted before it changes. Without this, a routine network upgrade silently changes a retained field’s meaning.</p>
+<p><strong>L2 — Ingest and normalisation.</strong> The most underestimated layer. It performs:</p>
+<ul>
+<li>parsing of source records into defined fields;</li>
+<li><strong>truncation of content-bearing granularity — before storage, irreversibly</strong>;</li>
+<li>classification of every field against the catalogue;</li>
+<li>normalisation of identifiers into canonical forms (E.164, URI forms);</li>
+<li>time normalisation to a single reference with recorded source accuracy;</li>
+<li>correlation of the several records for one event into a correlated set;</li>
+<li>validation, with rejected records counted, reported and retained separately for diagnosis.</li>
+</ul>
+<p><strong>L3 — Retention store.</strong> Module 8.</p>
+<p><strong>L4 — Query and resolution.</strong> Two distinct services, deliberately:</p>
+<pre class="diagram">Entity Resolution Service        Events Retrieval Service
+------------------------        ------------------------
+input: identifier + period      input: resolved identity set + period
+                                       + authorised field classes
+output: time-segmented          output: scoped record set
+        bindings + confidence           + completeness statement
+threshold: entity               threshold: events (higher)</pre>
+<p><strong>L5 — Disclosure management.</strong> The workflow layer, and the place where the human sits. Responsibilities: validating that the authority cited is present, current and covers what is asked; resolving the authorised scope; dispatching to L4; applying the review rule; assembling the response with provenance and caveats; recording everything; releasing.</p>
+<p><strong>L6 — External interface.</strong> Module 9.</p>
+<p><strong>L0 — Cross-cutting. </strong>Audit, time, access control, keys, monitoring and change control. Treated as a layer because in this domain they are functional requirements with legal force, not non-functional afterthoughts.</p>
+<h3>7.3 The three decisions that determine longevity</h3>
+<p>Most architectural choices in this domain are recoverable. Three are not, and they deserve explicit design-authority decisions with recorded rationale.</p>
+<h4>Decision 1 — Where is content-bearing granularity removed?</h4>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>Consequence</th></tr></thead><tbody><tr><td><strong>At generation, in the source</strong></td><td>Cleanest. The data never exists. Requires network-element capability and cooperation; may be impossible with COTS elements.</td></tr><tr><td><strong>At ingest (L2), before storage</strong></td><td>The standard answer. The full value exists transiently in the pipeline, so the pipeline itself becomes a controlled environment.</td></tr><tr><td><strong>At disclosure (L5)</strong></td><td>Weakest. The content-bearing value is retained for months and is a standing risk and disclosure target. Avoid; if forced, document why and compensate with access controls.</td></tr></tbody></table></div>
+<h4>Decision 2 — Is retention a copy or the system of record?</h4>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>Buys you</th><th>Costs you</th></tr></thead><tbody><tr><td><strong>Dedicated retention store,</strong> <strong>fed from production</strong></td><td>Isolation; independent lifecycle; classification by design; production changes do not directly break compliance</td><td>Duplication; reconciliation burden; cost</td></tr><tr><td><strong>Query production systems</strong> <strong>on demand</strong></td><td>No duplication; always current</td><td>Production performance risk; no independent retention control; deletion cannot be guaranteed; change coupling</td></tr></tbody></table></div>
+<p>Practically, the dedicated store wins for anything under a retention notice. The interesting variant is<em> hybrid</em>: a dedicated store for compelled retention, with on-demand access to production for data held on other bases. That hybrid is defensible but requires the boundary to be explicit, because the two halves have different legal bases and different permitted uses.</p>
+<h4>Decision 3 — How is scope enforced?</h4>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>Assurance strength</th></tr></thead><tbody><tr><td><strong>Procedurally</strong> — trained staff apply the authorisation</td><td>Weakest. Depends on human consistency; hard to evidence; fails under volume</td></tr><tr><td><strong>In the application</strong> — UI restricts what can be asked</td><td>Moderate. Bypassable by anyone with data-layer access</td></tr><tr><td><strong>In a scope-resolution service beneath</strong> <strong>the application</strong></td><td>Strong. Every query carries a machine-readable authorisation; the service intersects and enforces; the audit records requested/authorised/returned</td></tr><tr><td><strong>In the data layer</strong> — row and column security bound to the authorisation</td><td>Strongest, hardest to build, least flexible</td></tr></tbody></table></div>
+<aside class="callout"><p><strong>Governance note.</strong> This is the decision that most determines whether an inspection goes well. “We trained our staff” is a materially weaker answer than “the system could not have returned that, and here is the log of the intersection it computed.”</p></aside>
+<h3>7.4 A sequence through the architecture</h3>
+<pre class="diagram">Authority    L6 iface    L5 disclosure   L4 query    L3 store   Reviewer</pre>
+<pre class="diagram">|            |             |             |           |         |
+|--request--&gt;|             |             |           |         |
+|            |--validate--&gt;|             |           |         |
+|            |             | check authority present,|         |
+|            |             | current, in force       |         |
+|            |             |--resolve scope---------&gt;|         |
+|            |             |   (authorised fields,   |         |
+|            |             |    period, data classes)|         |
+|            |             |--entity resolve--------&gt;|         |
+|            |             |&lt;-time-segmented bindings|         |
+|            |             |--events retrieve-------&gt;|--query-&gt;|
+|            |             |&lt;-scoped records --------|&lt;--------|
+|            |             |--review required?------------------&gt;|
+|            |             |&lt;-approved / redacted ---------------|
+|            |             | assemble + caveat + audit |         |
+|            |&lt;-disclosure-|             |           |         |
+|&lt;-response--|             |             |           |         |</pre>
+<p>Note what is<em> not</em> in that sequence: no step in which a human decides what the query should be. The request and the authorisation determine it. The human decides whether the<em> result</em> may be released. That division — machine determines scope, human approves release — is the one that both scales and survives inspection.</p>
+<h3>Key takeaways</h3>
+<ul>
+<li>Six layers, five boundaries, and each boundary carries a named control. Collapsing a boundary removes a control.</li>
+<li>Ingest and normalisation is the layer most often underestimated and the one where the irreversible content decision is taken.</li>
+<li>Keep entity resolution and events retrieval as separate, separately authorised services; that is what makes the legal boundary demonstrable.</li>
+<li>Three non-recoverable decisions: where truncation happens, whether retention is a copy or the system of record, and how scope is enforced.</li>
+<li>Machine determines scope from the authorisation; human approves release.</li>
+</ul>
+<h2 id="s-module-8-designing-the-retention-store-d">Module 8 — Designing the Retention Store [D]</h2>
+<aside class="callout"><p><strong>Objectives. </strong>You can specify a retention store against a notice; you can reason about the correlation problem, the partitioning and deletion model, and the capacity drivers; and you can challenge a capacity plan credibly.</p></aside>
+<h3>8.1 Requirements the notice generates</h3>
+<p>A data retention notice is the requirements baseline. Translated:</p>
+<div class="table-wrap"><table><thead><tr><th>From the notice</th><th>Design requirement</th></tr></thead><tbody><tr><td>Specified data types</td><td>An explicit, versioned schema; anything not in it is not retained</td></tr><tr><td>Up to 12 months</td><td>Per-record expiry, enforced automatically, with evidence</td></tr><tr><td>Integrity and security obligations</td><td>Immutability, access control, encryption, monitoring</td></tr><tr><td>Disclosure “without undue delay”</td><td>Defined query performance targets, plus an urgent path</td></tr><tr><td>Destruction at end of period</td><td>Verifiable deletion, including from backups and indexes</td></tr><tr><td>Same standard as business data</td><td>It is not acceptable for the compelled store to be less well run than the commercial ones</td></tr></tbody></table></div>
+<aside class="callout"><p><strong>Governance note.</strong> “Verifiable deletion including from backups” is the requirement most often quietly unmet. Ask directly: what is the backup retention period, does it exceed the data retention period, and if so what is the mechanism that prevents expired data being restored? An honest answer is often “we have not solved that yet”, which is a finding worth having.</p></aside>
+<h3>8.2 The correlation problem</h3>
+<p>Module 4 established that one call produces several records in several systems. The retention store must present<em> one</em> coherent view.</p>
+<pre class="diagram">S-CSCF record    | session-id, orig IMPU, term URI, start, end, cause
+P-CSCF record    | session-id, UE IP:port, access type, cell, times
+TAS record       | correlation-id, service invoked, diversion target
+Interconnect rec | charging-id, peer operator, inter-operator identifiers
+Charging record  | charging-id, duration, rated party
+                 |
+                 v   correlate on what?
++--------------------------------------------------------------+
+| Correlated session record                                     |
+|  - one row per session, with the union of the useful fields   |
+|  - a completeness flag per contributing source                |
+|  - retained source record references for reconstruction       |
++--------------------------------------------------------------+</pre>
+<p><strong>The correlation key is the crux.</strong> Options, with their trade-offs:</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Strength</th><th>Weakness</th></tr></thead><tbody><tr><td><strong>Charging identifier</strong> carried across nodes</td><td>Designed for exactly this; survives service logic that changes the session</td><td>Only present where charging is engineered through; may be absent on non-billable events</td></tr><tr><td><strong>Session identifier</strong> from signalling</td><td>Always present</td><td>Changes at any node that terminates and re-originates the session — service logic does this routinely, so legs fragment</td></tr><tr><td><strong>Time + identifier</strong> <strong>heuristics</strong></td><td>Works with anything</td><td>Fragile, produces false joins, indefensible under challenge</td></tr></tbody></table></div>
+<p>The right answer is nearly always the charging identifier where it exists, with explicit, recorded handling of the cases where it does not — and<strong> never</strong> silent heuristic joining. A heuristic join that is right 99% of the time produces wrong disclosures about real people in the other 1%, undetectably.</p>
+<p><strong>Design for partial correlation.</strong></p>
+<aside class="callout"><p>Some contributing records will be late, missing or</p></aside>
+<p>unmatched. The store should hold the correlated record<em> with a completeness indicator per</em> <em>source</em>, rather than waiting for perfection or discarding the fragment. That indicator then travels into the disclosure as part of the caveat, which is exactly the honesty Module 6 demanded.</p>
+<h3>8.3 Data model shape</h3>
+<p>Three families, with different characteristics and, usefully, different retention arguments:</p>
+<pre class="diagram">ENTITY / BINDING STORE           EVENTS STORE              RESOLUTION AIDS
+---------------------            ------------              ---------------
+interval-keyed                   time-partitioned          NAT translations
+(identifier, type,               append-only               DHCP / RADIUS
+ valid_from, valid_to)           immutable                 huge volume
+low volume, high value           high volume               short life
+updated by change events         never updated             different sizing
+entity classification            events classification     events class.</pre>
+<p>Keeping them physically separate is worth doing for four reasons: they have different volumes by orders of magnitude; different retention periods are often justified; the entity/events access control boundary becomes a physical boundary rather than a logical one; and the resolution aids can be sized, tuned and — if the law allows — expired independently.</p>
+<p><strong>Every record carries:</strong> its classification, its source, its ingestion time, its expiry time, and a reference sufficient to reconstruct its derivation. That last field is what makes the store auditable rather than merely queryable.</p>
+<h3>8.4 Partitioning, expiry and deletion</h3>
+<p>Time partitioning is not an optimisation here; it is the deletion mechanism.</p>
+<pre class="diagram">Partition by ingest day (or hour, for the highest-volume feeds)
+
+[ d-365 ][ d-364 ] ...................... [ d-1 ][ d-0 ]
+   ^                                                 ^
+   |                                                 |
+expiring today:                                   writing
+- detach partition
+- cryptographically erase or securely destroy
+- record: partition id, record count, timestamp,
+  operator, verification hash
+- remove from indexes
+- confirm absence from backup sets in scope</pre>
+<p>Three refinements that separate a good design from a compliant-looking one:</p>
+<ul>
+<li><strong>Deletion produces evidence.</strong> A deletion job that leaves no artefact cannot be inspected. The evidence record — what was deleted, how many, when, verified how — must itself be retained<em> longer</em> than the data, because it is the proof that the obligation was met.</li>
+<li><strong>Legal hold is a designed feature, not an exception.</strong> Where data is subject to ongoing proceedings, it must be exemptable from expiry, and that exemption must be authorised, time-bounded and reviewed. Designs that lack this end up suspending the deletion job, which suspends it for everything.</li>
+<li><strong>Crypto-shredding as the practical answer to backups.</strong> Where per-partition keys are used, destroying the key makes the data unrecoverable everywhere it has been copied. This is usually the only workable answer to the backup problem, and it drives a key management design with real obligations.</li>
+</ul>
+<h3>8.5 Capacity — and how to challenge a plan</h3>
+<p>Five drivers, in descending order of how often they are underestimated:</p>
+<p>1.<strong> NAT / translation records.</strong></p>
+<aside class="callout"><p>Typically the largest by far. Sized by sessions per subscriber per day, not by calls. Deterministic allocation changes the number by orders of magnitude.</p></aside>
+<p>2.<strong> Registration and attachment events. </strong>Devices re-register more often than people</p>
+<aside class="callout"><p>imagine, and IoT populations behave nothing like handsets.</p></aside>
+<p>3.<strong> Messaging events.</strong> Including delivery reports, which double the count. 4.<strong> Correlated session records.</strong> The one everyone sizes, and usually the smallest. 5.<strong> Indexes.</strong> Frequently as large as the data, and often omitted entirely from the plan.</p>
+<p><strong>Questions that expose a weak capacity plan:</strong></p>
+<ul>
+<li>What is the assumed ratio of translation records to session records, and where did it come from — measurement or assumption?</li>
+<li>Does the model include indexes, replicas and the correlated copy, or only raw record volume?</li>
+<li>What happens at the 12-month boundary — is steady state modelled, or only the growth curve?</li>
+<li>What is the assumed query concurrency, and what is the<em> urgent</em> query performance under the<em> worst-case</em> concurrent load?</li>
+<li>How does the model behave if an IoT or fixed-wireless population is added mid-life?</li>
+<li>What is the re-ingest cost if a classification decision changes and records must be re-derived?</li>
+</ul>
+<p>That last one is worth dwelling on. Classification decisions do change, and a store that cannot be re-derived from retained source references means the only options are “leave it wrong” or “lose the history”. Designing for re-derivability is cheap at the start and impossible to retrofit.</p>
+<h3>8.6 Quality controls at ingest</h3>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>What it catches</th></tr></thead><tbody><tr><td>Schema validation</td><td>Source change, corrupt records</td></tr><tr><td>Referential checks on identifiers</td><td>Malformed or unresolvable identities</td></tr><tr><td>Volume reconciliation against source counts</td><td>Silent feed loss —<strong> the most common</strong> <strong>serious fault</strong></td></tr><tr><td>Time-window completeness</td><td>Late and missing batches</td></tr><tr><td>Duplicate detection</td><td>Replay, double ingestion</td></tr><tr><td>Classification coverage</td><td>Any field arriving that the catalogue does not know</td></tr><tr><td>Clock drift monitoring</td><td>The correctness control from Module 5</td></tr></tbody></table></div>
+<p><strong>Volume reconciliation deserves emphasis. </strong>A feed that stops produces no errors — it produces silence, and silence looks exactly like a quiet period. A store can lose a source for weeks without any alarm unless expected volumes are independently compared against source-side counts. Every disclosure made in that window is potentially incomplete and nobody knows. If you take one operational control from this course, take this one.</p>
+<h3>Key takeaways</h3>
+<ul>
+<li>The notice is the schema’s requirements baseline; retain what it specifies and nothing more.</li>
+<li>Correlate on a charging identifier where one exists; never silently join on heuristics; carry a per-source completeness indicator into the disclosure.</li>
+<li>Separate entity, events and resolution-aid stores physically — different volumes, different periods, different access boundaries.</li>
+<li>Time partitioning is the deletion mechanism; deletion must produce evidence that outlives the data; crypto-shredding is usually the only real answer to backups.</li>
+<li>Volume reconciliation against source counts is the control that catches the failure nothing else will.</li>
+</ul>
+<h2 id="s-module-9-request-handling-mediation-and-handover-d-g">Module 9 — Request Handling, Mediation and Handover [D/G]</h2>
+<aside class="callout"><p><strong>Objectives.</strong> You can specify the interface between an acquiring authority and a CSP; you can explain the relevant ETSI standards and what each is for; and you can design the assurance controls that make the interface trustworthy to both parties.</p></aside>
+<p>This is the module about the seam — and the seam is where most of the residual risk in a CDA capability lives, because it is the only part neither party wholly controls.</p>
+<h3>9.1 What the interface has to carry</h3>
+<pre class="diagram">Acquiring authority                              CSP
+-------------------                              ---
+Request:                                         Response:
+  - reference / case identifier                    - status
+  - authorisation reference and attributes         - the data
+  - requester and SPoC identity                    - completeness statement
+  - data sought (types, classes)                   - caveats and provenance
+  - identifier(s) and time period                  - handling markings
+  - urgency                                        - cost/charging reference
+  - delivery destination                           - errors and nil reasons
+
+Plus, in both directions:
+  - acknowledgement, status updates, clarification, withdrawal,
+    error signalling, and a complete audit of every exchange</pre>
+<p>Two design principles that follow directly.</p>
+<p><strong>The authorisation must be machine-readable.</strong> If the authority’s scope arrives as free text in a covering note, then scope enforcement (Module 7, Decision 3) can only be procedural, and every downstream assurance claim weakens. The interface should carry the authorisation’s <em>attributes</em> — type, purpose, data classes permitted, period, expiry — as structured fields.</p>
+<p><strong>The interface must express partial and negative outcomes richly.</strong> Module 6’s nil-return vocabulary lives here. An interface that can only say “results” or “no results” forces the CSP to discard information the authority needs.</p>
+<h3>9.2 The standards landscape</h3>
+<div class="table-wrap"><table><thead><tr><th>Standard</th><th>What it is</th><th>Where it fits</th></tr></thead><tbody><tr><td><strong>ETSI TS 103 120</strong></td><td>“Interface for warrant information” — a structured, extensible interface for conveying authorisations and tasks between authorities and operators, and for status and delivery notifications. XML/JSON over HTTPS, with objects for Authorisation, Document, Task, Notification and Delivery. Actively maintained; recent versions through 2025.</td><td>The<strong> request/authorisation</strong> interface — the modern replacement for email and bespoke portals</td></tr><tr><td><strong>ETSI TS 102 657</strong></td><td>Handover interface for the request and delivery of <strong>retained data</strong>. Defines the requesting interface (often written HI-A) and the delivery interface (HI-B), with data structures for subscriber, telephony, messaging and network access records.</td><td>The<strong> retained-data delivery</strong> model and schemas</td></tr><tr><td><strong>ETSI TS 102 232 series</strong></td><td>Handover specification for IP delivery, widely used as the delivery transport mechanism.</td><td>Delivery transport</td></tr><tr><td><strong>3GPP TS 33.126 / 33.127 /</strong> <strong>33.128</strong></td><td>Lawful interception requirements, architecture and stage-3 for 3GPP networks, including IMS. Defines ADMF (LICF + LIPF), POIs, MDFs and the LI_X and LI_HI interfaces.</td><td>The<strong> network-side</strong> <strong>architecture</strong> the CSP’s capability must fit into</td></tr><tr><td><strong>3GPP TS 33.108</strong></td><td>The older handover specification, still encountered in legacy estates.</td><td>Legacy</td></tr></tbody></table></div>
+<p>A crucial framing point for governance:</p>
+<aside class="callout"><p>the 3GPP LI architecture was designed for</p></aside>
+<p>interception, and communications data acquisition reuses much of its plumbing.</p>
+<aside class="callout"><p><strong>The</strong></p></aside>
+<p><strong>same architecture carries both content and communications data; the separation is</strong> <strong>achieved by authorisation and provisioning, not by physics.</strong> That is an uncomfortable fact worth stating explicitly in a design paper, because it means the controls that keep the two apart are administrative and must therefore be exceptionally well evidenced.</p>
+<h3>9.3 The 3GPP architecture, at governance level</h3>
+<pre class="diagram">     +--------------------------------------------------+
+     |  ADMF   =  LICF (control)  +  LIPF (provisioning) |
+     +--------------------------------------------------+
+          |  LI_X1 (provisioning)          ^
+          v                                |  LI_HI1 (tasking)
++---------------------+                    |
+|  POIs in the network|                +--------+
+|  IMS: P-CSCF,S-CSCF,|                | LEMF   |  authority's
+|  TAS, IP-SM-GW,     |                +--------+  collection point
+|  IBCF, SCC AS       |                    ^
++---------------------+                    |
+          |  LI_X2 (IRI = the events)      |  LI_HI2 (IRI delivery)</pre>
+<pre class="diagram">     v                                |
++--------------------+                |
+|  MDF2  mediation   |----------------+
++--------------------+
+[ MDF3 / LI_X3 / LI_HI3 carry CONTENT — out of scope here ]</pre>
+<p>Three governance observations:</p>
+<ul>
+<li><strong>The ADMF is the crown jewel.</strong></li>
+</ul>
+<aside class="callout"><p>Whoever controls provisioning controls what is intercepted and what is disclosed. Its access control, change control and audit are the highest-assurance components in the estate, and they should be reviewed as such rather than as ordinary management systems.</p></aside>
+<ul>
+<li><strong>The mediation function is where policy becomes bytes. </strong>MDF2 decides what is actually delivered and in what form. Filtering, formatting and caveating happen here or nowhere.</li>
+<li><strong>The X3/HI3 path exists whether or not you use it. </strong>If the capability is CD only, demonstrate — do not assert — that the content path is not provisioned, and make that demonstrable state part of the assurance evidence.</li>
+</ul>
+<h3>9.4 Designing the interface: decisions</h3>
+<h4>Synchronous or asynchronous?</h4>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>Right when</th></tr></thead><tbody><tr><td><strong>Synchronous request/response</strong></td><td>Simple, high-volume, fully automatable enquiries — a subscriber check against the binding store</td></tr><tr><td><strong>Asynchronous submit / poll or callback</strong></td><td>Anything requiring human review, long-running retrieval, or large results — the majority</td></tr><tr><td><strong>Both, by request type</strong></td><td>The practical answer. Publish which types are which.</td></tr></tbody></table></div>
+<h4>How is the response delivered?</h4>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>Considerations</th></tr></thead><tbody><tr><td><strong>Inline in the response</strong></td><td>Simple; bounded by size; fine for entity data</td></tr><tr><td><strong>Separate delivery channel</strong> (e.g. TS 102 232 style)</td><td>Standard for bulk results; separates control from data; adds a second channel to secure and audit</td></tr><tr><td><strong>Retrieval from a portal</strong></td><td>Convenient; weaker automation; audit lives in two places; avoid as the primary mechanism</td></tr></tbody></table></div>
+<h4>Who resolves ambiguity?</h4>
+<p>The most consequential and least-discussed interface decision. A request may be ambiguous — an identifier that resolves to several candidates, a period that spans a reassignment, a data type that does not exist in this network.</p>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>Consequence</th></tr></thead><tbody><tr><td><strong>CSP resolves and returns its best</strong> <strong>interpretation</strong></td><td>Fast; but the CSP is making a judgement it has no authority to make, and the authority cannot see it happened</td></tr><tr><td><strong>CSP returns the ambiguity and the</strong> <strong>authority decides</strong></td><td>Slower; correct; keeps the legal judgement with the body that holds the authorisation</td></tr><tr><td><strong>CSP returns all interpretations</strong></td><td>Over-discloses; may exceed scope</td></tr></tbody></table></div>
+<p>The middle option is nearly always right, and it requires the interface to have a<strong> clarification</strong> <strong>exchange</strong> — a first-class message type, not an email. Designs that lack one push the exchange into an unaudited channel, which is where the audit trail breaks.</p>
+<aside class="callout"><p><strong>Governance note.</strong> Ask to see the interface specification’s message catalogue. If it has “request” and “response” and nothing else, it will fail in operation and the gaps will be filled by telephone calls and email — with the corresponding loss of audit. A usable catalogue has at least: submit, acknowledge, clarify, amend, withdraw, status, deliver, error, nil-return.</p></aside>
+<h3>9.5 Securing the seam</h3>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>Purpose</th></tr></thead><tbody><tr><td><strong>Mutual authentication</strong> of both endpoints</td><td>Neither party acts on an unauthenticated instruction</td></tr><tr><td><strong>Per-request non-repudiation</strong> — signed requests and signed responses</td><td>Years later, both parties can prove what was asked and what was sent</td></tr><tr><td><strong>Dedicated, segregated connectivity</strong></td><td>Reduces exposure; simplifies the assurance case</td></tr><tr><td><strong>Independent audit at both ends,</strong> <strong>reconcilable</strong></td><td>Either party can detect tampering or omission by comparing</td></tr><tr><td><strong>Rate and volume anomaly detection</strong></td><td>Detects compromise of the authority’s endpoint — an unusual but high-impact scenario</td></tr><tr><td><strong>Cryptographic integrity over delivered</strong> <strong>data</strong></td><td>Underpins evidential weight (Module 11)</td></tr><tr><td><strong>Key management with defined rotation</strong> <strong>and revocation</strong></td><td>Otherwise the above degrades quietly</td></tr></tbody></table></div>
+<p><strong>The reconciliation point deserves emphasis.</strong></p>
+<aside class="callout"><p>If both parties keep independent,</p></aside>
+<p>comparable records of every exchange, then a discrepancy is detectable.</p>
+<aside class="callout"><p>If only one</p></aside>
+<p>does, the other is trusting it. Building reconcilable audit at both ends is the strongest single assurance control available at the seam, and it costs little if designed in.</p>
+<h3>9.6 Urgent requests</h3>
+<p>Threat-to-life and similar cases need an answer in minutes, and the design must accommodate that without weakening the controls.</p>
+<pre class="diagram">Normal path:  submit -&gt; validate -&gt; queue -&gt; retrieve -&gt; review -&gt; release
+              minutes to hours, human review, full assembly
+
+Urgent path:  submit -&gt; validate -&gt; retrieve -&gt; release
+              target minutes; pre-agreed narrow scope;
+              review AFTER release, not before;
+              automatic escalation and 100% post-hoc audit</pre>
+<p>The design decisions that make the urgent path defensible:</p>
+<ul>
+<li><strong>Narrow it.</strong> The urgent path supports a small, pre-agreed set of request types — typically identity resolution and recent location — not everything.</li>
+<li><strong>Move the human, do not remove them.</strong> Review happens after release, within a defined period, and every urgent disclosure is reviewed, not sampled.</li>
+<li><strong>Make it visibly different.</strong></li>
+</ul>
+<aside class="callout"><p>Distinct audit stream, distinct reporting, distinct reconciliation with the authority. If urgent volumes rise, that is a governance signal, and it should be visible without anyone running a query.</p></aside>
+<ul>
+<li><strong>Rehearse it.</strong> An urgent path that has never been exercised out of hours will not work at 3 a.m.</li>
+</ul>
+<h3>Key takeaways</h3>
+<ul>
+<li>The interface must carry machine-readable authorisation attributes, or scope enforcement can only ever be procedural.</li>
+<li>TS 103 120 for request and authorisation, TS 102 657 for retained-data structures and handover, TS 102 232 for delivery transport, 3GPP 33.127/128 for the network-side architecture.</li>
+<li>The same architecture carries content and communications data; separation is administrative, so its evidence must be exceptional.</li>
+<li>Ambiguity belongs with the authority, which means the interface needs a first-class clarification exchange.</li>
+<li>Reconcilable audit at both ends is the strongest control at the seam; signed requests and responses are what make it work years later.</li>
+</ul>
+<h2 id="s-module-10-security-compartmentation-and-insider-risk-d-g">Module 10 — Security, Compartmentation and Insider Risk [D/G]</h2>
+<aside class="callout"><p><strong>Objectives. </strong>You can articulate the threat model for a CDA capability; you can design the compartmentation and access model; and you can identify the insider-risk controls that the regime effectively requires even where it does not name them.</p></aside>
+<h3>10.1 The threat model, stated honestly</h3>
+<p>A CDA capability is a concentrated, high-value target with an unusual property:<strong> its most</strong> <strong>damaging misuse looks exactly like its intended use.</strong> A query run for a personal reason is technically identical to one run for an investigation. That shapes everything.</p>
+<div class="table-wrap"><table><thead><tr><th>Threat</th><th>What it looks like</th><th>Primary control</th></tr></thead><tbody><tr><td><strong>Insider misuse</strong></td><td>A legitimate user runs an unauthorised query</td><td>Scope binding to authorisation; anomaly detection; proactive audit</td></tr><tr><td><strong>Insider exfiltration</strong></td><td>Bulk extraction by someone with legitimate access</td><td>Volume controls; egress monitoring; separation of duties</td></tr><tr><td><strong>Compromise of the</strong> <strong>authority’s endpoint</strong></td><td>Well-formed requests arriving with valid credentials for fabricated cases</td><td>Reconcilable audit; anomaly detection; out-of-band verification for unusual patterns</td></tr><tr><td><strong>Compromise of the CSP</strong> <strong>estate</strong></td><td>Attacker reaches the retention store</td><td>Segregation; encryption; strong isolation from the corporate estate</td></tr><tr><td><strong>Compromise of the</strong> <strong>provisioning function</strong> <strong>(ADMF)</strong></td><td>Attacker tasks the network</td><td>Highest-assurance controls; dual authorisation; immutable audit</td></tr><tr><td><strong>Supply chain</strong></td><td>Vendor access, remote support, software updates</td><td>Vendor access model; code provenance; controlled update path</td></tr><tr><td><strong>Legal/process failure</strong></td><td>Correct system, invalid authority</td><td>Machine validation of authority; refusal as a designed outcome</td></tr><tr><td><strong>Aggregation by a hostile</strong> <strong>state</strong></td><td>Long-term, low-and-slow collection</td><td>Compartmentation; detection over long windows</td></tr></tbody></table></div>
+<aside class="callout"><p><strong>Governance note.</strong> The threat that a board will not raise, and that you should, is the third one: a compromised or coerced endpoint at the<em> authority</em>. The CSP’s controls largely assume requests are genuine. Ask what would detect a run of plausible, well-formed, individually unremarkable requests that were not in fact authorised. In</p></aside>
+<aside class="callout"><p>most designs the honest answer is “reconciliation with the authority’s own records, if anyone ever does it” — which is an argument for doing it routinely and automatically.</p></aside>
+<h3>10.2 Compartmentation</h3>
+<p>The organising principle:<strong> no single person, and no single system component, should be</strong> <strong>able to go from “I want to know about X” to “here is everything about X”.</strong></p>
+<pre class="diagram">Compartment 1        Compartment 2        Compartment 3
+---------------      ---------------      ---------------
+PROVISIONING         DATA                 DISCLOSURE
+ADMF / tasking       retention store      workflow, review,
+who is targeted      what is held         release
+     |                    |                     |
+staff: cleared       staff: platform      staff: accredited
+LI administrators    engineers, no        disclosure officers,
+                     query rights         no platform rights
+     |                    |                     |
++----------------------------------------------------+
+|  AUDIT — separate compartment again, separately     |
+|  administered, writable by all, alterable by none   |
++----------------------------------------------------+</pre>
+<p>Four rules that make this real rather than nominal:</p>
+<p>1.<strong> Platform engineers must not be able to run disclosure queries.</strong> They can keep the</p>
+<aside class="callout"><p>store running; they cannot ask it questions about people. This usually requires the query path to be the<em> only</em> path to plaintext, with platform access limited to encrypted storage and metadata.</p></aside>
+<p>2.<strong> Disclosure officers must not be able to change the system.</strong> No configuration, no</p>
+<aside class="callout"><p>schema, no scope rules.</p></aside>
+<p>3.<strong> Nobody administers their own audit.</strong> The audit compartment is administered by a</p>
+<aside class="callout"><p>separate authority — often internal audit or a security function with no operational role.</p></aside>
+<p>4.<strong> Privileged actions require two people.</strong> Provisioning a target, changing a scope rule,</p>
+<aside class="callout"><p>exporting in bulk, suspending deletion, or granting access.</p></aside>
+<h3>10.3 Access control that matches the law</h3>
+<p>Ordinary role-based access control is insufficient here, because the question is not “what may this user do?” but “what may this user do<em> in respect of this authorisation</em>?”</p>
+<pre class="diagram">Traditional RBAC                  What this domain needs
+----------------                  ----------------------
+user -&gt; role -&gt; permissions       user
+                                    + role
+                                    + accreditation status
+                                    + THE AUTHORISATION being acted on
+                                    + its permitted data classes
+                                    + its permitted period
+                                    + its expiry
+                                  ---------------------------
+                                  = the permitted action set,
+                                    computed per request,
+                                    logged with the result</pre>
+<p>The practical implication:<strong> access decisions are per-request, not per-session, and the</strong> <strong>authorisation is an input to the access decision. </strong>A user logged in with a valid role and no live authorisation can do nothing. This is more work than standard RBAC and it is the mechanism that makes “the system could not have returned that” true rather than aspirational.</p>
+<p><strong>Accreditation as an attribute.</strong> In the UK model, disclosure staff and SPoCs are accredited. Accreditation lapses. Making it a checked attribute rather than an HR record means a lapsed accreditation removes capability automatically, which is both better control and one less thing for an inspection to find.</p>
+<h3>10.4 Encryption and key management</h3>
+<div class="table-wrap"><table><thead><tr><th>Where</th><th>What</th><th>Why it matters here</th></tr></thead><tbody><tr><td><strong>In transit, external</strong></td><td>Mutual TLS, plus signing at the message layer</td><td>Confidentiality<em> and</em> non-repudiation</td></tr><tr><td><strong>In transit, internal</strong></td><td>Encrypted between all layers</td><td>Limits lateral movement</td></tr><tr><td><strong>At rest, bulk</strong></td><td>Per-partition keys</td><td>Enables crypto-shredding at expiry (Module 8)</td></tr><tr><td><strong>At rest, sensitive fields</strong></td><td>Field-level encryption for direct identifiers</td><td>Platform staff can operate the store without reading it</td></tr><tr><td><strong>In use</strong></td><td>Where available, confidential computing for the query path</td><td>Reduces the trusted footprint; still maturing</td></tr><tr><td><strong>Key custody</strong></td><td>Split across compartments; HSM-backed</td><td>The keys are the control; if one team holds all of them, compartmentation is nominal</td></tr></tbody></table></div>
+<p>The key management design is where several of the obligations meet: deletion evidence, compartmentation, and the ability to prove that platform staff could not have read what they administered. It deserves a design paper of its own and usually does not get one.</p>
+<h3>10.5 Detecting misuse</h3>
+<p>Preventive controls fail; the regime expects detection too.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>Detects</th></tr></thead><tbody><tr><td><strong>Query-to-authorisation reconciliation</strong></td><td>Queries with no valid authority behind them</td></tr><tr><td><strong>Volume and pattern anomaly detection</strong> <strong>per user</strong></td><td>Fishing, bulk extraction, gradual abuse</td></tr><tr><td><strong>Subject-of-interest alerting</strong></td><td>Queries about staff, public figures, or protected categories</td></tr><tr><td><strong>Self-query and associate-query detection</strong></td><td>The classic insider pattern: looking up oneself, family, neighbours, ex-partners</td></tr><tr><td><strong>Out-of-hours and unusual-context flags</strong></td><td>Access outside the operational pattern</td></tr><tr><td><strong>Proactive sampling audit</strong></td><td>A defined percentage reviewed regardless of suspicion</td></tr><tr><td><strong>Reconciliation with the authority’s</strong> <strong>records</strong></td><td>Fabricated or altered requests</td></tr></tbody></table></div>
+<p><strong>Self-query detection is the highest-yield control per unit of effort. </strong>It is trivially implementable — compare the query subject against the staff identifier set and their known associates — and historically it is the pattern that most real insider incidents in comparable systems have followed.</p>
+<h3>10.6 Vendor and supply chain</h3>
+<p>Three questions that should be settled before contract, not after:</p>
+<ul>
+<li><strong>Can the vendor reach production, and under what conditions?</strong> Standing remote access into a CDA estate is very hard to defend. The alternative — supervised, time-bounded, recorded, break-glass access — is more expensive to operate and far easier to assure.</li>
+<li><strong>What does the vendor’s software do that you cannot see?</strong> Closed components in the query or mediation path mean the assurance case rests on the vendor’s assertions. Source availability, reproducible builds, or at minimum contractual audit rights, change the shape of that case.</li>
+<li><strong>What happens at end of life?</strong> These systems outlive their vendors’ product lines. Data portability and schema ownership are compliance issues, not commercial ones: if you cannot migrate the retained data, you cannot meet the notice with a different supplier.</li>
+</ul>
+<h3>Key takeaways</h3>
+<ul>
+<li>The defining property of this threat model is that misuse looks exactly like use; that forces detection controls alongside preventive ones.</li>
+<li>Compartmentation means provisioning, data, disclosure and audit are separately staffed and separately administered, with two-person control on privileged actions.</li>
+<li>Access control must take the authorisation as an input and decide per request, not per session; accreditation should be a checked attribute.</li>
+<li>Per-partition keys serve deletion, compartmentation and the proof that platform staff could not read the data.</li>
+<li>Self-query and associate-query detection is the cheapest high-yield control in the whole design.</li>
+</ul>
+<h2 id="s-part-iv-assurance-and-governance">Part IV — Assurance and Governance</h2>
+<h2 id="s-module-11-quality-integrity-and-evidential-weight-g">Module 11 — Quality, Integrity and Evidential Weight [G]</h2>
+<aside class="callout"><p><strong>Objectives.</strong> You can specify the assurance regime for a CDA capability; you can explain what makes disclosed data evidentially usable and what destroys that; and you can design the error and reporting model the regime expects.</p></aside>
+<h3>11.1 Three different standards, often confused</h3>
+<div class="table-wrap"><table><thead><tr><th>Standard</th><th>Question it answers</th><th>Who needs it</th></tr></thead><tbody><tr><td><strong>Data quality</strong></td><td>Is the data accurate, complete and timely?</td><td>Everyone, always</td></tr><tr><td><strong>Data integrity</strong></td><td>Can we prove it has not changed since it was created?</td><td>Anything that may be relied on later</td></tr><tr><td><strong>Evidential weight</strong></td><td>Will a court accept it, and how much will it carry?</td><td>Only the subset that reaches proceedings</td></tr></tbody></table></div>
+<p>Designs commonly conflate the second and third and then either over-engineer everything or under-engineer the part that matters. The useful discipline is to decide, explicitly, which disclosures are built to evidential standard. In most operators the honest answer is<em> all of them</em>, because you cannot know in advance which will be used — and that answer should be reached deliberately, with its cost accepted, rather than by default.</p>
+<h3>11.2 What evidential weight actually requires</h3>
+<p>Not a legal treatment, but the engineering properties that support it:</p>
+<p><strong>Provenance.</strong> For every disclosed value: which source system produced it, when, through which processing steps, under which version of the transformation logic. “This field came from the S-CSCF record ingested at T under pipeline version 4.2” is a provenance statement; “this came from our retention system” is not.</p>
+<p><strong>Integrity.</strong> The disclosed data can be shown not to have changed between generation and presentation. Practically: hash at ingest, hash the retained record, hash the disclosure, sign the disclosure, and retain the chain.</p>
+<p><strong>Repeatability. </strong>The same query against the same data returns the same result. This is harder than it sounds where correlation is involved — a correlated record assembled from late-arriving components may legitimately differ between two runs, which is precisely why the<em> as-at</em> time of the disclosure must be recorded and why the correlated record should be immutable once assembled.</p>
+<p><strong>Explicability.</strong> A competent witness can explain how the system produced this answer. That is a constraint on<em> design</em>, not on documentation: a pipeline with undocumented heuristics, machine-learned matching, or emergent behaviour produces answers nobody can explain in a witness box. This is the strongest argument against the heuristic correlation warned about in Module 8.</p>
+<p><strong>Continuity.</strong> The chain of custody from generation to presentation is unbroken and recorded, including every human who handled the data.</p>
+<aside class="callout"><p><strong>Governance note. The explicability constraint is an architectural veto.</strong> It rules out design options that would otherwise be attractive — probabilistic identity matching, opaque third-party enrichment, adaptive heuristics. If a vendor proposes any of these in the resolution or correlation path, the question is not “how accurate is it?” but “who will explain it, and what happens when they cannot?”</p></aside>
+<h3>11.3 The quality framework</h3>
+<p>Six dimensions, each with a measure, a target and a reporting line. This is the table to put in the assurance strategy.</p>
+<div class="table-wrap"><table><thead><tr><th>Dimension</th><th>Measure</th><th>Typical control</th></tr></thead><tbody><tr><td><strong>Completeness</strong></td><td>Records received vs records expected, per source per period</td><td>Volume reconciliation against source counts</td></tr><tr><td><strong>Accuracy</strong></td><td>Sampled records verified against source</td><td>Periodic sampling with independent verification</td></tr><tr><td><strong>Timeliness</strong></td><td>Generation-to-availability latency distribution</td><td>Monitored per feed with alerting on the tail</td></tr><tr><td><strong>Consistency</strong></td><td>Agreement between overlapping sources for the same event</td><td>Cross-source comparison on a sample</td></tr><tr><td><strong>Validity</strong></td><td>Conformance to schema and to identifier formats</td><td>Validation at ingest with rejects quantified</td></tr><tr><td><strong>Uniqueness</strong></td><td>Duplicate rate</td><td>Deduplication with reporting</td></tr></tbody></table></div>
+<p>Two points that make the difference between a framework and a formality:</p>
+<ul>
+<li><strong>Measure against expectation, not against itself.</strong> A feed that reports its own record count is not a control. The expected count must come from the source side or from an independent model.</li>
+<li><strong>Report the tail, not the mean.</strong> Timeliness at the 50th percentile is irrelevant; what matters is how often a record is not available when an urgent request arrives. Assurance reporting that shows averages is concealing the failures.</li>
+</ul>
+<h3>11.4 Completeness statements</h3>
+<p>If Module 6 is right that absence of a record is weak evidence of absence of an event, then the disclosure must say what the system knows about its own completeness.</p>
+<pre class="diagram">Disclosure for MSISDN X, period 01-02-2026 to 28-02-2026
+
+Records returned: 47 sessions, 12 messages
+
+Completeness:
+  Session records    : complete, no known gaps
+  Message records    : feed unavailable 14-02 08:00-16:00 (8h);
+                       records for that window may be missing
+  Location           : present for 41 of 47 sessions; 6 sessions
+                       carried no access-network information
+  Correlation        : 45 of 47 fully correlated; 2 partial
+                       (interconnect component absent)
+
+As at: 03-03-2026 09:14 UTC. Pipeline version 4.2.</pre>
+<p>That block is more useful to the recipient than a hundred extra records, and it is generatable automatically from the quality controls already described. It is also, if things ever go wrong, the artefact that shows the operator disclosed the limitations of its own data rather than presenting it as complete.</p>
+<p><strong>The design requirement:</strong> the system must record feed outages, correlation failures and field-level absence<em> at the granularity of the query</em>, so that a completeness statement can be composed for any arbitrary period. Retrofitting this is very hard; designing it in is not.</p>
+<h3>11.5 Errors</h3>
+<p>The regime expects errors to be reported, which means the design must make them<em> detectable</em>. A taxonomy is the starting point:</p>
+<div class="table-wrap"><table><thead><tr><th>Error class</th><th>Example</th><th>Detection</th></tr></thead><tbody><tr><td><strong>Wrong subject</strong></td><td>Resolution returned the wrong subscriber, e.g. a reassigned number</td><td>Time-segmented resolution; post-hoc reconciliation</td></tr><tr><td><strong>Excess disclosure</strong></td><td>Data outside the authorised scope released</td><td>Requested/authorised/returned comparison in audit</td></tr><tr><td><strong>Content disclosure</strong></td><td>A content-bearing value reached the authority</td><td>Field classification checks on egress</td></tr><tr><td><strong>Third-party</strong> <strong>over-disclosure</strong></td><td>Unnecessary enrichment of the other party</td><td>Enrichment-off default; review</td></tr><tr><td><strong>Incomplete disclosure</strong></td><td>Silent feed loss</td><td>Volume reconciliation</td></tr><tr><td><strong>Late disclosure</strong></td><td>Missed statutory or agreed timescale</td><td>SLA instrumentation</td></tr><tr><td><strong>Unauthorised query</strong></td><td>Query run without valid authority</td><td>Query-to-authorisation reconciliation</td></tr><tr><td><strong>Retention failure</strong></td><td>Data kept beyond period, or destroyed early</td><td>Deletion evidence; sampling</td></tr></tbody></table></div>
+<p>For each class the design should define: how it is detected, how quickly, who is notified, how the affected disclosures are identified, and how the correction reaches the recipient.<strong> That</strong> <strong>last step is routinely missing.</strong> A system that can detect an error but cannot enumerate which past disclosures were affected cannot actually remediate, and “we have told them to disregard everything from that period” is a poor substitute.</p>
+<h3>11.6 The assurance evidence pack</h3>
+<p>What an inspection or an internal design authority should be able to receive, assembled largely automatically:</p>
+<p>1. The data catalogue, with classifications, bases, periods and sign-offs. 2. The mapping from notice to schema, field by field, with gaps recorded. 3. Scope enforcement evidence: for a sample of disclosures, the requested, authorised and</p>
+<aside class="callout"><p>returned field sets and the computed intersection.</p></aside>
+<p>4. Quality reporting for the period across the six dimensions. 5. Deletion evidence for every expired partition. 6. Access review: who had which rights, when, and the accreditation status behind them. 7. Misuse detection output, including nil returns — evidence the controls ran. 8. Error register with remediation status. 9. Change record for the period, with capability-impact assessments and any notifications</p>
+<aside class="callout"><p>made.</p></aside>
+<p>10. Reconciliation with the acquiring authority’s own records.</p>
+<aside class="callout"><p><strong>Governance note.</strong> Ask the programme to produce this pack for a single month, early — ideally before go-live, using test data. What cannot be produced is a gap in the design, and finding it at that point costs a fraction of finding it at the first inspection. It is the single most useful thing a design authority can demand.</p></aside>
+<h3>Key takeaways</h3>
+<ul>
+<li>Quality, integrity and evidential weight are three different standards; decide explicitly which disclosures need which.</li>
+<li>Evidential weight needs provenance, integrity, repeatability, explicability and continuity — and explicability is an architectural veto on opaque matching.</li>
+<li>Measure quality against independent expectation, and report the tail.</li>
+<li>Completeness statements that travel with the disclosure are cheap to generate and disproportionately valuable.</li>
+<li>Design the error taxonomy with the<em> remediation</em> path included: detecting an error you cannot trace to affected disclosures is not enough.</li>
+<li>Rehearse the assurance evidence pack before go-live.</li>
+</ul>
+<h2 id="s-module-12-governing-the-programme-g">Module 12 — Governing the Programme [G]</h2>
+<aside class="callout"><p><strong>Objectives.</strong> You can set up and run the design authority for a CDA programme; you can structure requirements that derive from a legal instrument; you can manage vendors and change in a regulated capability; and you can recognise the failure patterns early.</p></aside>
+<h3>12.1 What is different about governing this</h3>
+<p>Five things, and each has a structural consequence.</p>
+<p><strong>The requirements baseline is a legal instrument.</strong></p>
+<aside class="callout"><p>A notice is not a requirements</p></aside>
+<p>document: it is written to be legally effective, not implementable. Somebody must translate it, and that translation is itself a governed artefact that must be re-validated when the notice changes.</p>
+<p><strong>The customer is not the user.</strong> The acquiring authority sets the demand; your own disclosure team uses the system; the Secretary of State compels the capability; the regulator inspects it; and none of them is the one funding it. Stakeholder management is not a soft skill here, it is the job.</p>
+<p><strong>Failure is asymmetric. </strong>Under-delivering is a compliance breach. Over-delivering — retaining more, returning more, building more capability than is required — is<em> also</em> a breach, and a more serious one in privacy terms. Programmes are instinctively built to over-deliver.</p>
+<p><strong>The evidence is part of the deliverable.</strong> A capability that works but cannot prove it worked is not done.</p>
+<p><strong>The lifetime is long and the sources churn.</strong> A retention capability outlives the network generation that fed it. Modularity is a compliance property.</p>
+<h3>12.2 The design authority</h3>
+<p><strong>Membership.</strong> Enough to make the decision, small enough to make it. In practice: a chair with design authority; the solution architect; a security architect; someone who owns the legal interpretation; someone who owns the operational disclosure function; and data/privacy. The last two are the ones most often missing, and their absence shows up as designs that are elegant and unoperable, or compliant on paper and intrusive in practice.</p>
+<p><strong>What it decides, rather than notes.</strong> A useful design authority has a standing decision list. For this domain:</p>
+<div class="table-wrap"><table><thead><tr><th>Decision</th><th>Why it is a DA decision</th></tr></thead><tbody><tr><td>Field-level classification of anything arguable</td><td>It has legal effect (Module 3)</td></tr><tr><td>Where content truncation happens</td><td>Irreversible (Module 7)</td></tr><tr><td>Retention as copy vs system of record</td><td>Irreversible</td></tr><tr><td>Scope enforcement mechanism</td><td>Determines the assurance posture</td></tr><tr><td>Correlation key and treatment of uncorrelated records</td><td>Determines evidential explicability</td></tr><tr><td>Identifier expansion bound</td><td>Delegating it is delegating a legal judgement</td></tr><tr><td>Urgent path scope</td><td>Trades control against life safety</td></tr><tr><td>Human review rule</td><td>Where judgement sits</td></tr><tr><td>Nil-return vocabulary</td><td>Information the recipient cannot recover later</td></tr><tr><td>Source system-of-record nomination</td><td>Data quality accountability</td></tr><tr><td>Vendor production access model</td><td>Assurance case shape</td></tr><tr><td>Notifiable-change criteria</td><td>Regulatory obligation on your own lifecycle</td></tr></tbody></table></div>
+<aside class="callout"><p><strong>Governance note. </strong>If a programme’s design authority is reviewing documents rather than taking decisions from a list like this, it is a reading group. The test is whether a decision taken there can be produced, with rationale and date, two years later.</p></aside>
+<h3>12.3 Requirements that derive from law</h3>
+<p>A workable chain, and the reason each link exists:</p>
+<pre class="diagram">Legal instrument  -&gt;  Interpretation  -&gt;  Capability  -&gt;  Requirement
+(notice, IPA s.,      (legal opinion,     statement      (testable,
+ Code of Practice)     recorded, dated)   (what we                traceable)
+                                          must be able
+                                          to do)
+      |                     |                  |               |
+      +---------------------+------------------+---------------+
+                            |
+                every link versioned, and a change
+                at any level triggers re-validation
+                of everything downstream</pre>
+<p>Two disciplines make this work:</p>
+<ul>
+<li><strong>Never let a requirement cite the law directly. </strong>“Shall comply with section 87” is untestable. It must cite an interpretation, which cites the law. When the law changes, you can find every affected requirement.</li>
+<li><strong>Record the negative decisions.</strong> What you decided<em> not</em> to build, and why, is as important as what you built — it is the evidence of minimisation, and it is the first thing an inspector asks about when a capability looks narrower than the notice appears to require.</li>
+</ul>
+<h3>12.4 Vendors</h3>
+<div class="table-wrap"><table><thead><tr><th>Question</th><th>Why it matters</th><th>Bad answer</th></tr></thead><tbody><tr><td>Which of the six layers does the product cover?</td><td>Boundaries determine where your controls go</td><td>“It’s an end-to-end platform”</td></tr><tr><td>Where does scope enforcement happen in the product?</td><td>Module 7, Decision 3</td><td>“The user selects the authorisation”</td></tr><tr><td>Is the data model extensible without a vendor release?</td><td>Notices change</td><td>“We’ll add it to the roadmap”</td></tr><tr><td>Can we export retained data and its schema, in bulk, ourselves?</td><td>Exit and portability are compliance issues</td><td>“We’d do a migration project”</td></tr><tr><td>What in the resolution or correlation path is heuristic or learned?</td><td>Explicability veto (Module 11)</td><td>“It’s our proprietary matching”</td></tr><tr><td>How is production access by your staff controlled?</td><td>Module 10</td><td>“Standard support VPN”</td></tr><tr><td>Can it produce the assurance pack in Module 11?</td><td>It is part of the deliverable</td><td>“We provide logs”</td></tr><tr><td>What is the upgrade path when the network generation changes?</td><td>Lifetime mismatch</td><td>“The product supports 5G today”</td></tr></tbody></table></div>
+<p>The general principle:<strong> buy the plumbing, own the policy.</strong> Storage, ingestion, indexing, delivery transport and workflow are commodity and should be bought.</p>
+<aside class="callout"><p>Classification,</p></aside>
+<p>scope enforcement, correlation rules, the nil-return vocabulary, the caveat model and the audit schema are your compliance posture and should be specified by you, expressed in configuration you control, and portable between suppliers.</p>
+<h3>12.5 Change</h3>
+<p>Change is where compliant systems drift out of compliance, quietly.</p>
+<p><strong>Four change sources, four different controls:</strong></p>
+<div class="table-wrap"><table><thead><tr><th>Source</th><th>Example</th><th>Control</th></tr></thead><tbody><tr><td><strong>Legal</strong></td><td>Amended Act, revised Code, new notice</td><td>Re-validate interpretation → capability →requirements chain</td></tr><tr><td><strong>Network</strong></td><td>IMS upgrade, new access technology, NAT redesign</td><td>Data supply agreements; source impact assessment</td></tr><tr><td><strong>System</strong></td><td>Release of your own platform</td><td>Capability-impact assessment; notifiable-change test</td></tr><tr><td><strong>Demand</strong></td><td>New request type from the authority</td><td>Scope and classification review before build</td></tr></tbody></table></div>
+<p><strong>The capability-impact question</strong> belongs in your standard change record, as a mandatory field, phrased so it cannot be answered by reflex:</p>
+<aside class="callout"><p><em>Does this change alter what communications data we generate, retain, can resolve,</em> <em>or can disclose — in kind, in granularity, in timeliness or in completeness? If yes,</em> <em>describe the change and the assessment reference.</em></p></aside>
+<p>That single field, answered honestly on every change, is the operational mechanism behind both the notification-notice obligation and your own regression risk. It also produces, over time, a change history that is exactly what an inspection wants to see.</p>
+<h3>12.6 Failure patterns, and the early signal for each</h3>
+<div class="table-wrap"><table><thead><tr><th>Pattern</th><th>Early signal</th><th>Intervention</th></tr></thead><tbody><tr><td><strong>Requirements that the</strong> <strong>data cannot satisfy</strong></td><td>Requirements about continuous location or OTT services</td><td>Publish the capability statement (Module 6) early</td></tr><tr><td><strong>Scope creep into</strong> <strong>investigation</strong></td><td>Features that “help the analyst” — link analysis, enrichment, saved subjects</td><td>Return to the CSP’s actual duty: disclose what is held</td></tr><tr><td><strong>Compliance-by-</strong> <strong>documentation</strong></td><td>A classification spreadsheet not referenced by any code</td><td>Make the catalogue a build artefact</td></tr><tr><td><strong>Billing coupling</strong></td><td>Retention fed from charging with no gap analysis</td><td>Demand the gap analysis and change-coupling statement</td></tr><tr><td><strong>Audit as logs</strong></td><td>“We have comprehensive logging”</td><td>Ask for the assurance pack for one month</td></tr><tr><td><strong>Urgent path as normal</strong> <strong>path</strong></td><td>Rising urgent volumes</td><td>Report urgent volumes to the DA as standing item</td></tr><tr><td><strong>Undeletable backups</strong></td><td>No answer on backup expiry</td><td>Crypto-shredding design, or accept and document</td></tr><tr><td><strong>Single-vendor lock</strong></td><td>No export path</td><td>Portability clause and a rehearsed export</td></tr><tr><td><strong>Silent feed loss</strong></td><td>Nobody can say what yesterday’s expected volume was</td><td>Volume reconciliation (Module 8)</td></tr><tr><td><strong>Accreditation drift</strong></td><td>Access reviews are annual and manual</td><td>Accreditation as a checked attribute</td></tr></tbody></table></div>
+<h3>12.7 A first hundred days</h3>
+<p>If you are picking this up cold, the sequence that recovers ground fastest:</p>
+<p>1.<strong> Get the instruments.</strong> The notices, the current Code, the interpretation record. Read</p>
+<aside class="callout"><p>them before the architecture.</p></aside>
+<p>2.<strong> Build the field-level catalogue</strong>, even if it starts as an incomplete spreadsheet, and find</p>
+<aside class="callout"><p>out who has signed off the arguable classifications. Usually nobody has.</p></aside>
+<p>3.<strong> Trace one real disclosure end to end</strong> — request to response, with the audit — and see</p>
+<aside class="callout"><p>whether you can reconstruct it. This exposes more than a month of document review.</p></aside>
+<p>4.<strong> Ask for last month’s expected-versus-actual volumes per feed. </strong>If nobody can</p>
+<aside class="callout"><p>produce them, you have found the most serious operational gap.</p></aside>
+<p>5.<strong> Run the assurance pack rehearsal</strong> (Module 11) on test data. 6.<strong> Establish the decision list</strong> in §12.2 and find out which of those decisions have actually</p>
+<aside class="callout"><p>been taken, by whom, and when.</p></aside>
+<p>7.<strong> Write the capability statement</strong> and get it agreed with the acquiring authority.</p>
+<h3>Key takeaways</h3>
+<ul>
+<li>The requirements baseline is a legal instrument and must be translated through a versioned interpretation chain; requirements never cite the law directly.</li>
+<li>Over-delivery is a breach too — record the negative decisions as evidence of minimisation.</li>
+<li>Buy the plumbing, own the policy: classification, scope, correlation, caveats and audit are your compliance posture and must be portable.</li>
+<li>A mandatory capability-impact question on every change is the operational mechanism behind both notification obligations and regression control.</li>
+<li>The fastest diagnostic in an unfamiliar programme is to trace one disclosure end to end and ask for last month’s expected-versus-actual feed volumes.</li>
+</ul>
+<h2 id="s-appendix-a-design-review-question-bank">Appendix A — Design Review Question Bank</h2>
+<p>Grouped by review stage. Each question is written so that a weak design cannot answer it with an assertion.</p>
+<h3>A.1 Scope and legal basis</h3>
+<p>1. Which instrument generates this requirement — a retention notice, a technical capability</p>
+<aside class="callout"><p>notice, a national security notice, or a commercial agreement? Show me the clause.</p></aside>
+<p>2. Where is the interpretation record that sits between that clause and this requirement,</p>
+<aside class="callout"><p>and when was it last reviewed?</p></aside>
+<p>3. What have we decided<em> not</em> to build, and where is that recorded? 4. Which fields are classified as entity, which as events, and who signed off the arguable</p>
+<aside class="callout"><p>ones?</p></aside>
+<p>5. For each arguable classification, what is the rationale, and what would change it? 6. Are we building an ICR capability? If so, what precisely constitutes an ICR in our network,</p>
+<aside class="callout"><p>and who agreed that definition?</p></aside>
+<h3>A.2 Data and sources</h3>
+<p>7. For each event type, which system is the system of record, and what happens when two</p>
+<aside class="callout"><p>sources disagree?</p></aside>
+<p>8. What is the data supply agreement for each source — completeness, timing, change</p>
+<aside class="callout"><p>notification — and who signed it?</p></aside>
+<p>9. Where is content-bearing granularity removed, and is that before or after storage? 10. Can a retained record be re-derived if a classification decision changes? 11. What is the correlation key, what proportion of records correlate fully, and what happens</p>
+<aside class="callout"><p>to the rest?</p></aside>
+<p>12. Is any part of the correlation or resolution path heuristic, probabilistic or learned? Who</p>
+<aside class="callout"><p>will explain it in a witness box?</p></aside>
+<h3>A.3 Retention</h3>
+<p>13. Show me the mapping from notice to schema, field by field, with gaps. 14. How is expiry enforced, and what evidence does deletion produce? 15. Does backup retention exceed data retention? If so, what prevents restoring expired</p>
+<aside class="callout"><p>data?</p></aside>
+<p>16. How is legal hold implemented, authorised and time-bounded? 17. What is the assumed ratio of translation records to session records, and was it measured</p>
+<aside class="callout"><p>or assumed?</p></aside>
+<p>18. Does the capacity model include indexes, replicas and correlated copies? 19. What is the steady state at twelve months, not the growth curve?</p>
+<h3>A.4 Query, scope and disclosure</h3>
+<p>20. Where is scope enforced — procedurally, in the application, in a service, or in the data</p>
+<aside class="callout"><p>layer?</p></aside>
+<p>21. Is the authorisation machine-readable, and is it an input to the access decision on every</p>
+<aside class="callout"><p>request?</p></aside>
+<p>22. How many identifier hops can a resolution perform, is the bound configurable per</p>
+<aside class="callout"><p>authorisation, and is it audited?</p></aside>
+<p>23. Does resolution return time-segmented results with explicit gaps? 24. Can the system express ambiguity, or does it return a best guess? 25. What is the nil-return vocabulary, and does it distinguish “not our subscriber” from “no</p>
+<aside class="callout"><p>records”?</p></aside>
+<p>26. Is third-party enrichment on by default? 27. Where does a human review, and what is the rule that decides when review is required?</p>
+<h3>A.5 Interface</h3>
+<p>28. Show me the message catalogue. Is there a clarification message, a withdrawal, an</p>
+<aside class="callout"><p>amendment, an error and a nil return?</p></aside>
+<p>29. Are requests and responses individually signed? 30. Do both parties keep reconcilable audit, and does anyone actually reconcile them? 31. What is the urgent path, what request types does it support, and when was it last</p>
+<aside class="callout"><p>exercised out of hours?</p></aside>
+<p>32. How would we detect a run of well-formed but unauthorised requests from a</p>
+<aside class="callout"><p>compromised endpoint?</p></aside>
+<h3>A.6 Security and access</h3>
+<p>33. Can platform engineers run disclosure queries? Prove it. 34. Who administers the audit compartment, and do they have an operational role? 35. Which actions require two people? 36. Is accreditation a checked system attribute or an HR record? 37. Do we detect self-queries and associate queries? 38. What is the vendor’s production access model, and is it standing or break-glass? 39. Who holds the keys, and does any single team hold enough to read the store?</p>
+<h3>A.7 Assurance</h3>
+<p>40. Produce the assurance evidence pack for one month. 41. What was last month’s expected versus actual record volume per feed, and where did the</p>
+<aside class="callout"><p>expectation come from?</p></aside>
+<p>42. Show me, for a sampled disclosure, the requested, authorised and returned field sets. 43. Can we generate a completeness statement for an arbitrary period? 44. For each error class, how is it detected, and can we enumerate the past disclosures it</p>
+<aside class="callout"><p>affected?</p></aside>
+<p>45. What is the capability-impact question on our change record, and show me three</p>
+<aside class="callout"><p>completed examples.</p></aside>
+<h2 id="s-appendix-b-patterns-and-anti-patterns">Appendix B — Patterns and Anti-Patterns</h2>
+<h3>B.1 Patterns worth adopting</h3>
+<p><strong>Catalogue as a build artefact.</strong> The field catalogue — classification, basis, period, source, owner — is machine-readable and consumed by the pipeline and the scope resolver. Schema and catalogue cannot drift because the catalogue generates the enforcement.</p>
+<p><strong>Interval-keyed bindings.</strong> Every association is (identifier, type, from, to). Every resolution takes a time and returns segments with explicit gaps. This one pattern prevents the largest class of wrongful disclosure.</p>
+<p><strong>Scope resolver as a service.</strong></p>
+<aside class="callout"><p>A component beneath the application intersects the</p></aside>
+<p>authorisation with the request and emits a permitted field set and period. Every query goes through it; the intersection is logged. Converts “we trained our staff” into “the system could not have.”</p>
+<p><strong>Truncate at ingest, irreversibly.</strong> The content-bearing value never reaches storage. One engineering decision replaces a permanent operational risk.</p>
+<p><strong>Per-partition keys.</strong> Time partitions hold their own keys; expiry destroys the key. Deletion becomes provable and reaches backups.</p>
+<p><strong>Completeness statement as a first-class output.</strong> Feed outages, correlation failures and field absence are recorded at a granularity that lets a statement be composed for any query period, and it travels with the disclosure.</p>
+<p><strong>Two pipelines, one policy.</strong> Urgent and routine paths are physically distinct, with different latency targets and different review placement, but share the same scope resolver and the same audit.</p>
+<p><strong>Reconcilable audit at both ends.</strong> Both parties record every exchange in comparable form, and reconciliation runs automatically rather than on suspicion.</p>
+<p><strong>Negative decision register.</strong> What was deliberately not built, and why, kept as evidence of minimisation.</p>
+<h3>B.2 Anti-patterns, and what they cost</h3>
+<div class="table-wrap"><table><thead><tr><th>Anti-pattern</th><th>What it looks like</th><th>What it costs</th></tr></thead><tbody><tr><td><strong>The investigation</strong> <strong>workbench</strong></td><td>Link analysis, saved subjects, enrichment, “related identities”</td><td>Drifts the CSP into investigation, exceeds the disclosure duty, and creates scope that no authorisation covers</td></tr><tr><td><strong>Heuristic correlation</strong></td><td>Time-and-identifier joining where no correlation key exists</td><td>Undetectable wrong disclosures; fails explicability</td></tr><tr><td><strong>Enrichment by default</strong></td><td>Automatically resolving the other party’s number to a name</td><td>Routine third-party over-disclosure, designed in</td></tr><tr><td><strong>Scope in the UI</strong></td><td>The application restricts what may be asked</td><td>Bypassable; weak evidence; fails at the data layer</td></tr><tr><td><strong>Billing as the retention</strong> <strong>source, permanently</strong></td><td>Charging feed retained as the compliance store</td><td>Coupling to a commercial roadmap; silent gaps</td></tr><tr><td><strong>Single “search” service</strong></td><td>Entity and events retrieval fused</td><td>The entity/events boundary becomes undemonstrable</td></tr><tr><td><strong>Logs as audit</strong></td><td>Operational logging repurposed</td><td>Not immutable, not complete, not retained long enough, not reconstructable</td></tr><tr><td><strong>Best-guess resolution</strong></td><td>Ambiguity collapsed to one answer</td><td>The recipient cannot detect the error</td></tr><tr><td><strong>Deletion by job, not by</strong> <strong>evidence</strong></td><td>A nightly purge with no artefact</td><td>Cannot demonstrate compliance; backups unaddressed</td></tr><tr><td><strong>Standing vendor access</strong></td><td>Support VPN into production</td><td>Indefensible under inspection; expands the trust boundary</td></tr><tr><td><strong>Annual access review</strong></td><td>Spreadsheet-driven, manual</td><td>Accreditation drift; stale privilege</td></tr><tr><td><strong>The universal pipeline</strong></td><td>One path for urgent and routine</td><td>Either too slow for threat-to-life or too loose for everything else</td></tr></tbody></table></div>
+<h3>B.3 Two worked design decisions</h3>
+<h4>Where to enforce scope</h4>
+<aside class="callout"><p><strong>Context. </strong>Requests arrive with an authorisation reference. The authorisation permits certain data classes for a certain period.</p>
+<p><strong>Options. </strong>(a) Disclosure officers apply it. (b) The application restricts the form. (c) A scope-resolution service intersects authorisation and request and returns a permitted set that the query layer enforces. (d) Row and column security in the data layer bound to the authorisation.</p>
+<p><strong>Decision.</strong> (c), with (d) for the highest-sensitivity classes.</p>
+<p><strong>Rationale.</strong> (a) and (b) cannot produce the evidence an inspection needs and fail under volume. (d) alone is inflexible and slow to change as notices change. (c) puts the intersection in one auditable place, keeps the policy in configuration we own, and produces the requested/authorised/returned triple that the assurance pack depends on.</p>
+<p><strong>Consequences.</strong> Every request must carry machine-readable authorisation attributes — this becomes an interface requirement. The scope resolver is a high-assurance component with its own change control.</p></aside>
+<h4>Retention source for voice session records</h4>
+<aside class="callout"><p><strong>Context.</strong> Charging records already exist and are complete for billable events. The notice specifies session records including unanswered attempts.</p>
+<p><strong>Options. </strong>(a) Reuse charging. (b) Purpose-built collection from the S-CSCF and P-CSCF. (c) Charging now, purpose-built later.</p>
+<p><strong>Decision.</strong> (c), with a dated commitment and a published gap list.</p></aside>
+<aside class="callout"><p><strong>Rationale.</strong> (a) cannot meet the notice — unanswered attempts are not billable — and couples compliance to the tariff roadmap. (b) is right but not deliverable in the required timescale. (c) delivers a partial capability honestly, provided the gaps are declared to the authority rather than concealed.</p>
+<p><strong>Consequences.</strong> A published gap list; a change-coupling statement naming who is consulted before billing changes; a capability statement update; and a date at which (c) becomes (b) or is re-decided.</p></aside>
+<h2 id="s-appendix-c-ims-protocol-reference-annex">Appendix C — IMS Protocol Reference Annex</h2>
+<p>The technical detail compressed out of the main text, for when you need to check a fact or challenge a vendor’s claim.</p>
+<h3>C.1 Nodes</h3>
+<div class="table-wrap"><table><thead><tr><th>Node</th><th>Full name</th><th>Function</th></tr></thead><tbody><tr><td>P-CSCF</td><td>Proxy Call Session Control Function</td><td>First contact point for the device; access edge; asserts identity; requests QoS; sees access type, IP address, cell</td></tr><tr><td>I-CSCF</td><td>Interrogating CSCF</td><td>Network front door; asks the HSS which S-CSCF serves a user</td></tr><tr><td>S-CSCF</td><td>Serving CSCF</td><td>Always in the home network; registrar; authenticates; holds the user profile; triggers services; routes</td></tr><tr><td>HSS</td><td>Home Subscriber Server</td><td>Subscriber data, identity bindings, authentication</td></tr><tr><td>AS / TAS</td><td>Application Server / Telephony AS</td><td>Supplementary services: diversion, barring, waiting, transfer, conference</td></tr><tr><td>IBCF</td><td>Interconnection Border Control Function</td><td>Border to other operators; topology hiding; inserts inter-operator identifiers</td></tr><tr><td>MRFC / MRFP</td><td>Media Resource Function</td><td>Announcements, tones, conferencing</td></tr><tr><td>BGCF / MGCF</td><td>Breakout / Media Gateway Control</td><td>Routing and conversion to the circuit-switched world</td></tr><tr><td>IP-SM-GW</td><td>IP Short Message Gateway</td><td>SMS over IP</td></tr><tr><td>SCC AS</td><td>Service Centralization and Continuity AS</td><td>Access transfer, terminating access domain selection</td></tr><tr><td>E-CSCF / LRF</td><td>Emergency CSCF / Location Retrieval</td><td>Emergency routing and location</td></tr></tbody></table></div>
+<h3>C.2 Identifiers</h3>
+<div class="table-wrap"><table><thead><tr><th>Identifier</th><th>Form</th><th>Notes</th></tr></thead><tbody><tr><td>IMPI</td><td><code>user@realm</code> (NAI)</td><td>Private; authentication only; on the ISIM</td></tr><tr><td>IMPU</td><td><code>sip:user@domain</code> or <code>tel:+44...</code></td><td>Public; several per subscriber; aliases share a service profile</td></tr><tr><td>IMSI</td><td>15 digits: MCC + MNC + MSIN</td><td>The SIM subscription</td></tr><tr><td>IMEI / IMEISV</td><td>15 / 16 digits</td><td>The device</td></tr><tr><td>MSISDN</td><td>E.164</td><td>The telephone number</td></tr><tr><td>GRUU</td><td>A URI with a<code> gr</code> parameter</td><td>Reaches one specific registered device</td></tr><tr><td>PSI</td><td>A URI naming a service</td><td>Conference factory, voicemail</td></tr><tr><td>ICID</td><td><code>icid-value</code> in <code>P-Charging-Vector</code></td><td><strong>The charging correlation</strong> <strong>identifier — preserved</strong> <strong>across nodes and across</strong> <strong>B2BUAs; the practical</strong> <strong>correlation key</strong></td></tr><tr><td>IOI</td><td><code>orig-ioi</code> /<code> term-ioi</code></td><td>Inter-operator identifiers; name the peer operator</td></tr></tbody></table></div>
+<h3>C.3 Signalling elements that carry CD-relevant information</h3>
+<div class="table-wrap"><table><thead><tr><th>Element</th><th>Carries</th></tr></thead><tbody><tr><td><code>P-Asserted-Identity</code></td><td>The identity the network vouches for — the reliable originator</td></tr><tr><td><code>P-Called-Party-ID</code></td><td>The identity that was dialled, preserved when the target is rewritten</td></tr><tr><td><code>P-Access-Network-Info</code></td><td>Access type (E-UTRAN, NR, WLAN) and cell identity —<strong> the location source</strong></td></tr><tr><td><code>P-Visited-Network-ID</code></td><td>The visited network when roaming</td></tr><tr><td><code>P-Charging-Vector</code></td><td>ICID and inter-operator identifiers — <strong>correlation</strong></td></tr><tr><td><code>Contact</code> /<code> Path</code> /<code> Service-Route</code></td><td>Registration binding and routing — establishes where a device was reachable</td></tr><tr><td><code>From</code> /<code> To</code> /<code> Call-ID</code> / tags</td><td>Session and dialog identity — note that a B2BUA changes Call-ID, which is why ICID matters</td></tr><tr><td>Request-URI</td><td>The target; rewritten during routing, hence <code>P-Called-Party-ID</code></td></tr><tr><td>SDP<code> m=</code> /<code> c=</code> lines</td><td>Media type, address and port — describes the event, not its meaning</td></tr><tr><td>Message body</td><td><strong>Content. Out of scope.</strong></td></tr></tbody></table></div>
+<h3>C.4 Procedures that generate records</h3>
+<div class="table-wrap"><table><thead><tr><th>Procedure</th><th>Produces</th><th>CD value</th></tr></thead><tbody><tr><td><strong>Registration</strong></td><td>Identity, contact address, access type, cell, time, expiry</td><td>Device attached here, then</td></tr><tr><td><strong>Re-registration</strong></td><td>Same, periodically</td><td>Presence over time, coarse</td></tr><tr><td><strong>Deregistration</strong></td><td>Time and reason</td><td>Device left</td></tr><tr><td><strong>Session establishment</strong></td><td>Both identities, time, service, media types</td><td>The core call record</td></tr><tr><td><strong>Service invocation</strong></td><td>Which supplementary service applied, and any diversion target</td><td>Explains anomalous records</td></tr><tr><td><strong>Session release</strong></td><td>Time, duration, cause</td><td>Completes the record</td></tr><tr><td><strong>Message send / deliver</strong></td><td>Sender, recipient, time, delivery status</td><td>Messaging records</td></tr><tr><td><strong>Access transfer</strong></td><td>Old and new access, time</td><td>Explains a session that changed technology</td></tr><tr><td><strong>Emergency session</strong></td><td>Identity, location, PSAP</td><td>Handled under a separate regime</td></tr></tbody></table></div>
+<h3>C.5 Interfaces you may see named</h3>
+<div class="table-wrap"><table><thead><tr><th>Reference point</th><th>Between</th><th>Protocol</th></tr></thead><tbody><tr><td>Gm</td><td>Device ↔P-CSCF</td><td>SIP</td></tr><tr><td>Mw</td><td>CSCF ↔CSCF</td><td>SIP</td></tr><tr><td>ISC</td><td>S-CSCF ↔Application Server</td><td>SIP</td></tr><tr><td>Cx / Dx</td><td>CSCF ↔HSS / SLF</td><td>Diameter</td></tr><tr><td>Sh / Dh</td><td>AS ↔HSS / SLF</td><td>Diameter</td></tr><tr><td>Ut</td><td>Device ↔AS</td><td>XCAP over HTTP — subscriber’s own service settings</td></tr><tr><td>Rx / N5</td><td>P-CSCF ↔PCRF (4G) / PCF (5G)</td><td>Diameter / HTTP2 — QoS authorisation</td></tr><tr><td>Rf / Ro</td><td>Nodes ↔charging</td><td>Diameter — offline / online charging</td></tr><tr><td>Ici / Izi</td><td>Operator ↔operator</td><td>SIP / media</td></tr><tr><td>LI_X1 / X2 / X3</td><td>ADMF ↔POI / MDF</td><td>3GPP LI internal: provisioning, IRI, content</td></tr><tr><td>LI_HI1 / HI2 / HI3</td><td>Operator ↔authority</td><td>Tasking, IRI delivery, content delivery</td></tr></tbody></table></div>
+<h3>C.6 The 4G and 5G context in one table</h3>
+<div class="table-wrap"><table><thead><tr><th>4G (EPS)</th><th>5G (5GS)</th></tr></thead><tbody><tr><td>Signalling bearer for IMS EPS bearer on the “ims”</td><td>PDU session on the “ims”</td></tr><tr><td>APN, QCI 5</td><td>DNN, 5QI 5</td></tr><tr><td>Voice bearer Dedicated bearer, QCI 1</td><td>QoS Flow, 5QI 1</td></tr><tr><td>Mobility control MME</td><td>AMF</td></tr><tr><td>Session control S-GW / P-GW</td><td>SMF / UPF</td></tr><tr><td>Policy PCRF over Rx</td><td>PCF over N5</td></tr><tr><td>Subscriber data HSS</td><td>UDM (commonly HSS+UDM combined)</td></tr><tr><td>Voice service VoLTE (GSMA IR.92)</td><td>VoNR (GSMA NG.114), or EPS Fallback to 4G</td></tr><tr><td>CD implications Location from E-UTRAN cell identity</td><td>Location from NR cell identity; EPS Fallback means a 5G call may produce 4G records</td></tr></tbody></table></div>
+<p>That last row is a real and frequently missed operational point: with EPS Fallback, a call initiated on 5G completes on 4G, so the session records may appear in the 4G-facing feeds while the registration records are 5G-facing. A correlation design that assumes one access technology per session will fragment exactly these calls.</p>
+<h2 id="s-appendix-d-legal-and-standards-index">Appendix D — Legal and Standards Index</h2>
+<h3>D.1 UK legislation and codes</h3>
+<div class="table-wrap"><table><thead><tr><th>Instrument</th><th>Relevance</th></tr></thead><tbody><tr><td><strong>Investigatory Powers Act 2016</strong></td><td>The governing statute. Part 1 (s.11 offence), Part 3 (acquisition), Part 4 (retention), Part 8 (oversight), Part 9 (notices)</td></tr><tr><td><strong>Investigatory Powers (Amendment) Act</strong> <strong>2024</strong></td><td>Amended the notices regime (including notification notices, s.258A), the bulk personal datasets regime (Parts 7A, 7B), the s.11 offence and the internet connection record conditions</td></tr><tr><td><strong>Data Retention and Acquisition</strong></td><td>Introduced independent authorisation</td></tr><tr><td><strong>Regulations 2018</strong></td><td>(OCDA) and the serious crime threshold for events data</td></tr><tr><td><strong>Communications Data Code of Practice</strong></td><td>The operational detail: how authorisations are made, what applications must contain, error reporting. Revised in 2025 following the 2024 Act</td></tr><tr><td><strong>Notices Regime Code of Practice</strong></td><td>New code covering retention, technical capability, national security and notification notices</td></tr><tr><td><strong>Investigatory Powers (Codes of Practice,</strong> <strong>Review of Notices and Technical Advisory</strong></td><td>Brought the revised and new codes into force; set notice review timelines; adjusted</td></tr><tr><td><strong>Board) Regulations 2025</strong> (SI 2025/656)</td><td>the Technical Advisory Board</td></tr><tr><td><strong>Data Protection Act 2018 / UK GDPR</strong></td><td>Applies to everything not compelled, and to the operator’s handling throughout</td></tr></tbody></table></div>
+<p><em>Check the current consolidated text before relying on any of this: the amendments of 2024</em> <em>and the 2025 regulations mean older secondary material and commentary may describe a</em> <em>superseded position.</em></p>
+<h3>D.2 ETSI</h3>
+<div class="table-wrap"><table><thead><tr><th>Standard</th><th>Subject</th></tr></thead><tbody><tr><td><strong>TS 103 120</strong></td><td>Interface for warrant information — structured exchange of authorisations, tasks, notifications and delivery between authorities and operators. Actively maintained; versions through 2025</td></tr><tr><td><strong>TS 102 657</strong></td><td>Handover interface for the request and delivery of retained data; requesting and delivery interfaces and the retained-data schemas</td></tr><tr><td><strong>TS 102 232 series</strong></td><td>Handover specification for IP delivery — the delivery transport</td></tr><tr><td><strong>TS 101 331</strong></td><td>Requirements of law enforcement agencies</td></tr><tr><td><strong>TS 102 656</strong></td><td>Retained data requirements</td></tr><tr><td><strong>TR 102 528 / TS 103 705</strong> and related</td><td>Supporting architecture and profiling material</td></tr></tbody></table></div>
+<h3>D.3 3GPP</h3>
+<div class="table-wrap"><table><thead><tr><th>Specification</th><th>Subject</th></tr></thead><tbody><tr><td><strong>TS 33.126</strong></td><td>Lawful interception requirements</td></tr><tr><td><strong>TS 33.127</strong></td><td>LI architecture and functions — ADMF (LICF + LIPF), POIs, MDF2/MDF3, TF, LEMF; includes IMS in clause 7</td></tr><tr><td><strong>TS 33.128</strong></td><td>LI stage 3 — protocol and procedures, including IMS events</td></tr><tr><td><strong>TS 33.108</strong></td><td>Earlier handover specification; still found in legacy estates</td></tr><tr><td><strong>TS 23.228</strong></td><td>IMS architecture (stage 2)</td></tr><tr><td><strong>TS 24.229</strong></td><td>IMS SIP profile (stage 3)</td></tr><tr><td><strong>TS 23.003</strong></td><td>Numbering, addressing and identification — the identifier definitions</td></tr><tr><td><strong>TS 32.260 / 32.299</strong></td><td>IMS charging and the Diameter charging applications — where ICID is defined and carried</td></tr></tbody></table></div>
+<h3>D.4 GSMA</h3>
+<div class="table-wrap"><table><thead><tr><th>Document</th><th>Subject</th></tr></thead><tbody><tr><td><strong>IR.92</strong></td><td>IMS Profile for Voice and SMS (VoLTE)</td></tr><tr><td><strong>IR.94</strong></td><td>IMS Profile for Conversational Video</td></tr><tr><td><strong>NG.114</strong></td><td>IMS Profile for Voice, Video and Messaging over 5GS</td></tr><tr><td><strong>IR.65</strong></td><td>IMS Roaming and Interworking Guidelines</td></tr></tbody></table></div>
+<h2 id="s-appendix-e-glossary">Appendix E — Glossary</h2>
+<p><strong>ADMF</strong> — Administration Function; in 3GPP LI, the combination of the control function (LICF) and provisioning function (LIPF) that tasks the network.</p>
+<p><strong>CD</strong> — Communications data.<strong> CDA</strong> — communications data acquisition.</p>
+<p><strong>CGNAT</strong> — Carrier-grade NAT; address sharing that makes IP-to-subscriber resolution impossible without source port and accurate time.</p>
+<p><strong>Content</strong> — the meaning of a communication; requires an interception warrant; out of scope for CDA.</p>
+<p><strong>CSP / TO</strong> — Communications service provider / telecommunications operator.</p>
+<p><strong>DRN</strong> — Data retention notice, under Part 4 IPA 2016.</p>
+<p><strong>Entity data</strong> — data about an entity or about the association between an entity and a telecommunications service; the lower threshold category.</p>
+<p><strong>Events data</strong> — data identifying or describing an event on a telecommunication system; the higher threshold category.</p>
+<p><strong>HSS</strong> — Home Subscriber Server; the identity and subscription database.</p>
+<p><strong>ICID</strong> — IMS Charging Identifier; the correlation identifier preserved across IMS nodes, and the practical key for joining records about one session.</p>
+<p><strong>ICR</strong> — Internet connection record; a defined subset of events data subject to additional restrictions under section 62.</p>
+<p><strong>IMPI / IMPU</strong> — IMS private / public user identity.</p>
+<p><strong>IMS</strong> — IP Multimedia Subsystem; the operator’s service core for voice, video and messaging.</p>
+<p><strong>IPA</strong> — Investigatory Powers Act 2016.<strong> IP(A)A 2024</strong> — the 2024 Amendment Act.</p>
+<p><strong>IPC / IPCO</strong> — Investigatory Powers Commissioner / Commissioner’s Office; oversight and inspection.</p>
+<p><strong>IPT</strong> — Investigatory Powers Tribunal; redress.</p>
+<p><strong>LEMF</strong> — Law Enforcement Monitoring Facility; the authority’s collection point.</p>
+<p><strong>MDF2 / MDF3</strong> — Mediation and delivery functions for intercept-related information and for content respectively.</p>
+<p><strong>Notification notice</strong> — s.258A notice requiring an operator to notify the Secretary of State of relevant changes affecting capability; added by the 2024 Act.</p>
+<p><strong>NSN</strong> — National security notice, s.252.</p>
+<p><strong>OCDA</strong> — Office for Communications Data Authorisations; independent authorisation on behalf of most public authorities.</p>
+<p><strong>POI</strong> — Point of interception; the network function that generates intercept-related information or content.</p>
+<p><strong>P-CSCF / I-CSCF / S-CSCF</strong> — the three IMS call session control functions: access edge, network front door, and home serving node.</p>
+<p><strong>SPoC</strong> — Single Point of Contact; accredited staff within a public authority who quality-assure and submit requests.</p>
+<p><strong>TAS</strong> — Telephony Application Server; supplementary services.</p>
+<p><strong>TCN</strong> — Technical capability notice, s.253.</p>
+<p><strong>Third-party data</strong> — data about a person who is not the subject of the authorisation but appears in the records of the subject’s communications.</p>
+    </article>
+  </main>
+  <footer class="container doc-foot"><a href="./">&larr; All documents</a> <a href="#top">Back to top &uarr;</a></footer>
+</body>
+</html>

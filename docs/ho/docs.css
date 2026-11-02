@@ -91,6 +91,11 @@ pre.diagram {
   font-size: 12.5px; line-height: 1.5; overflow-x: auto; white-space: pre;
 }
 
+/* Figures */
+figure { margin: 22px 0 28px; }
+figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+figcaption { font-size: 13px; color: var(--ink-muted); margin-top: 8px; }
+
 /* Tables */
 .table-wrap { overflow-x: auto; margin: 18px 0 26px; -webkit-overflow-scrolling: touch; }
 table { border-collapse: collapse; width: 100%; font-size: 14px; line-height: 1.5; background: var(--surface); }
