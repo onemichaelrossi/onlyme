@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>The IPA Retention Notice</title>
+  <link rel="icon" type="image/png" href="../../assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css?v=1" />
+</head>
+<body id="top">
+
+  <header class="doc-top container">
+    <a class="back" href="./">&larr; All documents</a>
+    <a class="pdf" href="pdf/ipa-retention-notice.pdf">PDF &darr;</a>
+  </header>
+  <main class="container doc">
+    <header class="doc-head">
+      <h1>The IPA Retention Notice</h1>
+      <p class="subtitle">Part 4 of the Investigatory Powers Act 2016 in brief — what a retention notice is, what it can require, and what it does to a design</p>
+      <p class="meta">Prepared for Michael Rossi · October 2026 — legal brief, not legal advice</p>
+    </header>
+    <nav class="toc"><p class="toc-label">Contents</p><ol><li><a href="#s-in-one-paragraph">In one paragraph</a></li><li><a href="#s-1-the-statutory-frame">The statutory frame</a></li><li><a href="#s-2-what-a-notice-can-and-cannot-require">What a notice can and cannot require</a></li><li><a href="#s-3-from-notice-to-design">From notice to design</a></li><li><a href="#s-4-difficulties-in-practice">Difficulties in practice</a></li><li><a href="#s-5-questions-to-ask">Questions to ask</a></li></ol></nav>
+    <article>
+<h2 id="s-in-one-paragraph">In one paragraph</h2>
+<p>A retention notice is an instrument under Part 4 of the Investigatory Powers Act 2016 by which the Secretary of State, with the approval of a Judicial Commissioner, requires a telecommunications operator to retain specified communications data for up to twelve months. It is the mechanism that makes the data exist; Part 3 acquisition is what obtains it. The notice is the requirements baseline for the retention store — its schema, its period, its security and its deletion — and almost everything a design authority decides about the store flows from reading the notice correctly and nothing more generously than it says.</p>
+<aside class="callout"><p class="callout-label">TALKING POINT</p><p>'The notice is the schema. Retain what it specifies, for the period it specifies, to the standard it specifies, and delete at the end — and record every decision not to keep something the pipeline offered.'</p></aside>
+<h2 id="s-1-the-statutory-frame">1. The statutory frame</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>Section</strong></th><th><strong>What it provides</strong></th></tr></thead><tbody><tr><td>s.87 Powers to require retention</td><td>The Secretary of State may by notice require an operator to retain relevant communications data if necessary and proportionate for one or more of the statutory purposes; subject to Judicial Commissioner approval (the 'double lock'); maximum period twelve months from the data's generation or the communication's end</td></tr><tr><td>s.87(2)–(4) Content of a notice</td><td>May relate to a particular operator or description of operators; may specify the data (by description), the period, and requirements or restrictions on the retention; may require generation or processing of data the operator does not otherwise hold — but not content</td></tr><tr><td>s.88 Matters to be taken into account</td><td>Likely benefits; likely number of users; technical feasibility; likely cost; any other effect on the operator — the factors a design must evidence in consultation</td></tr><tr><td>s.89 Approval by Judicial Commissioner</td><td>The Commissioner reviews necessity and proportionality; the notice does not come into force without approval</td></tr><tr><td>s.90 Review by the Secretary of State</td><td>The operator may refer the notice back for review within the specified period; the Technical Advisory Board and Judicial Commissioner report; the notice may be varied, confirmed or revoked — the only formal route to push back on a requirement the data cannot meet</td></tr><tr><td>s.91 Data integrity and security</td><td>Operator must secure the data against unlawful access, keep it to the same standard as business data, and destroy it when retention is no longer authorised — including every copy</td></tr><tr><td>s.92 Disclosure of retained data</td><td>Retained data must not be disclosed except under lawful authority (Part 3 or a court order) or as permitted by the notice</td></tr><tr><td>s.93–94 Variation and revocation; enforcement</td><td>Notices may be varied or revoked; the duty is enforceable by civil proceedings</td></tr><tr><td>s.95 Application to internet connection records</td><td>ICRs may be required only where the notice specifically says so</td></tr><tr><td>s.244–245 (ICO audit; cost recovery)</td><td>The Information Commissioner audits retained-data security; the Secretary of State contributes to compliance costs</td></tr><tr><td>Code of Practice: Communications Data (2018, as updated)</td><td>Operational detail: consultation before a notice, what 'retain' means, security expectations, destruction, error reporting, relations with IPCO</td></tr></tbody></table></div>
+<p>The 2024 amending Act did not change the retention mechanics materially but introduced notification notices (s.258A), which bear directly on how a retention capability is changed once built.</p>
+<h2 id="s-2-what-a-notice-can-and-cannot-require">2. What a notice can and cannot require</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>Can require</strong></th><th><strong>Cannot require</strong></th></tr></thead><tbody><tr><td>Retention of specified entity data and events data generated or processed in the UK by the operator</td><td>Retention of content</td></tr><tr><td>Generation of data the operator does not otherwise create (e.g. a record it has no business reason to keep)</td><td>Retention beyond twelve months</td></tr><tr><td>Specific data classes, including internet connection records if the notice says so</td><td>Disclosure to anyone without lawful authority</td></tr><tr><td>A specified period, which may be shorter than twelve months and may differ by data class</td><td>Retention of data about communications outside the operator's own service</td></tr><tr><td>Requirements as to the manner of retention and security</td><td>A particular architecture or vendor — the means are the operator's</td></tr><tr><td>Retention by a particular operator or a described class of operators</td><td>Anything the Secretary of State has not shown to be necessary and proportionate to a Judicial Commissioner</td></tr></tbody></table></div>
+<p>'Relevant communications data' is defined by reference to the purposes of identifying the sender or recipient, the time and duration, the type, method and pattern of the communication, the system used, and location. That list is the taxonomy; every field in the retained store should be traceable to one of those heads.</p>
+<h2 id="s-3-from-notice-to-design">3. From notice to design</h2>
+<pre class="diagram">Notice (legal)  -&gt;  Interpretation (recorded)  -&gt;  Field-level schema  -&gt;  Store
+   "retain data        "we read 'data            "S-CSCF: IMPU, times,    time-
+    identifying the     identifying the            outcome, ICID;          partitioned,
+    sender..."          sender' as these           P-CSCF: PANI..."        12 months,
+                        fields from these                                   per-partition
+                        nodes, for these                                    keys
+                        reasons"</pre>
+<div class="table-wrap"><table><thead><tr><th><strong>Notice element</strong></th><th><strong>Design decision it forces</strong></th></tr></thead><tbody><tr><td>The data description</td><td>Field-level catalogue: for each field, which head of 'relevant communications data' it serves, its classification (entity / events), source node, and sign-off. Anything the pipeline offers that no head justifies is dropped — and the negative decision recorded</td></tr><tr><td>The period</td><td>Partition granularity and expiry; periods may differ by class, so expiry is per data family, not per store</td></tr><tr><td>'Generation' of data not otherwise held</td><td>A feed that must be created, not just captured — budget for new instrumentation at the source node</td></tr><tr><td>ICRs, if specified</td><td>A separate store, separate authorisation path, separate audit; never co-mingled with other events data</td></tr><tr><td>Security requirements</td><td>Encryption at rest, access control bound to authorisation, compartmentation, audit — now with the TSA Code as the floor</td></tr><tr><td>Destruction</td><td>Deletion that produces evidence; crypto-shredding for backups; legal hold as a designed exception</td></tr><tr><td>Consultation and review (s.88, s.90)</td><td>The capability statement — what the data can and cannot support — is the evidence in consultation and the basis for any review</td></tr><tr><td>Variation</td><td>The interpretation record is versioned; a varied notice re-validates every downstream artefact</td></tr></tbody></table></div>
+<h2 id="s-4-difficulties-in-practice">4. Difficulties in practice</h2>
+<ul>
+<li><strong>Reading the notice generously.</strong> The commonest failure: treating the notice as permission to retain everything for a year. It is a ceiling, not a licence. Over-retention is a breach under both the IPA and data protection law.</li>
+<li><strong>'Generate' versus 'retain'.</strong> A notice can require data the operator has never created. Programmes often discover this only when a field in the notice maps to no existing feed.</li>
+<li><strong>Period arithmetic.</strong> Twelve months from generation, or from the end of the communication — not from ingest. A pipeline with a two-day lag retains for twelve months and two days unless expiry is keyed to the event time.</li>
+<li><strong>Copies.</strong> Destruction means every copy: replicas, indexes, the correlated store, analytics extracts, backups. The design must know where every copy is.</li>
+<li><strong>Billing coupling.</strong> Where retention is fed from charging, a tariff change silently alters a retained field. That is a capability change for s.258A purposes and a regression for the notice.</li>
+<li><strong>Consultation after the fact.</strong> s.88 factors (feasibility, cost, number of users) are meant to be argued before the notice; a programme that first engages at implementation has lost its best opportunity to shape the requirement.</li>
+<li><strong>Multi-operator groups.</strong> A notice to a 'description of operators' may cover several legal entities in a group with different estates; be clear which entity holds which data.</li>
+</ul>
+<h2 id="s-5-questions-to-ask">5. Questions to ask</h2>
+<ul>
+<li>Which notice, which version, and where is the recorded interpretation of each data description?</li>
+<li>For each retained field: which statutory head justifies it, and who signed off the classification?</li>
+<li>What did the pipeline offer that we chose not to retain, and where is that decision recorded?</li>
+<li>Is expiry keyed to the event time or the ingest time?</li>
+<li>List every copy of retained data, including backups and analytics extracts, and the deletion mechanism for each.</li>
+<li>Does the notice specify ICRs? If so, where is the separate path?</li>
+<li>What did we say in consultation about feasibility and cost, and does the delivered capability match it?</li>
+<li>Has anything changed since the notice that should have been notified under s.258A?</li>
+</ul>
+<aside class="callout"><p class="callout-label">CAVEAT</p><p>Section numbers, the Code of Practice's current version and the effect of the 2024 amendments should be verified against the legislation as in force before any of this becomes a design constraint.</p></aside>
+    </article>
+  </main>
+  <footer class="container doc-foot"><a href="./">&larr; All documents</a> <a href="#top">Back to top &uarr;</a></footer>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>PECR and CDA</title>
+  <link rel="icon" type="image/png" href="../../assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css?v=1" />
+</head>
+<body id="top">
+
+  <header class="doc-top container">
+    <a class="back" href="./">&larr; All documents</a>
+    <a class="pdf" href="pdf/pecr-and-cda.pdf">PDF &darr;</a>
+  </header>
+  <main class="container doc">
+    <header class="doc-head">
+      <h1>PECR and CDA</h1>
+      <p class="subtitle">The Privacy and Electronic Communications Regulations 2003 in brief — the rules that govern traffic and location data before a retention notice touches them</p>
+      <p class="meta">Prepared for Michael Rossi · October 2026 — legal brief, not legal advice</p>
+    </header>
+    <nav class="toc"><p class="toc-label">Contents</p><ol><li><a href="#s-in-one-paragraph">In one paragraph</a></li><li><a href="#s-1-what-pecr-covers">What PECR covers</a></li><li><a href="#s-2-the-key-definitions">The key definitions</a></li><li><a href="#s-3-how-the-retention-notice-sits-inside-pecr">How the retention notice sits inside PECR</a></li><li><a href="#s-4-where-pecr-and-the-design-meet">Where PECR and the design meet</a></li><li><a href="#s-5-difficulties-in-practice">Difficulties in practice</a></li><li><a href="#s-6-questions-to-ask">Questions to ask</a></li></ol></nav>
+    <article>
+<h2 id="s-in-one-paragraph">In one paragraph</h2>
+<p>PECR implements the EU ePrivacy Directive in UK law and sits alongside UK GDPR as the specific regime for electronic communications. For a CDA design its importance is that it governs the operator's ordinary handling of exactly the data a retention notice later requires: traffic data must be erased or anonymised when no longer needed for the transmission or for billing; location data may be processed only anonymised or with consent; the confidentiality of communications must be protected. The retention notice carves an exception — a legal obligation that displaces the erasure duty for the specified data — and the width of that carve-out is exactly the width of the notice. PECR is why the operator's instinct to delete is correct for everything the notice does not name.</p>
+<aside class="callout"><p class="callout-label">TALKING POINT</p><p>'PECR says delete it; the notice says keep this much of it for this long. The retained store is the shape of the gap between those two sentences and nothing wider.'</p></aside>
+<h2 id="s-1-what-pecr-covers">1. What PECR covers</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>Regulations</strong></th><th><strong>Subject</strong></th><th><strong>Relevance to CDA</strong></th></tr></thead><tbody><tr><td>Reg 5 — security of services</td><td>Providers must take appropriate measures to safeguard the security of their service, inform users of risks, and (reg 5A) notify the ICO of personal-data breaches within 24 hours</td><td>A 24-hour breach clock, tighter than UK GDPR's 72 — applies to breaches of personal data in connection with the service, which includes the retained store</td></tr><tr><td>Reg 6 — confidentiality of communications (cookies and similar)</td><td>Storing or accessing information on terminal equipment requires consent</td><td>Marginal; relevant to any client-side instrumentation</td></tr><tr><td>Reg 7 — restrictions on processing traffic data</td><td>Traffic data must be erased or anonymised when no longer needed for transmission; may be processed for billing and interconnect payments until the bill can no longer be challenged; otherwise only with consent, for value-added services or marketing</td><td>The default disposition of session records, cell identities at signalling moments, call records: delete. The notice is the exception</td></tr><tr><td>Reg 8 — further provisions on traffic data</td><td>Processing restricted to persons acting under the provider's authority for the stated purposes; does not prevent disclosure to competent bodies for dispute resolution</td><td>Access to traffic data is purpose- and role-bound even inside the operator — compartmentation has a PECR root</td></tr><tr><td>Reg 14 — restrictions on processing location data</td><td>Location data other than traffic data may be processed only if anonymised or with the user's consent, for value-added services, and the user can withdraw</td><td>Where the network derives location beyond what signalling needs (e.g. positioning for services), that is consent-based and not retained-data</td></tr><tr><td>Regs 19–24 — direct marketing</td><td>Unsolicited calls, messages and email</td><td>Out of scope for CDA, but the same traffic data must not leak into marketing use</td></tr><tr><td>Reg 28 — national security and law enforcement exemption</td><td>Nothing in PECR requires a provider to do anything inconsistent with safeguarding national security; exemption for processing required by law or for crime purposes</td><td>The hinge: retention under a notice and disclosure under a Part 3 authorisation are 'required by law' and so are not PECR breaches — to the extent required</td></tr><tr><td>Reg 31 — enforcement</td><td>The ICO enforces PECR with notices and monetary penalties (up to £500,000 under the DPA 1998 framework; alignment with UK GDPR penalties has been legislated)</td><td>The ICO is the PECR regulator as well as the GDPR one; one regulator, two regimes</td></tr></tbody></table></div>
+<h2 id="s-2-the-key-definitions">2. The key definitions</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>Term</strong></th><th><strong>PECR meaning</strong></th><th><strong>CDA equivalent</strong></th></tr></thead><tbody><tr><td>Traffic data</td><td>Data processed for the purpose of conveying a communication or for billing it — routing, duration, time, volume, protocol, format, network, start/end, who to whom</td><td>Events data, almost exactly; plus the cell identity at signalling moments</td></tr><tr><td>Location data</td><td>Data indicating the geographic position of the user's terminal equipment, including latitude/longitude, direction, accuracy, cell identification, time</td><td>Location fields within events data; the 'other than traffic data' limb catches positioning beyond what the network needs</td></tr><tr><td>Value-added service</td><td>Any service requiring processing of traffic or location data beyond what transmission or billing needs</td><td>Any business analytics or enrichment of the same data — needs consent; never from the retained store</td></tr><tr><td>Public electronic communications service / provider</td><td>The service offered to the public and the entity providing it</td><td>The telecommunications operator in IPA terms, broadly</td></tr><tr><td>Subscriber / user</td><td>The contracting party / the individual using the service</td><td>The entity behind an identifier; the person using the device — PECR already knows they may differ</td></tr></tbody></table></div>
+<h2 id="s-3-how-the-retention-notice-sits-inside-pecr">3. How the retention notice sits inside PECR</h2>
+<pre class="diagram">Ordinary life of a traffic-data record under PECR
+
+ generated ---&gt; used for transmission ---&gt; used for billing ---&gt; ERASED or ANONYMISED
+                                            (until bill can no
+                                             longer be challenged)
+
+With a retention notice (reg 28 exemption; IPA Part 4 duty)
+
+ generated ---&gt; transmission ---&gt; billing ---&gt; ERASED   (business copy)
+             +--&gt; RETAINED STORE (notice-specified fields only) ---&gt; 12 months ---&gt; DESTROYED
+                 |
+                 +--&gt; disclosed only under lawful authority (IPA Part 3)</pre>
+<p>Three consequences follow:</p>
+<ol>
+<li><strong>The business copy and the retained copy have different legal bases and different lifetimes.</strong> The business copy lives as long as billing needs it and then goes; the retained copy lives twelve months regardless and may be touched only for disclosure. The CDA course's conclusion that compelled data needs a dedicated store with an explicit boundary is a PECR conclusion as much as an IPA one.</li>
+<li><strong>The retained store cannot be the source of value-added services.</strong> Reg 7 permits analytics only with consent; reg 28 lifts PECR only for what the law requires. Business access to retained data has no PECR cover at all.</li>
+<li><strong>The notice bounds the exemption.</strong> Data the notice does not specify remains under reg 7 and must be erased on the ordinary timetable. Keeping it 'alongside' the retained data is a PECR breach, a UK GDPR minimisation breach and an IPA over-retention.</li>
+</ol>
+<h2 id="s-4-where-pecr-and-the-design-meet">4. Where PECR and the design meet</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>PECR point</strong></th><th><strong>Design consequence</strong></th></tr></thead><tbody><tr><td>Traffic data erasure (reg 7)</td><td>The ingest pipeline is the gate: what is not in the notice-bound schema is not stored. Over-capture at the feed is tolerable only if it is dropped before persistence</td></tr><tr><td>Billing retention period</td><td>The charging platform keeps records for its own PECR-permitted period. Feeding retention from charging couples two different legal lifecycles — another reason for the course's warning about charging records</td></tr><tr><td>Role-bound access (reg 8)</td><td>Even the business copy of traffic data is restricted to persons acting under the provider's authority for the stated purposes. Compartmentation of the retained store is a stricter form of a duty the operator already has</td></tr><tr><td>Location data consent (reg 14)</td><td>Any positioning more precise than the cell identity the network needs for transmission is consent-based and sits outside the retained store; the notice cannot require it unless it is traffic data</td></tr><tr><td>Breach notification (reg 5A)</td><td>24 hours to the ICO for personal-data breaches in connection with the service — add it to the three-regulator incident playbook; it is the shortest clock</td></tr><tr><td>Confidentiality of communications</td><td>The content exclusion in the IPA and the confidentiality duty in PECR point the same way: truncation at ingest is the implementation of both</td></tr></tbody></table></div>
+<h2 id="s-5-difficulties-in-practice">5. Difficulties in practice</h2>
+<ul>
+<li><strong>Two copies, one habit.</strong> Engineers who have run billing platforms for years know traffic data as something you keep until the bill is settled. The retained store looks like 'more of the same' and gets handled the same way. It is not the same.</li>
+<li><strong>Anonymisation claims.</strong> Reg 7 permits anonymised traffic data for analytics. Cell-level mobility data is rarely anonymous in any robust sense; a claim that the retained store can feed 'anonymised' analytics should be refused.</li>
+<li><strong>The 24-hour clock.</strong> PECR's breach notification is faster than UK GDPR's and is routinely missed in incident playbooks built around 72 hours.</li>
+<li><strong>Consent-based location products.</strong> Operators sell location insight products under reg 14 consent. Those datasets, their pipelines and their teams must be demonstrably separate from the retained store, or the purpose boundary collapses.</li>
+<li><strong>Interconnect and roaming.</strong> Traffic data exchanged with other operators for interconnect billing is PECR-permitted; the same data is in the IBCF records the notice may require. Same record, two bases, two lifetimes.</li>
+<li><strong>Reform in flight.</strong> The Data (Use and Access) Act 2025 amends PECR, including enforcement alignment with UK GDPR; check the current text.</li>
+</ul>
+<h2 id="s-6-questions-to-ask">6. Questions to ask</h2>
+<ul>
+<li>What is the operator's ordinary PECR erasure period for traffic data, and is the retained store the only place it lives longer?</li>
+<li>Is any field in the retained store there because the feed offered it rather than because the notice named it?</li>
+<li>Does any business, analytics or location-product pipeline read from the retained store or share infrastructure with it?</li>
+<li>Is the 24-hour PECR breach notification in the incident playbook alongside the 72-hour UK GDPR one?</li>
+<li>Where location is derived beyond cell identity, on what basis, and is it kept away from the retained data?</li>
+<li>Has the PECR position been reviewed since the 2025 amendments?</li>
+</ul>
+<aside class="callout"><p class="callout-label">CAVEAT</p><p>Regulation numbers, penalty levels and the effect of the Data (Use and Access) Act 2025 on PECR should be verified against the current text before use as a design constraint.</p></aside>
+    </article>
+  </main>
+  <footer class="container doc-foot"><a href="./">&larr; All documents</a> <a href="#top">Back to top &uarr;</a></footer>
+</body>
+</html>

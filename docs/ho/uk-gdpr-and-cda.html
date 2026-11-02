@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>UK GDPR and CDA</title>
+  <link rel="icon" type="image/png" href="../../assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css?v=1" />
+</head>
+<body id="top">
+
+  <header class="doc-top container">
+    <a class="back" href="./">&larr; All documents</a>
+    <a class="pdf" href="pdf/uk-gdpr-and-cda.pdf">PDF &darr;</a>
+  </header>
+  <main class="container doc">
+    <header class="doc-head">
+      <h1>UK GDPR and CDA</h1>
+      <p class="subtitle">Data protection law in brief, and how it applies to an operator's retained communications data and disclosure capability</p>
+      <p class="meta">Prepared for Michael Rossi · October 2026 — legal brief, not legal advice</p>
+    </header>
+    <nav class="toc"><p class="toc-label">Contents</p><ol><li><a href="#s-in-one-paragraph">In one paragraph</a></li><li><a href="#s-1-the-principles-applied">The principles, applied</a></li><li><a href="#s-2-roles">Roles</a></li><li><a href="#s-3-obligations-that-bite-on-the-design">Obligations that bite on the design</a></li><li><a href="#s-4-the-exemptions-where-the-ipa-and-data-protection-meet">The exemptions — where the IPA and data protection meet</a></li><li><a href="#s-5-the-law-enforcement-regime-on-the-other-side">The law-enforcement regime on the other side</a></li><li><a href="#s-6-difficulties-in-practice">Difficulties in practice</a></li><li><a href="#s-7-questions-to-ask">Questions to ask</a></li></ol></nav>
+    <article>
+<h2 id="s-in-one-paragraph">In one paragraph</h2>
+<p>UK GDPR (the retained EU regulation as amended) and the Data Protection Act 2018 govern every operation an operator performs on personal data, and retained communications data is personal data: it identifies, or can identify, living individuals. The operator is the controller of the retained store; the retention notice supplies the lawful basis (legal obligation) and the IPA restricts the purpose; the acquiring authority becomes a separate controller — under the law-enforcement regime in Part 3 of the DPA 2018 where it is a competent authority — on receipt. Data protection does not override the IPA and the IPA does not switch data protection off: the two apply together, and the design must satisfy both.</p>
+<aside class="callout"><p class="callout-label">TALKING POINT</p><p>'The IPA tells us what we must keep and to whom we may disclose it. UK GDPR tells us how to behave as the controller of it in the meantime. They are cumulative.'</p></aside>
+<h2 id="s-1-the-principles-applied">1. The principles, applied</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>Article 5 principle</strong></th><th><strong>What it means for the retained store</strong></th></tr></thead><tbody><tr><td>Lawfulness, fairness, transparency</td><td>Lawful basis is Art 6(1)(c), compliance with a legal obligation (the notice). Transparency is limited by the IPA's confidentiality duties; the privacy notice should state that data may be retained and disclosed as required by law, without detail that would reveal operational capability</td></tr><tr><td>Purpose limitation</td><td>The sole purpose is retention for disclosure under lawful authority. No business use. Access to the store for fraud, analytics, marketing or customer service is a breach of this principle and of the IPA</td></tr><tr><td>Data minimisation</td><td>Retain exactly the fields the notice specifies and no more; return no more than the authorisation permits; do not enrich third-party identifiers by default</td></tr><tr><td>Accuracy</td><td>Time-segmented identity resolution; explicit gaps and nil-return vocabulary; quality controls against source; caveats travel with the data</td></tr><tr><td>Storage limitation</td><td>Twelve months maximum, keyed to event time; evidenced deletion; backups handled by crypto-shredding</td></tr><tr><td>Integrity and confidentiality (security)</td><td>Art 32 appropriate measures: encryption, compartmentation, per-request authorisation-bound access, audit, detection of misuse — with the TSA Code as the floor</td></tr><tr><td>Accountability</td><td>Record of processing (Art 30) entry for the retained store; DPIA (Art 35); recorded decisions; evidence pack; a named accountable owner</td></tr></tbody></table></div>
+<h2 id="s-2-roles">2. Roles</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>Party</strong></th><th><strong>Role</strong></th><th><strong>Why</strong></th></tr></thead><tbody><tr><td>Operator</td><td>Controller of the retained store</td><td>Generates the data in its own service, determines the means (architecture, vendor, security), relies on its own lawful basis</td></tr><tr><td>Home Office / Secretary of State</td><td>Not a controller of the retained store</td><td>Compels retention but never holds or directs the handling of the data</td></tr><tr><td>Acquiring authority</td><td>Separate controller of disclosed data, from receipt</td><td>Under DPA 2018 Part 3 (law-enforcement processing) for police and competent authorities; UK GDPR for others; Part 4 for the intelligence services</td></tr><tr><td>Platform and support vendors</td><td>Processors of the operator</td><td>Act on the operator's instructions; Art 28 contract required</td></tr><tr><td>A vendor that also determines means (e.g. a managed service deciding its own architecture)</td><td>Risk of joint controllership</td><td>Avoid by keeping policy decisions — schema, classification, scope rules — in the operator's hands</td></tr></tbody></table></div>
+<p>See the separate paper <em>Processor, Controller or Owner?</em> for the full argument. The short form: 'owner' is not a legal category, and the operator is a controller whose purpose was chosen for it.</p>
+<h2 id="s-3-obligations-that-bite-on-the-design">3. Obligations that bite on the design</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>Obligation</strong></th><th><strong>Article</strong></th><th><strong>Design consequence</strong></th></tr></thead><tbody><tr><td>DPIA</td><td>Art 35</td><td>Mandatory: large-scale processing of data about individuals, with intrusive potential. One DPIA for the retention and disclosure capability, reviewed on every material change; it is also the right place to record the negative decisions</td></tr><tr><td>Record of processing</td><td>Art 30</td><td>A separate entry for the retained store with its own purpose, basis, categories, recipients, retention period and security description</td></tr><tr><td>Security of processing</td><td>Art 32</td><td>Measures appropriate to the risk — the CDA course's Module 10 is the implementation</td></tr><tr><td>Processor contracts</td><td>Art 28</td><td>Every vendor touching the store: documented instructions, confidentiality, security, sub-processor control, assistance, deletion/return at end, audit rights</td></tr><tr><td>Breach notification</td><td>Art 33–34</td><td>72 hours to the ICO for notifiable breaches; a wrongful disclosure is a breach. Pre-agree the route alongside IPCO and Ofcom reporting</td></tr><tr><td>Data protection by design and default</td><td>Art 25</td><td>Truncation at ingest, classification-driven scope enforcement, minimisation as architecture rather than policy</td></tr><tr><td>Subject rights</td><td>Art 15–22</td><td>Subject access, rectification, erasure, restriction, objection — each subject to exemptions (below). A defined route is needed; the request cannot simply be referred to the Home Office</td></tr><tr><td>International transfers</td><td>Art 44–49</td><td>Where any component, vendor or support function is outside the UK; a cloud region or offshore support desk is a transfer</td></tr><tr><td>DPO</td><td>Art 37–39</td><td>The DPO must be consulted on the DPIA and should be part of the design authority's governance</td></tr></tbody></table></div>
+<h2 id="s-4-the-exemptions-where-the-ipa-and-data-protection-meet">4. The exemptions — where the IPA and data protection meet</h2>
+<p>Data protection law anticipates compelled retention and disclosure and provides restrictions on subject rights and transparency, but they must be applied case by case, not as a blanket.</p>
+<div class="table-wrap"><table><thead><tr><th><strong>Provision</strong></th><th><strong>Effect</strong></th><th><strong>Caution</strong></th></tr></thead><tbody><tr><td>DPA 2018 Sch 2 para 2 — crime and taxation</td><td>Subject rights and transparency may be restricted to the extent they would prejudice the prevention or detection of crime</td><td>'To the extent' — a subject-access request about ordinary account data is not restricted just because the subject also appears in a disclosure</td></tr><tr><td>DPA 2018 s.26 and Sch 11 — national security</td><td>Exemption from most of the regime where required for safeguarding national security; ministerial certificate available</td><td>Narrow in scope; must be justified per case</td></tr><tr><td>DPA 2018 Sch 2 para 5 — disclosures required by law</td><td>Processing required by an enactment or court order is exempt from provisions that would prevent it</td><td>This is what lets the operator disclose under a Part 3 authorisation without breaching purpose limitation — it does not expand what may be disclosed</td></tr><tr><td>IPA confidentiality duties (e.g. s.95, s.255)</td><td>The operator must not reveal the existence or content of a notice or disclosure</td><td>A subject-access response must neither confirm nor deny that a disclosure occurred; the wording is a designed artefact</td></tr></tbody></table></div>
+<aside class="callout"><p class="callout-label">DESIGN CONSEQUENCE</p><p>Design consequence: the subject-rights process needs a route for retained data — who answers, which exemption applies, how the response is worded so that neither the existence nor the absence of a disclosure can be inferred — and the disclosure audit must be queryable by subject without that query itself constituting a disclosure. Record the exemption decision each time.</p></aside>
+<h2 id="s-5-the-law-enforcement-regime-on-the-other-side">5. The law-enforcement regime on the other side</h2>
+<p>When a competent authority (police, NCA, HMRC and others listed in Sch 7 DPA 2018) receives disclosed data, it processes under Part 3 of the DPA 2018, not UK GDPR. Part 3 has its own principles, including a requirement to distinguish categories of data subject (suspect, victim, witness) and to distinguish fact from assessment. That is why the caveats and completeness statements the CDA course attaches to a disclosure matter: they help the receiving controller meet its own duty to distinguish what is known from what is inferred, and they bound the operator's accountability at the point of release.</p>
+<h2 id="s-6-difficulties-in-practice">6. Difficulties in practice</h2>
+<ul>
+<li><strong>Two regimes, one dataset.</strong> Teams tend to pick one — 'this is IPA data, GDPR doesn't apply' or the reverse. Both apply; the design must show both.</li>
+<li><strong>Purpose creep.</strong> The retained store is a clean, well-indexed copy of exactly the data the business wants for fraud and analytics. The temptation is permanent; the control must be technical.</li>
+<li><strong>DPIA as paperwork.</strong> A DPIA written after the architecture is fixed records risk rather than reducing it. Run it with the design authority, early.</li>
+<li><strong>Vendor contracts.</strong> Specialist retention vendors are often on legacy terms predating UK GDPR; check for Art 28 compliance and for the production-access and portability terms the course calls for.</li>
+<li><strong>Subject-access wording.</strong> Getting the neither-confirm-nor-deny response wrong, in either direction, is a regulatory failure.</li>
+<li><strong>Transfers hidden in support.</strong> A follow-the-sun support desk or a cloud control plane outside the UK is a transfer, and a security question under the IPA and TSA too.</li>
+<li><strong>Breach routing.</strong> Three regulators with three clocks; decide in advance.</li>
+</ul>
+<h2 id="s-7-questions-to-ask">7. Questions to ask</h2>
+<ul>
+<li>Where is the DPIA for the retention and disclosure capability, who signed it, and when was it last reviewed?</li>
+<li>Is there a separate record-of-processing entry for the retained store with legal obligation as the basis and no business purpose?</li>
+<li>Show me the Art 28 terms for every vendor with access to the store.</li>
+<li>What happens, step by step, when a subject-access request arrives from someone who is the subject of a live authorisation?</li>
+<li>Is any part of the estate, or any support function, outside the UK?</li>
+<li>Can we prove no business query has ever run against the retained store?</li>
+<li>Who makes the breach-notification decision, and which bodies are in the playbook?</li>
+</ul>
+<aside class="callout"><p class="callout-label">CAVEAT</p><p>Article numbers, Schedule references and the current status of the Data (Use and Access) Act 2025 amendments should be checked against the legislation in force before use as a design constraint.</p></aside>
+    </article>
+  </main>
+  <footer class="container doc-foot"><a href="./">&larr; All documents</a> <a href="#top">Back to top &uarr;</a></footer>
+</body>
+</html>

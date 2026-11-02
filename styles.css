@@ -1,9 +1,9 @@
 :root {
-  --yellow: #FFE01B;
-  --yellow-line: #d4b800;
+  --bg: #FAF7F0;
+  --line: #E4DED1;
   --ink: #1a1a1a;
-  --ink-soft: #5c5200;
-  --ink-muted: #6b5d00;
+  --ink-soft: #4A463F;
+  --ink-muted: #6E685C;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -11,7 +11,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--yellow);
+  background: var(--bg);
   color: var(--ink);
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 16px;
@@ -67,7 +67,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 16px 0;
-  border-bottom: 1px solid var(--yellow-line);
+  border-bottom: 1px solid var(--line);
 }
 .row-main { display: flex; align-items: center; gap: 14px; font-size: 16px; }
 .row-content { display: flex; flex-direction: column; gap: 2px; }
@@ -78,11 +78,11 @@ body {
 
 /* Contact form */
 .contact-form { display: flex; flex-direction: column; gap: 12px; max-width: 440px; margin-bottom: 28px; }
-.cf-input { font: inherit; color: var(--ink); background: transparent; border: none; border-bottom: 1px solid var(--yellow-line); padding: 10px 0; outline: none; }
+.cf-input { font: inherit; color: var(--ink); background: transparent; border: none; border-bottom: 1px solid var(--line); padding: 10px 0; outline: none; }
 .cf-input:focus { border-bottom-color: var(--ink); }
 .cf-input::placeholder { color: var(--ink-muted); }
 textarea.cf-input { resize: vertical; }
-.cf-btn { align-self: flex-start; font: inherit; font-weight: 500; color: var(--yellow); background: var(--ink); border: none; border-radius: 999px; padding: 10px 22px; cursor: pointer; transition: opacity .15s; }
+.cf-btn { align-self: flex-start; font: inherit; font-weight: 500; color: var(--bg); background: var(--ink); border: none; border-radius: 999px; padding: 10px 22px; cursor: pointer; transition: opacity .15s; }
 .cf-btn:hover { opacity: 0.85; }
 .cf-btn:disabled { opacity: 0.5; cursor: default; }
 .cf-status { font-size: 14px; color: var(--ink-soft); margin: 0; }

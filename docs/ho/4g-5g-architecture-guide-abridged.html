@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>4G and 5G in Brief</title>
+  <link rel="icon" type="image/png" href="../../assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="docs.css?v=1" />
+</head>
+<body id="top">
+
+  <header class="doc-top container">
+    <a class="back" href="./">&larr; All documents</a>
+    <a class="pdf" href="pdf/4g-5g-architecture-guide-abridged.pdf">PDF &darr;</a>
+  </header>
+  <main class="container doc">
+    <header class="doc-head">
+      <h1>4G and 5G in Brief</h1>
+      <p class="subtitle">The key concepts of mobile network architecture — abridged edition for quick orientation</p>
+      <p class="meta">Prepared for Michael Rossi · October 2026 — companion to the full guide</p>
+    </header>
+    <nav class="toc"><p class="toc-label">Contents</p><ol><li><a href="#s-the-ten-things-to-hold-in-your-head">The ten things to hold in your head</a></li><li><a href="#s-1-the-two-architectures-on-one-page">The two architectures on one page</a></li><li><a href="#s-2-interfaces-you-will-hear-named">Interfaces you will hear named</a></li><li><a href="#s-3-sessions-bearers-and-qos">Sessions, bearers and QoS</a></li><li><a href="#s-4-the-four-procedures-that-generate-records">The four procedures that generate records</a></li><li><a href="#s-5-identity-in-one-table">Identity in one table</a></li><li><a href="#s-6-nsa-sa-and-the-migration-traps">NSA, SA and the migration traps</a></li><li><a href="#s-7-where-communications-data-comes-from">Where communications data comes from</a></li><li><a href="#s-8-glossary-the-short-list">Glossary — the short list</a></li></ol></nav>
+    <article>
+<h2 id="s-the-ten-things-to-hold-in-your-head">The ten things to hold in your head</h2>
+<ol>
+<li><strong>Both generations are all-IP.</strong> Every service, including voice, is a packet flow. Voice is delivered by a separate system, the IMS, that sits on top of either core.</li>
+<li><strong>Three planes.</strong> Control (signalling: who, when, where), user (the traffic itself), management (configuration). Communications data lives on the control plane; content lives on the user plane.</li>
+<li><strong>Radio and core are separate.</strong> Base stations (eNB in 4G, gNB in 5G) handle the air interface; the core handles identity, sessions, policy and the route to the outside world.</li>
+<li><strong>4G's core is a handful of boxes.</strong> MME (control brain), HSS (subscriber database), SGW and PGW (user-plane gateways), PCRF (policy). Point-to-point interfaces with letter-number names.</li>
+<li><strong>5G's core is a set of services.</strong> AMF, SMF, UPF, UDM, AUSF, PCF, NRF, NSSF, NEF, CHF — cloud-native functions on an HTTP/2 bus. Control and user plane fully separated.</li>
+<li><strong>'5G' may be 4G underneath.</strong> Non-standalone 5G (NSA, Option 3x) uses a 5G radio on a 4G core: all records are 4G records. Standalone (SA) is the real thing.</li>
+<li><strong>The unit of service is a session with QoS.</strong> 4G: PDN connection and EPS bearers with a QCI each. 5G: PDU session with QoS flows with a 5QI each. Voice media is QCI/5QI 1; IMS signalling is QCI/5QI 5.</li>
+<li><strong>Identity is layered.</strong> Subscription (IMSI/SUPI), device (IMEI/PEI), public number (MSISDN/GPSI), IMS identities (IMPI/IMPU), temporary (GUTI), and an IP address per session. No single one is the person.</li>
+<li><strong>Location is a cell at a signalling moment.</strong> ECGI (4G) or NCGI (5G), captured when something happens; in idle, only the tracking/registration area. Never a track.</li>
+<li><strong>One call, many records.</strong> Core, IMS, policy and charging nodes each record part of it. The charging correlation identifier (ICID) is what joins them.</li>
+</ol>
+<h2 id="s-1-the-two-architectures-on-one-page">1. The two architectures on one page</h2>
+<pre class="diagram">4G / EPS
+ +----+       +-----+  S1-MME  +-----+  S6a  +-----+
+ | UE |&lt;=====&gt;| eNB |&lt;--------&gt;| MME |&lt;-----&gt;| HSS |
+ +----+       |     |          +--+--+       +-----+
+              |     |   S1-U      | S11
+              |     |&lt;------&gt;+-----+  S5/S8 +-----+  SGi  internet
+              +-----+        | SGW |&lt;------&gt;| PGW |&lt;----&gt; / IMS
+                             +-----+        +--+--+
+                                               | Gx    +------+
+                                               +-------| PCRF |&lt;-- Rx -- IMS
+                                                       +------+
+
+5G / 5GS (standalone)
+   NSSF  NEF  NRF  PCF  UDM  AUSF  CHF      &lt;- services on the SBI bus
+   =======================================================
+        |                     |
+     +--+--+               +--+--+
+     | AMF |               | SMF |
+     +--+--+               +--+--+
+        | N2                  | N4
+ +----+ |   +-----+  N3    +--+--+   N6   internet
+ | UE |&lt;===&gt;| gNB |&lt;------&gt;| UPF |&lt;-----&gt; / IMS
+ +----+ N1  +-----+        +-----+</pre>
+<div class="table-wrap"><table><thead><tr><th><strong>Job</strong></th><th><strong>4G</strong></th><th><strong>5G</strong></th></tr></thead><tbody><tr><td>Base station</td><td>eNB</td><td>gNB (CU/DU split)</td></tr><tr><td>Mobility, registration, paging</td><td>MME</td><td>AMF</td></tr><tr><td>Session set-up, IP address</td><td>MME + SGW/PGW control</td><td>SMF</td></tr><tr><td>User-plane forwarding, NAT, usage counting</td><td>SGW, PGW</td><td>UPF</td></tr><tr><td>Subscriber data and authentication</td><td>HSS</td><td>UDM + UDR + AUSF</td></tr><tr><td>Policy and QoS decisions</td><td>PCRF</td><td>PCF</td></tr><tr><td>Charging</td><td>OCS / OFCS</td><td>CHF</td></tr><tr><td>Service discovery</td><td>(configuration)</td><td>NRF</td></tr><tr><td>Slicing</td><td>(none)</td><td>NSSF, S-NSSAI</td></tr><tr><td>External API exposure</td><td>SCEF</td><td>NEF</td></tr><tr><td>Wi-Fi access gateway</td><td>ePDG</td><td>N3IWF</td></tr><tr><td>Voice</td><td>VoLTE via IMS</td><td>VoNR via IMS, or EPS Fallback to 4G</td></tr></tbody></table></div>
+<h2 id="s-2-interfaces-you-will-hear-named">2. Interfaces you will hear named</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>Name</strong></th><th><strong>Between</strong></th><th><strong>What it does</strong></th></tr></thead><tbody><tr><td>S1-MME / N2</td><td>Base station and MME / AMF</td><td>All control signalling between RAN and core; UE NAS messages ride inside</td></tr><tr><td>S1-U / N3</td><td>Base station and SGW / UPF</td><td>User-plane tunnels (GTP-U)</td></tr><tr><td>S6a / Nudm</td><td>MME / AMF and HSS / UDM</td><td>Authentication and subscription data; 'which node serves this subscriber now'</td></tr><tr><td>S11 / N11</td><td>MME and SGW / AMF and SMF</td><td>Create and tear down sessions</td></tr><tr><td>S5-S8 / N9</td><td>SGW and PGW / UPF to UPF</td><td>Gateway-to-gateway; S8 when roaming</td></tr><tr><td>Gx / N7</td><td>PGW and PCRF / SMF and PCF</td><td>Policy rules per flow</td></tr><tr><td>Rx / N5</td><td>IMS P-CSCF and PCRF / PCF</td><td>'Give this call a voice bearer' — the only place IMS touches the packet core</td></tr><tr><td>Sx / N4</td><td>Gateway control and user plane</td><td>PFCP rules to the user plane; where CUPS and the 5G split live</td></tr><tr><td>SGi / N6</td><td>PGW / UPF and the outside</td><td>The subscriber's traffic leaves the mobile network</td></tr><tr><td>X2 / Xn</td><td>Base station to base station</td><td>Handover without the core</td></tr><tr><td>N26</td><td>MME and AMF</td><td>4G-to-5G session continuity</td></tr><tr><td>Gm / Mw / ISC / Cx</td><td>Inside IMS</td><td>UE to P-CSCF / between CSCFs / to application servers / to HSS</td></tr><tr><td>LI_X1, X2, X3 / HI1, HI2, HI3</td><td>Lawful intercept</td><td>Provisioning, events, content / tasking and delivery to the authority</td></tr></tbody></table></div>
+<h2 id="s-3-sessions-bearers-and-qos">3. Sessions, bearers and QoS</h2>
+<p>A device with an active data connection has, in 4G, a PDN connection per APN (typically 'internet' and 'ims'), each with a default bearer and possibly dedicated bearers; in 5G, a PDU session per DNN, each carrying several QoS flows in one tunnel. The QoS class decides treatment:</p>
+<div class="table-wrap"><table><thead><tr><th><strong>QCI / 5QI</strong></th><th><strong>Used for</strong></th><th><strong>Why it matters</strong></th></tr></thead><tbody><tr><td>1</td><td>Voice media</td><td>Its set-up and release bracket a call's media; corroborates IMS timing</td></tr><tr><td>2</td><td>Video media</td><td></td></tr><tr><td>5</td><td>IMS signalling</td><td>Exists from attach on every VoLTE/VoNR device — it means registered, not on a call</td></tr><tr><td>6-9</td><td>Internet traffic</td><td>Where data-session and ICR-type records come from</td></tr></tbody></table></div>
+<p>Because each APN/DNN has its own IP address, one device holds several addresses at once; and because most operators run carrier-grade NAT, the public address is shared by hundreds of subscribers. 'The device's IP' is only meaningful as (address, port, time).</p>
+<h2 id="s-4-the-four-procedures-that-generate-records">4. The four procedures that generate records</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>Procedure</strong></th><th><strong>What happens</strong></th><th><strong>Records produced</strong></th></tr></thead><tbody><tr><td>Attach (4G) / Registration (5G)</td><td>UE identifies itself, is authenticated against HSS/UDM, gets a temporary identity and a tracking/registration area. In 4G a default data session is created at the same time; in 5G it is a separate step.</td><td>HSS/UDM location update; MME/AMF context with IMSI/SUPI, IMEI/PEI, cell; (4G) IP allocation</td></tr><tr><td>Session establishment</td><td>A PDN connection / PDU session is created to an APN/DNN; the PGW/SMF allocates an IP address; policy is fetched; tunnels are set up.</td><td>IP allocation with time; policy session; charging session start</td></tr><tr><td>IMS registration and call</td><td>Device registers with the IMS over the 'ims' APN/DNN; a call is a SIP INVITE through P-CSCF and S-CSCF, service logic at the TAS, a QoS bearer/flow requested over Rx/N5, media on the user plane, BYE to end.</td><td>S-CSCF session record (authoritative), P-CSCF access/location, TAS service events, IBCF interconnect, policy bearer events, IMS charging record with ICID</td></tr><tr><td>Mobility</td><td>Handover between cells (X2/Xn without the core, S1/N2 via it), tracking/registration area updates in idle, inter-system moves over N26, EPS Fallback for voice.</td><td>Core sees only the handovers and area updates that involve it; cell changes inside a connected session are largely invisible to the core</td></tr></tbody></table></div>
+<pre class="diagram">A VoLTE / VoNR call, compressed
+UE --INVITE--&gt; P-CSCF --&gt; S-CSCF --iFC--&gt; TAS --&gt; (I-CSCF/HSS) --&gt; S-CSCF(term) --&gt; P-CSCF --&gt; callee
+                 |
+                 +--Rx/N5--&gt; PCRF/PCF --&gt; PGW/SMF --&gt; dedicated bearer / QoS flow (QCI/5QI 1)
+&lt;===================== RTP media on the user plane, never through IMS ====================&gt;
+UE --BYE--&gt; ... --&gt; callee ; bearer released ; charging records closed, joined by ICID</pre>
+<h2 id="s-5-identity-in-one-table">5. Identity in one table</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>Identifies</strong></th><th><strong>4G</strong></th><th><strong>5G</strong></th><th><strong>Note</strong></th></tr></thead><tbody><tr><td>The subscription (SIM)</td><td>IMSI</td><td>SUPI (sent concealed as SUCI)</td><td>The join key between core and IMS records</td></tr><tr><td>The device</td><td>IMEI</td><td>PEI</td><td>Captured at attach and IMS registration, not per call</td></tr><tr><td>The public number</td><td>MSISDN</td><td>GPSI</td><td>Portable and reassignable — only valid as at a time</td></tr><tr><td>Temporary core identity</td><td>GUTI</td><td>5G-GUTI</td><td>In traces, not disclosures</td></tr><tr><td>IMS credential / public identity</td><td>IMPI / IMPU</td><td>same</td><td>Several IMPUs per subscriber</td></tr><tr><td>The session endpoint</td><td>UE IP (per APN)</td><td>UE IP (per PDU session; may change under SSC 2/3)</td><td>Shared behind CGNAT; needs port and time</td></tr><tr><td>Location</td><td>ECGI (cell), TAI (area)</td><td>NCGI (cell), registration area</td><td>Different identifier spaces; cell at signalling moments only</td></tr><tr><td>One call across nodes</td><td>ICID</td><td>ICID</td><td>The correlation key</td></tr><tr><td>The other operator</td><td>IOI</td><td>IOI</td><td>Inserted at the IBCF</td></tr></tbody></table></div>
+<h2 id="s-6-nsa-sa-and-the-migration-traps">6. NSA, SA and the migration traps</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>NSA (Option 3x)</strong></th><th><strong>SA (Option 2)</strong></th></tr></thead><tbody><tr><td>Radio LTE anchor + NR secondary</td><td>NR only</td></tr><tr><td>Core 4G EPC</td><td>5G core</td></tr><tr><td>Identity IMSI, GUTI</td><td>SUPI/SUCI, 5G-GUTI</td></tr><tr><td>Location id ECGI</td><td>NCGI</td></tr><tr><td>Voice VoLTE</td><td>VoNR or EPS Fallback</td></tr><tr><td>Records All 4G-shaped</td><td>5G-shaped, with 4G records for fallback calls</td></tr></tbody></table></div>
+<ul>
+<li>A '5G subscriber' on NSA produces nothing but 4G records.</li>
+<li>EPS Fallback splits one call across two cores: INVITE on 5G, media and release on 4G. Correlate on ICID.</li>
+<li>ECGI and NCGI are different identifier spaces; hold both in the cell-site reference.</li>
+<li>5G UEs can change IP address mid-session (SSC modes 2/3) and hold more sessions per device (slices).</li>
+<li>RRC_INACTIVE in 5G hides even more mobility from the core than 4G idle did.</li>
+<li>Every 4G feed gains a 5G twin; reconcile volumes per feed per generation.</li>
+</ul>
+<h2 id="s-7-where-communications-data-comes-from">7. Where communications data comes from</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>Question</strong></th><th><strong>Go to</strong></th></tr></thead><tbody><tr><td>Who holds this number / subscription?</td><td>HSS / UDM and the CRM — a subscription attribute, valid as at a time</td></tr><tr><td>Did a call happen, between whom, when, how did it end?</td><td>S-CSCF</td></tr><tr><td>Where was the device when it did?</td><td>P-CSCF (P-Access-Network-Info) for IMS events; MME / AMF for core events</td></tr><tr><td>Which IP address did they have?</td><td>PGW / SMF allocation record</td></tr><tr><td>Who was behind this public IP:port then?</td><td>CGNAT translation logs — nothing else</td></tr><tr><td>Was the call diverted, barred, conferenced?</td><td>TAS</td></tr><tr><td>Which operator was the other party on?</td><td>IBCF (inter-operator identifier)</td></tr><tr><td>Was it 4G, 5G or Wi-Fi?</td><td>Access type field in P-Access-Network-Info; MME / AMF context</td></tr><tr><td>What was said / what app was used / where they were in between</td><td>Not generated. Content is user plane; OTT is encrypted; location is occasional.</td></tr></tbody></table></div>
+<p>The same lawful-intercept plumbing (ADMF provisioning, POIs in AMF/SMF/UPF/CSCF, MDF2 for events and MDF3 for content) carries both interception and communications data. The separation between the two is administrative — authorisation and provisioning — not physical.</p>
+<h2 id="s-8-glossary-the-short-list">8. Glossary — the short list</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>Term</strong></th><th><strong>Meaning</strong></th></tr></thead><tbody><tr><td>AMF / MME</td><td>5G / 4G mobility and registration control node</td></tr><tr><td>SMF / UPF</td><td>5G session control / user-plane forwarding (4G: SGW/PGW)</td></tr><tr><td>HSS / UDM</td><td>Subscriber database, 4G / 5G</td></tr><tr><td>PCRF / PCF</td><td>Policy and QoS decisions, 4G / 5G</td></tr><tr><td>eNB / gNB</td><td>4G / 5G base station</td></tr><tr><td>APN / DNN</td><td>Named data network a session connects to</td></tr><tr><td>Bearer / PDU session / QoS flow</td><td>The units of connectivity and QoS</td></tr><tr><td>QCI / 5QI</td><td>QoS class; 1 = voice media, 5 = IMS signalling</td></tr><tr><td>IMS, CSCF (P/I/S), TAS</td><td>Voice and messaging service core and its nodes</td></tr><tr><td>IMSI / SUPI, IMEI / PEI, MSISDN / GPSI</td><td>Subscription, device, public number — 4G / 5G names</td></tr><tr><td>ECGI / NCGI, TAI</td><td>Cell and tracking-area identifiers</td></tr><tr><td>ICID, IOI</td><td>Call correlation key; peer-operator identifier</td></tr><tr><td>NSA / SA</td><td>5G radio on a 4G core / full 5G</td></tr><tr><td>EPS Fallback</td><td>A 5G-originated call completed on 4G</td></tr><tr><td>CGNAT</td><td>Shared public IP addresses; resolution needs port and time</td></tr><tr><td>SBI / SBA</td><td>The HTTP/2 service bus the 5G core runs on</td></tr><tr><td>Slice (S-NSSAI)</td><td>A logical end-to-end network for a class of service</td></tr><tr><td>ADMF / POI / MDF</td><td>Lawful-intercept provisioning, capture and mediation functions</td></tr></tbody></table></div>
+    </article>
+  </main>
+  <footer class="container doc-foot"><a href="./">&larr; All documents</a> <a href="#top">Back to top &uarr;</a></footer>
+</body>
+</html>
