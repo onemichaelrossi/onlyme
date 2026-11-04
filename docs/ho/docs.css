@@ -130,6 +130,65 @@ tbody tr:last-child td { border-bottom: 1px solid var(--line-strong); }
 .doc-list .s { grid-column: 2; color: var(--ink-muted); font-size: 14px; line-height: 1.45; }
 .doc-list .p { grid-row: 1; grid-column: 3; color: var(--ink-muted); font-size: 13px; white-space: nowrap; }
 
+/* Handbook components (CDA Governance Architect's Handbook) */
+.doc-head .kicker { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 10px; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 0 0 24px; }
+.stat { border-top: 2px solid var(--accent); padding-top: 8px; }
+.stat-n { display: block; font-size: 28px; font-weight: 600; line-height: 1.2; }
+.stat-l { display: block; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted); }
+.callout.scope p { font-size: 15px; }
+.callout.callout-warn { background: #FBF1E8; border-left-color: #B5541C; padding-bottom: 4px; }
+.toc-grouped li.toc-part > a { font-weight: 600; color: var(--accent); }
+.toc-grouped li.toc-part ol { border-top: 0; margin-left: 18px; }
+.toc-grouped li.toc-part li { border-bottom: 0; }
+.toc-grouped li.toc-part li a { padding: 3px 0; font-size: 14.5px; }
+.toc-grouped li.toc-part { padding-bottom: 8px; }
+.part { margin: 72px 0 8px; padding: 18px 0 14px 18px; border-left: 4px solid var(--accent); scroll-margin-top: 16px; }
+.part-label { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 !important; }
+.part-title { font-size: 32px; font-weight: 600; line-height: 1.2; margin: 2px 0 0 !important; }
+.part + h2 { margin-top: 28px; }
+.chip { display: inline-block; vertical-align: middle; font-size: 12px; font-weight: 600; letter-spacing: 0.05em;
+  padding: 1px 8px; border-radius: 4px; background: #E8F0FB; color: #1F5FAE; position: relative; top: -2px; }
+.lvl { display: inline-block; min-width: 20px; text-align: center; font-size: 11.5px; font-weight: 600; line-height: 18px;
+  border-radius: 3px; padding: 0 4px; }
+.lvl-m { background: #12223D; color: #fff; }
+.lvl-e { background: #CFE0F5; color: #12223D; }
+.lvl-g { background: #E9F4EE; color: #2F7A4D; box-shadow: inset 0 0 0 1px #B9DCC6; }
+p.lvl-row { display: flex; gap: 12px; align-items: baseline; font-size: 15px; }
+p.lvl-row .lvl { flex: none; }
+table.hb { font-size: 13.5px; }
+table.hb td:first-child { min-width: 0; }
+table.hb td:first-child code { white-space: nowrap; }
+table.hb.cols-3 td:first-child { min-width: 150px; }
+table.hb.cols-8 { font-size: 12.5px; }
+table.hb.cols-8 td, table.hb.cols-8 th { padding: 8px 8px; }
+table.hb code { color: #1F5FAE; font-weight: 600; font-size: 0.9em; }
+table.hb td:last-child:has(.lvl) { text-align: center; width: 1%; }
+table.hb tr.group td { background: var(--callout); font-weight: 600; color: var(--accent); font-size: 13px; }
+table.defs td:first-child { width: 1%; }
+.panels { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0 28px; }
+.panel { border-radius: 6px; padding: 14px 16px 6px; }
+.panel ul { margin: 0 0 8px 18px; }
+.panel li { font-size: 14.5px; margin-bottom: 5px; line-height: 1.5; }
+.panel-label { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px !important; }
+.panel-ev { background: #EAF4EE; } .panel-ev .panel-label { color: #2F7A4D; }
+.panel-fm { background: #FBF1E8; } .panel-fm .panel-label { color: #B5541C; }
+.pattern { background: var(--surface); border: 1px solid var(--line-strong); border-radius: 6px; padding: 12px 16px 2px; margin: 0 0 14px; scroll-margin-top: 16px; }
+.pattern-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin-bottom: 6px; }
+.pchip { background: #12223D; color: #fff; font-size: 12px; font-weight: 600; border-radius: 3px; padding: 0 6px; }
+.pattern-title { font-weight: 600; font-size: 16.5px; }
+.sat { margin-left: auto; font-size: 12.5px; color: var(--ink-muted); }
+.pattern p { font-size: 15px; margin-bottom: 8px; }
+article p.note { font-size: 14px; color: var(--ink-soft); }
+article p.closing { font-size: 14px; font-style: italic; color: var(--ink-muted); margin-top: 32px; }
+@media (max-width: 640px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .panels { grid-template-columns: 1fr; }
+  .part-title { font-size: 26px; }
+  .sat { margin-left: 0; width: 100%; }
+}
+@media print { .pattern, .panels { break-inside: avoid; } }
+
 @media (max-width: 640px) {
   .doc-head h1 { font-size: 30px; }
   .doc-head .subtitle { font-size: 17px; }
