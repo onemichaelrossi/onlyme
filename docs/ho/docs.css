@@ -189,6 +189,56 @@ article p.closing { font-size: 14px; font-style: italic; color: var(--ink-muted)
 }
 @media print { .pattern, .panels { break-inside: avoid; } }
 
+/* Search (search.js) */
+.doc-top { position: sticky; top: 0; z-index: 30; background: var(--bg); gap: 16px; padding-top: 14px; padding-bottom: 14px; }
+.doc-top::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--line); }
+.doc-top .back { order: 0; white-space: nowrap; }
+.doc-top .hs { order: 1; flex: 1; max-width: 440px; }
+.doc-top .pdf { order: 2; white-space: nowrap; }
+article h2, article h3, article h4, .part, .pattern { scroll-margin-top: 84px; }
+.hs { position: relative; }
+.ho-head .hs { margin-top: 18px; max-width: 560px; }
+.hs-box { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line-strong);
+  border-radius: 999px; padding: 0 12px; height: 38px; cursor: text; transition: border-color .15s, box-shadow .15s; }
+.hs-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(11, 79, 108, .12); }
+.hs-box svg { width: 16px; height: 16px; flex: none; fill: none; stroke: var(--ink-muted); stroke-width: 1.8; stroke-linecap: round; }
+.hs-box input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 15px; color: var(--ink); }
+.hs-box input::-webkit-search-cancel-button { cursor: pointer; }
+.hs-box kbd { font: 12px/1 'SFMono-Regular', Consolas, monospace; color: var(--ink-muted); border: 1px solid var(--line-strong);
+  border-radius: 4px; padding: 3px 6px; }
+.hs-box:focus-within kbd { display: none; }
+.hs-pop { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: min(680px, calc(100vw - 32px));
+  max-height: min(70vh, 640px); overflow-y: auto; background: var(--surface); border: 1px solid var(--line-strong);
+  border-radius: 10px; box-shadow: 0 14px 40px rgba(31, 41, 51, .16); z-index: 40; padding: 6px; text-align: left; }
+.ho-head .hs-pop { left: 0; transform: none; }
+.hs-pop[hidden] { display: none; }
+.hs-head { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); font-weight: 600; padding: 8px 10px 6px; }
+.hs-empty { padding: 14px 12px; color: var(--ink-muted); font-size: 14.5px; }
+a.hs-item { display: block; padding: 9px 12px; border-radius: 7px; text-decoration: none; color: var(--ink); }
+a.hs-item:hover, a.hs-item.on { background: var(--callout); }
+.hs-crumb { display: block; font-size: 12px; color: var(--ink-muted); line-height: 1.4; }
+.hs-title { display: block; font-weight: 600; font-size: 15px; color: var(--accent); line-height: 1.35; }
+.hs-n { font-weight: 500; font-size: 12px; color: var(--ink-muted); margin-left: 4px; }
+.hs-snip { display: block; font-size: 13.5px; line-height: 1.5; color: var(--ink-soft); margin-top: 2px; }
+.hs-pop mark { background: #FFE58A; color: inherit; border-radius: 2px; padding: 0 1px; }
+.hs-doc { border-top: 1px solid var(--line); padding: 4px 0 6px; }
+.hs-doc:first-of-type { border-top: 0; }
+a.hs-doc-t { display: block; padding: 8px 12px 2px; font-weight: 600; font-size: 14.5px; color: var(--ink); text-decoration: none; }
+a.hs-doc-t:hover { color: var(--accent); }
+.hs-doc-n { color: var(--ink-muted); font-weight: 500; font-variant-numeric: tabular-nums; margin-right: 4px; }
+.hs-doc a.hs-item { margin-left: 14px; }
+a.hs-more { display: block; margin-left: 26px; padding: 4px 0 6px; font-size: 13px; color: var(--accent); text-decoration: none; }
+a.hs-more:hover { text-decoration: underline; }
+mark.hs-hit { background: #FFE58A; color: inherit; border-radius: 2px; padding: 0 1px; }
+@keyframes hs-flash { from { background: #FFF3C4; } to { background: transparent; } }
+.hs-flash { animation: hs-flash 1.6s ease-out; border-radius: 4px; }
+@media (max-width: 640px) {
+  .doc-top { flex-wrap: wrap; row-gap: 10px; }
+  .doc-top .hs { order: 3; flex-basis: 100%; max-width: none; }
+  .hs-box kbd { display: none; }
+  article h2, article h3, article h4, .part, .pattern { scroll-margin-top: 130px; }
+}
+
 @media (max-width: 640px) {
   .doc-head h1 { font-size: 30px; }
   .doc-head .subtitle { font-size: 17px; }
@@ -199,7 +249,8 @@ article p.closing { font-size: 14px; font-style: italic; color: var(--ink-muted)
 
 @media print {
   body { background: #fff; }
-  .doc-top, .doc-foot, .toc { display: none; }
+  .doc-top, .doc-foot, .toc, .hs { display: none; }
+  mark.hs-hit { background: none; }
   article h2 { break-after: avoid; }
   tr, .callout, pre.diagram { break-inside: avoid; }
 }
