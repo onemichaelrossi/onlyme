@@ -195,6 +195,28 @@ article p.closing { font-size: 14px; font-style: italic; color: var(--ink-muted)
   border-radius: 4px; font-size: 13.5px; font-weight: 500; text-decoration: none; background: var(--surface); }
 .toc .toc-letters a:hover { border-color: var(--accent); }
 
+/* Book layout (How Claude Works) */
+article h2 .ch-num { display: inline-block; min-width: 1.6em; margin-right: 6px; padding: 0 7px; border-radius: 5px; background: #EEF0FB;
+  color: #3730A3; font-size: 0.72em; text-align: center; vertical-align: 3px; font-variant-numeric: tabular-nums; }
+.part-intro { font-size: 17px; color: var(--ink-soft); margin: 4px 0 4px 22px !important; max-width: 620px; }
+.part-chapters { font-size: 13px; color: var(--ink-muted); margin: 0 0 8px 22px !important; letter-spacing: .02em; }
+.box { border-radius: 0 8px 8px 0; border-left: 4px solid; padding: 12px 18px 4px; margin: 20px 0 24px; }
+.box .box-label { font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; margin: 0 0 6px !important; }
+.box .box-title { font-weight: 600; font-size: 17px; margin: 0 0 8px !important; color: var(--ink); }
+.box p, .box li { font-size: 15px; }
+.box ul { margin: 0 0 12px 20px; }
+.box-worked { background: #F0FDFA; border-color: #0F766E; } .box-worked .box-label { color: #0F766E; }
+.box-simple { background: #FFFBEB; border-color: #F59E0B; } .box-simple .box-label { color: #B45309; }
+.box-claude { background: #FFF7ED; border-color: #C2410C; } .box-claude .box-label { color: #C2410C; }
+.box-unsettled { background: #F5F3FF; border-color: #6D28D9; } .box-unsettled .box-label { color: #6D28D9; }
+.box-takeaways { background: #EEF2FF; border-color: #A5B4FC; } .box-takeaways .box-label { color: #3730A3; font-size: 12.5px; }
+pre.code, pre.formula { background: var(--code); border: 1px solid var(--line); border-radius: 6px; padding: 12px 16px; margin: 16px 0 20px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace; font-size: 13px; line-height: 1.55; overflow-x: auto; white-space: pre; }
+pre.formula { text-align: center; background: transparent; border-color: transparent; font-size: 14px; }
+.box pre.code { background: rgba(255,255,255,.6); }
+article code { background: #F3F4F6; border-radius: 3px; padding: 0 3px; }
+@media print { .box { break-inside: avoid; } }
+
 /* docs-lock: password screen, libraries, lock button */
 .lock-shell { min-height: 60vh; }
 html.is-locked body { background: var(--bg); }
